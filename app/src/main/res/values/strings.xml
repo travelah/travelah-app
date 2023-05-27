@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Travelah App</string>
+    <string name="travelah">Travelah</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="hello_welcome">Hello! Welcome to <font color='#07AFFF'><b>Travelah</b></font>. Please login to start a new journey with us!</string>
+    <string name="travelah_icon">Travelah Icon</string>
 </resources>
