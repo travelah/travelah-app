@@ -29,6 +29,13 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         }
     }
 
+    suspend fun clearProfile() {
+        dataStore.edit { preferences ->
+            preferences[EMAIL_KEY] = ""
+            preferences[USER_ID_KEY] = 0
+        }
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: SettingPreferences? = null

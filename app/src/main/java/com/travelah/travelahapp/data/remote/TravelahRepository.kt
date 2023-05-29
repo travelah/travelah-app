@@ -61,7 +61,7 @@ class TravelahRepository private constructor(
     }
 
     suspend fun logout() {
-        pref.saveProfile(ProfileResponse("", 0, "", ""))
+        pref.clearProfile()
         return pref.saveTokenSetting("")
     }
 

@@ -15,4 +15,5 @@
     <string name="failed">Gagal</string>
     <string name="login_failed_message">Anda gagal login.</string>
     <string name="login_successful_message">Anda berhasil login.</string>
+    <string name="logout">Logout</string>
 </resources>
