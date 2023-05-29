@@ -1,14 +1,13 @@
 package com.travelah.travelahapp.data.remote
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
+import com.google.gson.Gson
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
-import kotlinx.coroutines.DelicateCoroutinesApi
 import retrofit2.HttpException
 import com.travelah.travelahapp.data.Result
-import com.travelah.travelahapp.data.remote.models.ProfileResponse
+import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 
@@ -17,19 +16,15 @@ class TravelahRepository private constructor(
     private val pref: SettingPreferences
 ) {
 
-//    private fun convertErrorResponse(stringRes: String?): CommonResponse {
-//        return Gson().fromJson(stringRes, CommonResponse::class.java)
-//    }
+    private fun convertErrorResponse(stringRes: String?): ErrorResponse {
+        return Gson().fromJson(stringRes, ErrorResponse::class.java)
+    }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun postLogin(
         email: String,
         password: String,
     ): LiveData<Result<String>> = liveData {
         emit(Result.Loading)
-
-        Log.d("abc", email)
-        Log.d("abc", password)
 
         wrapEspressoIdlingResource {
             try {
@@ -41,16 +36,18 @@ class TravelahRepository private constructor(
 
                     val profile = apiService.profile("Bearer ${response.accessToken}")
                     pref.saveProfile(profile)
+                    // TO DO: change if response from server is already consistent
                     emit(Result.Success("Success"))
                 } else {
+                    // TO DO: change if response from server is already consistent
                     emit(Result.Error("Error"))
                 }
             } catch (e: Exception) {
                 when (e) {
                     is HttpException -> {
-//                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
-//                        val msg = jsonRes.message
-                        emit(Result.Error("Error"))
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
                     }
                     else -> {
                         emit(Result.Error(e.message.toString()))
