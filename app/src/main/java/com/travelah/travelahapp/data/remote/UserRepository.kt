@@ -11,7 +11,7 @@ import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 
-class TravelahRepository private constructor(
+class UserRepository private constructor(
     private val apiService: ApiService,
     private val pref: SettingPreferences
 ) {
@@ -68,13 +68,13 @@ class TravelahRepository private constructor(
 
     companion object {
         @Volatile
-        private var instance: TravelahRepository? = null
+        private var instance: UserRepository? = null
         fun getInstance(
             apiService: ApiService,
             pref: SettingPreferences
-        ): TravelahRepository =
+        ): UserRepository =
             instance ?: synchronized(this) {
-                instance ?: TravelahRepository(apiService, pref)
+                instance ?: UserRepository(apiService, pref)
             }.also { instance = it }
     }
 }
