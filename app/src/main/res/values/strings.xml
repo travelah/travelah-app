@@ -9,4 +9,10 @@
     <string name="login">Login</string>
     <string name="hello_welcome">Hello! Welcome to <font color='#07AFFF'><b>Travelah</b></font>. Please login to start a new journey with us!</string>
     <string name="travelah_icon">Travelah Icon</string>
+    <string name="invalid_input">Pastikan semua field sudah terisi</string>
+    <string name="next">Lanjut</string>
+    <string name="success">Sukses</string>
+    <string name="failed">Gagal</string>
+    <string name="login_failed_message">Anda gagal login.</string>
+    <string name="login_successful_message">Anda berhasil login.</string>
 </resources>
