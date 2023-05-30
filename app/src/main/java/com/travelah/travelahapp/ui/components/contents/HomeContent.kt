@@ -23,6 +23,7 @@ import com.travelah.travelahapp.R
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
+    profileName: String = ""
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -51,7 +52,7 @@ fun HomeContent(
                         .padding(horizontal = 16.dp, vertical = 20.dp)
                 ) {
                     Text(
-                        "${stringResource(R.string.hi)} Malih, ${stringResource(R.string.good_to_see_you_again)}, \n" +
+                        "${stringResource(R.string.hi)} $profileName, ${stringResource(R.string.good_to_see_you_again)}, \n" +
                                 stringResource(R.string.help_today_question),
                         style = MaterialTheme.typography.body2.copy(
                             color = Color(0xFF454545),
