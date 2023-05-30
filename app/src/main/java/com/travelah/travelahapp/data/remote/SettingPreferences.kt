@@ -1,10 +1,7 @@
 package com.travelah.travelahapp.data.remote
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import com.travelah.travelahapp.data.remote.models.ProfileResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -24,8 +21,10 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
 
     suspend fun saveProfile(profile: ProfileResponse) {
         dataStore.edit { preferences ->
-            preferences[EMAIL_KEY] = profile.email
-            preferences[USER_ID_KEY] = profile.id
+            preferences[EMAIL_KEY] = profile.data.email
+            preferences[USER_ID_KEY] = profile.data.id
+            preferences[NAME_KEY] = profile.data.fullName
+            preferences[IS_SIGNED_BY_GOOGLE_KEY] = profile.data.isSignedByGoogle
         }
     }
 
@@ -33,6 +32,8 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         dataStore.edit { preferences ->
             preferences[EMAIL_KEY] = ""
             preferences[USER_ID_KEY] = 0
+            preferences[NAME_KEY] = ""
+            preferences[IS_SIGNED_BY_GOOGLE_KEY] = false
         }
     }
 
@@ -41,6 +42,8 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         private var INSTANCE: SettingPreferences? = null
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val EMAIL_KEY = stringPreferencesKey("email")
+        private val NAME_KEY = stringPreferencesKey("fullName")
+        private val IS_SIGNED_BY_GOOGLE_KEY = booleanPreferencesKey("isSignedByGoogle")
         private val USER_ID_KEY = intPreferencesKey("userId")
 
         fun getInstance(dataStore: DataStore<Preferences>): SettingPreferences {

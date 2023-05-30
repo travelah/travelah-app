@@ -31,17 +31,16 @@ class UserRepository private constructor(
             try {
                 val response = apiService.login(LoginBody(email, password))
 
-                if (response.accessToken != null) {
+                if (response.data != null) {
 
-                    pref.saveTokenSetting(response.accessToken)
+                    pref.saveTokenSetting(response.data.token)
 
-                    val profile = apiService.profile("Bearer ${response.accessToken}")
+                    val profile = apiService.profile("Bearer ${response.data.token}")
                     pref.saveProfile(profile)
-                    // TO DO: change if response from server is already consistent
-                    emit(Result.Success("Success"))
+
+                    emit(Result.Success(response.message))
                 } else {
-                    // TO DO: change if response from server is already consistent
-                    emit(Result.Error("Error"))
+                    emit(Result.Error(response.message))
                 }
             } catch (e: Exception) {
                 when (e) {
