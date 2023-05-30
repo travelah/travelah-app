@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                                         showLoading(false)
                                         AlertDialog.Builder(this).apply {
                                             setTitle(getString(R.string.success))
-                                            setMessage(getString(R.string.login_successful_message))
+                                            setMessage(result.data)
                                             setPositiveButton(getString(R.string.next)) { _, _ ->
                                                 val intent =
                                                     Intent(context, MainActivity::class.java)
