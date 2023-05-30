@@ -8,6 +8,7 @@
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="hello_welcome">Hello! Welcome to <font color='#07AFFF'><b>Travelah</b></font>. Please login to start a new journey with us!</string>
+    <string name="register_welcome">Don’t have an account? Please register to start a new journey with us!</string>
     <string name="travelah_icon">Travelah Icon</string>
     <string name="invalid_input">Pastikan semua field sudah terisi</string>
     <string name="next">Lanjut</string>
@@ -15,5 +16,8 @@
     <string name="failed">Gagal</string>
     <string name="login_failed_message">Anda gagal login.</string>
     <string name="login_successful_message">Anda berhasil login.</string>
+    <string name="register_failed_message">Anda gagal mendaftar.</string>
+    <string name="register_successful_message">Anda berhasil mendaftar.</string>
     <string name="logout">Logout</string>
+    <string name="fullname_hint">Full name</string>
 </resources>

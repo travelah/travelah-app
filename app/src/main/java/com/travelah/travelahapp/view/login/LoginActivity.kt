@@ -13,6 +13,7 @@ import com.travelah.travelahapp.databinding.ActivityLoginBinding
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainActivity
 import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.view.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -77,6 +78,10 @@ class LoginActivity : AppCompatActivity() {
                         }
                 }
             }
+        }
+        binding.registerButton.setOnClickListener{
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 

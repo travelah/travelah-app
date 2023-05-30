@@ -9,6 +9,7 @@ import retrofit2.HttpException
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
+import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 
 class UserRepository private constructor(
@@ -40,6 +41,36 @@ class UserRepository private constructor(
                     emit(Result.Success("Success"))
                 } else {
                     // TO DO: change if response from server is already consistent
+                    emit(Result.Error("Error"))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun postRegister(
+        email: String,
+        password: String,
+        fullName: String
+    ) : LiveData<Result<String>> = liveData {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.register(RegisterBody(email, password, fullName))
+                if (response.status == true) {
+                    emit(Result.Success("Success"))
+                } else {
                     emit(Result.Error("Error"))
                 }
             } catch (e: Exception) {
