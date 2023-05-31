@@ -2,6 +2,7 @@ package com.travelah.travelahapp.data.remote
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
+import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.data.remote.models.ProfileResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -34,6 +35,17 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
             preferences[USER_ID_KEY] = 0
             preferences[NAME_KEY] = ""
             preferences[IS_SIGNED_BY_GOOGLE_KEY] = false
+        }
+    }
+
+    fun getProfileSetting(): Flow<Profile> {
+        return dataStore.data.map { preferences ->
+            Profile(
+                email = preferences[EMAIL_KEY] ?: "",
+                fullName = preferences[NAME_KEY]?: "",
+                id = preferences[USER_ID_KEY] ?: 0,
+                isSignedByGoogle = preferences[IS_SIGNED_BY_GOOGLE_KEY] ?: false
+            )
         }
     }
 

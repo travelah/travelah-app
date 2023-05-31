@@ -18,9 +18,6 @@ data class ProfileResponse(
 
 @Parcelize
 data class Profile(
-	@field:SerializedName("createdAt")
-	val createdAt: String,
-
 	@field:SerializedName("isSignedByGoogle")
 	val isSignedByGoogle: Boolean,
 
@@ -32,7 +29,4 @@ data class Profile(
 
 	@field:SerializedName("email")
 	val email: String,
-
-	@field:SerializedName("updatedAt")
-	val updatedAt: String
 ) : Parcelable
