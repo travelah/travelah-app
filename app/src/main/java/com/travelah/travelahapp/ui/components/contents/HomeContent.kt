@@ -116,15 +116,15 @@ fun HomeContent(
                     ) {
                         HistoryChatCardHome(
                             latestChat = "Ini rekomendasi yang diinginkan",
-                            date = "2 Mei 2023"
+                            date = "31 Mei 2023"
                         )
                         HistoryChatCardHome(
-                            latestChat = "Ini rekomendasi yang diinginkan",
-                            date = "2 Mei 2023"
+                            latestChat = "Ini rekomendasi yang diinginkan 2",
+                            date = "31 Mei 2023"
                         )
                         HistoryChatCardHome(
-                            latestChat = "Ini rekomendasi yang diinginkan",
-                            date = "2 Mei 2023"
+                            latestChat = "Ini rekomendasi yang diinginkan 3",
+                            date = "31 Mei 2023"
                         )
                     }
                 }
@@ -142,19 +142,19 @@ fun HomeContent(
                         PostCardHome(
                             username = "zuhalal",
                             title = "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
-                            date = "2 Mei 2023",
+                            date = "31 Mei 2023",
                             likeCount = 24
                         )
                         PostCardHome(
                             username = "zuhalal",
-                            title = "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
-                            date = "2 Mei 2023",
+                            title = "Jalan di bekasi, ini rekomendasi tempat wisata yang keren banget",
+                            date = "31 Mei 2023",
                             likeCount = 24
                         )
                         PostCardHome(
                             username = "zuhalal",
-                            title = "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
-                            date = "2 Mei 2023",
+                            title = "Jalan di depok, ini rekomendasi tempat wisata yang keren banget",
+                            date = "31 Mei 2023",
                             likeCount = 24
                         )
                     }
