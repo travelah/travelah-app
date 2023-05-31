@@ -2,18 +2,17 @@ package com.travelah.travelahapp.view.register
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import com.travelah.travelahapp.data.Result
+import androidx.appcompat.app.AppCompatActivity
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.databinding.ActivityRegisterBinding
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
-import com.travelah.travelahapp.view.main.MainActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -58,7 +57,7 @@ class RegisterActivity : AppCompatActivity() {
                                             showLoading(false)
                                             AlertDialog.Builder(this@RegisterActivity).apply {
                                                 setTitle(getString(R.string.success))
-                                                setMessage(getString(R.string.register_successful_message))
+                                                setMessage((result.data))
                                                 setPositiveButton(getString(R.string.next)) { _, _ ->
                                                     val intent = Intent(context, LoginActivity::class.java)
                                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

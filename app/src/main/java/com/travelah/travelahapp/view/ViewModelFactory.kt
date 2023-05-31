@@ -7,6 +7,7 @@ import com.travelah.travelahapp.data.remote.UserRepository
 import com.travelah.travelahapp.di.Injection
 import com.travelah.travelahapp.view.login.LoginViewModel
 import com.travelah.travelahapp.view.main.MainViewModel
+import com.travelah.travelahapp.view.register.RegisterViewModel
 
 class ViewModelFactory private constructor(
     private val userRepository: UserRepository,

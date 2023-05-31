@@ -68,9 +68,9 @@ class UserRepository private constructor(
             try {
                 val response = apiService.register(RegisterBody(email, password, fullName))
                 if (response.status == true) {
-                    emit(Result.Success("Success"))
+                    emit(Result.Success(response.message))
                 } else {
-                    emit(Result.Error("Error"))
+                    emit(Result.Error(response.message))
                 }
             } catch (e: Exception) {
                 when (e) {
