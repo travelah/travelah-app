@@ -32,8 +32,7 @@ fun PostCardHome(
         modifier = modifier
             .height(112.dp)
             .fillMaxWidth()
-            .background(color = Color(0xFFFAFAFA), shape = RoundedCornerShape(8.dp))
-            .border(width = 1.dp, color = Color(0xFFCAC4D0))
+            .background(color = Color(0xFFE2F0F7), shape = RoundedCornerShape(16.dp))
             .padding(vertical = 8.dp, horizontal = 16.dp),
     ) {
         Column(
@@ -65,7 +64,7 @@ fun PostCardHome(
             Text(
                 title,
                 style = MaterialTheme.typography.body2.copy(
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Medium
                 ),
                 maxLines = 1, overflow = TextOverflow.Ellipsis
             )

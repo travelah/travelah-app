@@ -34,22 +34,25 @@ fun HomeContent(
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = Color(0xFFE2F0F7),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .padding(horizontal = 16.dp, vertical = 20.dp)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
-                        "${stringResource(R.string.hi)} $profileName, ${stringResource(R.string.good_to_see_you_again)}, \n" +
-                                stringResource(R.string.help_today_question),
-                        style = MaterialTheme.typography.body2.copy(
+                        "${stringResource(R.string.hi)} $profileName,",
+                        style = MaterialTheme.typography.h6.copy(
                             color = Color(0xFF454545),
-                            textAlign = TextAlign.Center
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Left
                         ),
                         modifier = Modifier.fillMaxWidth()
+                    )
+                    Text(
+                        "${stringResource(R.string.good_to_see_you_again)}, ${stringResource(R.string.help_today_question)}",
+                        style = MaterialTheme.typography.subtitle2.copy(
+                            color = Color(0xFF454545),
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Left
+                        ),
                     )
                 }
                 Row(
@@ -147,7 +150,7 @@ fun HomeContent(
                             date = "2 Mei 2023",
                             likeCount = 24
                         )
-                        PostCardHome (
+                        PostCardHome(
                             username = "zuhalal",
                             title = "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
                             date = "2 Mei 2023",
