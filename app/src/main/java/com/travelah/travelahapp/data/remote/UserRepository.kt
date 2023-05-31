@@ -10,6 +10,7 @@ import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
+import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 
 class UserRepository private constructor(
@@ -38,6 +39,36 @@ class UserRepository private constructor(
                     val profile = apiService.profile("Bearer ${response.data.token}")
                     pref.saveProfile(profile)
 
+                    emit(Result.Success(response.message))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun postRegister(
+        email: String,
+        password: String,
+        fullName: String
+    ) : LiveData<Result<String>> = liveData {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.register(RegisterBody(email, password, fullName))
+                if (response.status == true) {
                     emit(Result.Success(response.message))
                 } else {
                     emit(Result.Error(response.message))
