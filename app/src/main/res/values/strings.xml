@@ -24,4 +24,6 @@
     <string name="help_today_question">What can I help you today?</string>
     <string name="good_to_see_you_again">Good to see you again</string>
     <string name="hi">Hi</string>
+    <string name="history">History</string>
+    <string name="most_liked_post">Most Liked Post</string>
 </resources>

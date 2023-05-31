@@ -3,10 +3,7 @@ package com.travelah.travelahapp.ui.components.contents
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,9 +13,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.ui.components.elements.SubHeaderHome
 
 @Composable
 fun HomeContent(
@@ -28,15 +27,8 @@ fun HomeContent(
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(40.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        AsyncImage(
-            model = stringResource(id = R.string.profile_picture_link),
-            contentDescription = stringResource(R.string.profile_image_content_desc),
-            contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.ic_baseline_person_24),
-            modifier = Modifier.size(160.dp)
-        )
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
@@ -108,8 +100,123 @@ fun HomeContent(
                         )
                     )
                 }
-            }
 
+//              history section
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(
+                        4.dp,
+                        Alignment.CenterVertically
+                    )
+                ) {
+                    SubHeaderHome(title = stringResource(R.string.history), onClick = {})
+                    Box(
+                        modifier = Modifier
+                            .height(76.dp)
+                            .fillMaxWidth()
+                            .background(color = Color(0xFFFAFAFA), shape = RoundedCornerShape(8.dp))
+                            .border(width = 1.dp, color = Color(0xFFCAC4D0))
+                            .padding(vertical = 12.dp, horizontal = 16.dp),
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(
+                                4.dp,
+                                Alignment.CenterVertically
+                            ), modifier = Modifier.fillMaxHeight()
+                        ) {
+                            Text(
+                                text = "Ini rekomendasi yang diinginkan",
+                                color = Color(0xFF343434),
+                                style = MaterialTheme.typography.body2.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                maxLines = 1, overflow = TextOverflow.Ellipsis
+                            )
+                            Text(
+                                "2 Mei 2023",
+                                color = Color(0xFF737373),
+                                style = MaterialTheme.typography.caption.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                maxLines = 1, overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(
+                        4.dp,
+                        Alignment.CenterVertically
+                    )
+                ) {
+                    SubHeaderHome(title = stringResource(R.string.most_liked_post), onClick = {})
+                    Box(
+                        modifier = Modifier
+                            .height(108.dp)
+                            .fillMaxWidth()
+                            .background(color = Color(0xFFFAFAFA), shape = RoundedCornerShape(8.dp))
+                            .border(width = 1.dp, color = Color(0xFFCAC4D0))
+                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(
+                                4.dp,
+                                Alignment.CenterVertically
+                            ),
+                            modifier = Modifier.fillMaxHeight()
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                AsyncImage(
+                                    model = stringResource(id = R.string.profile_picture_link),
+                                    contentDescription = stringResource(R.string.profile_image_content_desc),
+                                    contentScale = ContentScale.Crop,
+                                    placeholder = painterResource(id = R.drawable.ic_baseline_person_24),
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Text(
+                                    "zuhalal",
+                                    style = MaterialTheme.typography.caption.copy(
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    maxLines = 1, overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                            Text(
+                                "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
+                                style = MaterialTheme.typography.body2.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                maxLines = 1, overflow = TextOverflow.Ellipsis
+                            )
+                            Text(
+                                "2 Mei 2023",
+                                style = MaterialTheme.typography.caption.copy(
+                                    color = Color(0xFF737373)
+                                ),
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_baseline_thumb_up_24),
+                                    contentDescription = stringResource(R.string.tips),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    "12", style = MaterialTheme.typography.overline.copy(
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
