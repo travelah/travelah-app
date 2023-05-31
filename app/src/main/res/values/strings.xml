@@ -20,4 +20,14 @@
     <string name="register_successful_message">Anda berhasil mendaftar.</string>
     <string name="logout">Logout</string>
     <string name="fullname_hint">Full name</string>
+    <string name="profile_picture_link">https://avatars.githubusercontent.com/u/74417769?v=4</string>
+    <string name="profile_image_content_desc">Profile Image</string>
+    <string name="tips">tips</string>
+    <string name="new_chat">New Chat</string>
+    <string name="tips_chat">Don’t know what to say? you can ask FAQ or ask recommendation some places to Vela like “recommend me the best place in Bali!” or say anything like that.</string>
+    <string name="help_today_question">What can I help you today?</string>
+    <string name="good_to_see_you_again">Good to see you again</string>
+    <string name="hi">Hi</string>
+    <string name="history">History</string>
+    <string name="most_liked_post">Most Liked Post</string>
 </resources>

@@ -65,6 +65,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version" // observeAsState
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1" // ConstraintLayout
     implementation "io.coil-kt:coil-compose:2.2.0" // AsyncImage
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 
     // converter and utils
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1'
