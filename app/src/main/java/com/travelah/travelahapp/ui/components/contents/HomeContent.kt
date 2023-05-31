@@ -32,7 +32,7 @@ fun HomeContent(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -85,9 +85,10 @@ fun HomeContent(
                 Button(
                     onClick = { /*TODO*/ },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF07AFFF)
+                        backgroundColor = Color(0xFF07AFFF),
                     ),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_baseline_add_24_white),
