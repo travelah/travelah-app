@@ -8,6 +8,7 @@ import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import retrofit2.HttpException
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
+import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
@@ -94,6 +95,10 @@ class UserRepository private constructor(
 
     fun getToken(): LiveData<String> {
        return pref.getTokenSetting().asLiveData()
+    }
+
+    fun getProfile(): LiveData<Profile> {
+        return pref.getProfileSetting().asLiveData()
     }
 
     companion object {

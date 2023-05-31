@@ -8,9 +8,8 @@ import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.ui.screens.HomeScreen
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
 
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme {
-                HomeScreen()
+                HomeScreen(viewModel = mainViewModel)
             }
         }
     }
@@ -56,7 +55,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-@Composable
-fun HomeScreen() {
-    Text(text = "Hello From Travelah")
-}
