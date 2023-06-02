@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.contents
 
+import android.text.TextUtils.replace
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,8 +27,10 @@ import com.travelah.travelahapp.utils.withDateFormatFromISO
 @Composable
 fun HomeContent(
     listPost: List<Post> = mutableListOf(),
+    onClickSeeChat: ()-> Unit,
+    onClickSeePost: () -> Unit,
+    profileName: String = "",
     modifier: Modifier = Modifier,
-    profileName: String = ""
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -116,7 +119,7 @@ fun HomeContent(
                         Alignment.CenterVertically
                     )
                 ) {
-                    SubHeaderHome(title = stringResource(R.string.history), onClick = {})
+                    SubHeaderHome(title = stringResource(R.string.history), onClick = onClickSeeChat)
                     Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -143,7 +146,7 @@ fun HomeContent(
                         Alignment.CenterVertically
                     ),
                 ) {
-                    SubHeaderHome(title = stringResource(R.string.most_liked_post), onClick = {})
+                    SubHeaderHome(title = stringResource(R.string.most_liked_post), onClick = onClickSeePost)
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxWidth().height(342.dp)

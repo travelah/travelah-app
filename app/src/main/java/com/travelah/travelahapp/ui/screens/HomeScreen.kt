@@ -22,10 +22,12 @@ import com.travelah.travelahapp.ui.components.elements.ErrorText
 @Composable
 fun HomeScreen(
     result: Result<List<Post>>,
-    modifier: Modifier = Modifier,
+    onClickSeeChat: () -> Unit,
+    onClickSeePost: () -> Unit,
     viewModel: MainViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
+    modifier: Modifier = Modifier,
 ) {
     val profileState: State<Profile?> = viewModel.getProfile().observeAsState()
 
@@ -39,7 +41,9 @@ fun HomeScreen(
                 profileName = profileState.value?.fullName ?: "",
                 modifier = modifier
                     .padding(20.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onClickSeeChat = onClickSeeChat,
+                onClickSeePost = onClickSeePost
             )
         }
         is Result.Error -> {

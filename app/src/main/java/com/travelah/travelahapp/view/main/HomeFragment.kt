@@ -8,6 +8,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import com.travelah.travelahapp.R
 import com.travelah.travelahapp.databinding.FragmentHomeBinding
 import com.travelah.travelahapp.ui.screens.HomeScreen
 import com.travelah.travelahapp.view.ViewModelFactory
@@ -35,6 +37,14 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        fun handleClickChat() {
+            root.findNavController().navigate(R.id.action_navigation_home_to_navigation_chat)
+        }
+
+        fun handleClickPost() {
+            root.findNavController().navigate(R.id.action_navigation_home_to_navigation_post)
+        }
+
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
             postViewModel.getMostLikedPost(token).observe(viewLifecycleOwner) { result ->
                 binding.composeView.apply {
@@ -44,12 +54,17 @@ class HomeFragment : Fragment() {
                     setContent {
                         // In Compose world
                         MaterialTheme {
-                            HomeScreen(result)
+                            HomeScreen(
+                                result,
+                                onClickSeeChat = { handleClickChat() },
+                                onClickSeePost = { handleClickPost() }
+                            )
                         }
                     }
                 }
             }
         }
+
 
         return root
     }

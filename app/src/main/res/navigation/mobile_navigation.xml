@@ -9,7 +9,14 @@
         android:id="@+id/navigation_home"
         android:name="com.travelah.travelahapp.view.main.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_post"
+            app:destination="@id/navigation_post" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_chat"
+            app:destination="@id/navigation_chat" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_chat"
