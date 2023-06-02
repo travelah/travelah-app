@@ -1,15 +1,14 @@
-package com.travelah.travelahapp.view.main.fragment.chat
+package com.travelah.travelahapp.view.profile
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.travelah.travelahapp.databinding.FragmentChatBinding
+import com.travelah.travelahapp.databinding.FragmentProfileBinding
 
-class ChatFragment : Fragment() {
-
-    private var _binding: FragmentChatBinding? = null
+class ProfileFragment : Fragment() {
+    private var _binding: FragmentProfileBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -21,7 +20,7 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentChatBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root

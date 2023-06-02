@@ -1,4 +1,4 @@
-package com.travelah.travelahapp.view.main.fragment.post
+package com.travelah.travelahapp.view.post
 
 import android.os.Bundle
 import android.view.LayoutInflater

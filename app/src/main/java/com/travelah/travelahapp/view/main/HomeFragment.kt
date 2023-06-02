@@ -1,4 +1,4 @@
-package com.travelah.travelahapp.view.main.fragment.home
+package com.travelah.travelahapp.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import com.travelah.travelahapp.databinding.FragmentHomeBinding
 import com.travelah.travelahapp.ui.screens.HomeScreen
 import com.travelah.travelahapp.view.ViewModelFactory
-import com.travelah.travelahapp.view.main.MainViewModel
 import com.travelah.travelahapp.view.post.PostViewModel
 
 class HomeFragment : Fragment() {
