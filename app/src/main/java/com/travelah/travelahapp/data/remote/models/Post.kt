@@ -7,23 +7,23 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Post(
     @field:SerializedName("createdAt")
-    val createdAt: String? = null,
+    val createdAt: String,
 
     @field:SerializedName("description")
-    val description: String? = null,
+    val description: String,
 
     @field:SerializedName("location")
-    val location: String? = null,
+    val location: String,
 
     @field:SerializedName("likeCount")
-    val likeCount: Int? = null,
+    val likeCount: Int,
 
     @field:SerializedName("id")
-    val id: Int? = null,
+    val id: Int,
 
     @field:SerializedName("userId")
-    val userId: Int? = null,
+    val userId: Int,
 
     @field:SerializedName("updatedAt")
-    val updatedAt: String? = null
+    val updatedAt: String
 ) : Parcelable

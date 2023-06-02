@@ -2,6 +2,7 @@ package com.travelah.travelahapp.ui.components.contents
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -14,12 +15,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.HistoryChatCardHome
 import com.travelah.travelahapp.ui.components.elements.PostCardHome
 import com.travelah.travelahapp.ui.components.elements.SubHeaderHome
+import androidx.compose.foundation.lazy.items
+import com.travelah.travelahapp.ui.components.elements.ErrorText
+import com.travelah.travelahapp.utils.withDateFormatFromISO
 
 @Composable
 fun HomeContent(
+    listPost: List<Post> = mutableListOf(),
     modifier: Modifier = Modifier,
     profileName: String = ""
 ) {
@@ -135,32 +141,27 @@ fun HomeContent(
                     verticalArrangement = Arrangement.spacedBy(
                         4.dp,
                         Alignment.CenterVertically
-                    )
+                    ),
                 ) {
                     SubHeaderHome(title = stringResource(R.string.most_liked_post), onClick = {})
-                    Column(
+                    LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth().height(342.dp)
                     ) {
-//                        ErrorText(text = stringResource(R.string.no_most_liked_post_data))
-                        PostCardHome(
-                            username = "zuhalal",
-                            title = "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
-                            date = "31 Mei 2023",
-                            likeCount = 24
-                        )
-                        PostCardHome(
-                            username = "zuhalal",
-                            title = "Jalan di bekasi, ini rekomendasi tempat wisata yang keren banget",
-                            date = "31 Mei 2023",
-                            likeCount = 24
-                        )
-                        PostCardHome(
-                            username = "zuhalal",
-                            title = "Jalan di depok, ini rekomendasi tempat wisata yang keren banget",
-                            date = "31 Mei 2023",
-                            likeCount = 24
-                        )
+                        if (listPost.isNotEmpty()) {
+                            items(listPost, key={it.id}) { data ->
+                                PostCardHome(
+                                    username = "zuhalal",
+                                    title = data.description,
+                                    date = data.createdAt.withDateFormatFromISO(),
+                                    likeCount = data.likeCount
+                                )
+                            }
+                        } else {
+                            item {
+                                ErrorText(text = stringResource(R.string.no_most_liked_post_data))
+                            }
+                        }
                     }
                 }
             }

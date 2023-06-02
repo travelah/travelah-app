@@ -25,7 +25,7 @@ interface ApiService {
     ): ProfileResponse
 
     @GET("posts/most-liked")
-    suspend fun mostLikedPost(
+    suspend fun getAllMostLikedPost(
         @Header("Authorization") authorization: String,
     ): MostLikedPostResponse
 }

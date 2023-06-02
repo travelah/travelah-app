@@ -12,6 +12,7 @@ import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
+import kotlinx.coroutines.flow.Flow
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -95,6 +96,10 @@ class UserRepository private constructor(
 
     fun getToken(): LiveData<String> {
        return pref.getTokenSetting().asLiveData()
+    }
+
+    fun getTokenFlow(): Flow<String> {
+        return pref.getTokenSetting()
     }
 
     fun getProfile(): LiveData<Profile> {

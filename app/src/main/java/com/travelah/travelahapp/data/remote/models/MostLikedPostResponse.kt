@@ -7,12 +7,12 @@ import com.google.gson.annotations.SerializedName
 @Parcelize
 data class MostLikedPostResponse(
 	@field:SerializedName("data")
-	val data: List<Post?>? = null,
+	val data: List<Post>,
 
 	@field:SerializedName("message")
-	val message: String? = null,
+	val message: String,
 
 	@field:SerializedName("status")
-	val status: Boolean? = null
+	val status: Boolean
 ) : Parcelable
 

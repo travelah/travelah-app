@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme {
-                HomeScreen(viewModel = mainViewModel)
+                HomeScreen()
             }
         }
     }

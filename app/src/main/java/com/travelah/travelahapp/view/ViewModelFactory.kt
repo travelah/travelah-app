@@ -8,6 +8,7 @@ import com.travelah.travelahapp.data.remote.UserRepository
 import com.travelah.travelahapp.di.Injection
 import com.travelah.travelahapp.view.login.LoginViewModel
 import com.travelah.travelahapp.view.main.MainViewModel
+import com.travelah.travelahapp.view.post.PostViewModel
 import com.travelah.travelahapp.view.register.RegisterViewModel
 
 class ViewModelFactory private constructor(
@@ -28,6 +29,10 @@ class ViewModelFactory private constructor(
 
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
             return RegisterViewModel(userRepository) as T
+        }
+
+        if (modelClass.isAssignableFrom(PostViewModel::class.java)) {
+            return PostViewModel(postRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
