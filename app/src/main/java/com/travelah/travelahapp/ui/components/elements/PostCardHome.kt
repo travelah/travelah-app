@@ -2,7 +2,6 @@ package com.travelah.travelahapp.ui.components.elements
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -50,7 +49,7 @@ fun PostCardHome(
                     model = stringResource(id = R.string.profile_picture_link),
                     contentDescription = stringResource(R.string.profile_image_content_desc),
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(id = R.drawable.ic_baseline_person_24),
+                    placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
                     modifier = Modifier.size(20.dp)
                 )
                 Text(
