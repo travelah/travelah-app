@@ -44,7 +44,7 @@ class ViewModelFactory private constructor(
             instance ?: synchronized(this) {
                 instance ?: ViewModelFactory(
                     Injection.provideUserRepository(context),
-                    Injection.providePostRepository(context)
+                    Injection.providePostRepository()
                 )
             }.also { instance = it }
     }

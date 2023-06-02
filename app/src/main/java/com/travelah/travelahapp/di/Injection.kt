@@ -18,9 +18,8 @@ object Injection {
         return UserRepository.getInstance(apiService, pref)
     }
 
-    fun providePostRepository(context: Context): PostRepository {
+    fun providePostRepository(): PostRepository {
         val apiService = RetrofitConfig.getApiService()
-        val pref = SettingPreferences.getInstance(context.dataStore)
-        return PostRepository.getInstance(apiService, pref)
+        return PostRepository.getInstance(apiService)
     }
 }

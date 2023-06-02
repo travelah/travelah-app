@@ -12,7 +12,6 @@ import retrofit2.HttpException
 
 class PostRepository private constructor(
     private val apiService: ApiService,
-    private val pref: SettingPreferences
 ) {
     private fun convertErrorResponse(stringRes: String?): ErrorResponse {
         return Gson().fromJson(stringRes, ErrorResponse::class.java)
@@ -49,10 +48,9 @@ class PostRepository private constructor(
         private var instance: PostRepository? = null
         fun getInstance(
             apiService: ApiService,
-            pref: SettingPreferences
         ): PostRepository =
             instance ?: synchronized(this) {
-                instance ?: PostRepository(apiService, pref)
+                instance ?: PostRepository(apiService)
             }.also { instance = it }
     }
 }
