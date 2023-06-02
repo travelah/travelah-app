@@ -98,10 +98,6 @@ class UserRepository private constructor(
        return pref.getTokenSetting().asLiveData()
     }
 
-    fun getTokenFlow(): Flow<String> {
-        return pref.getTokenSetting()
-    }
-
     fun getProfile(): LiveData<Profile> {
         return pref.getProfileSetting().asLiveData()
     }

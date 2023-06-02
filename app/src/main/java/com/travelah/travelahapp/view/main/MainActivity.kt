@@ -12,10 +12,12 @@ import com.travelah.travelahapp.R
 import com.travelah.travelahapp.ui.screens.HomeScreen
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
+import com.travelah.travelahapp.view.post.PostViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var factory: ViewModelFactory
     private val mainViewModel: MainViewModel by viewModels { factory }
+    private val postViewModel: PostViewModel by viewModels { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +30,14 @@ class MainActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 finish()
-            }
-        }
-
-        setContent {
-            MaterialTheme {
-                HomeScreen()
+            } else {
+                postViewModel.getMostLikedPost(token).observe(this) { result ->
+                    setContent {
+                        MaterialTheme {
+                            HomeScreen(result)
+                        }
+                    }
+                }
             }
         }
     }

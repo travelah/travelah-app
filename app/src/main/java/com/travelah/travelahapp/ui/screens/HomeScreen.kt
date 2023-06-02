@@ -14,55 +14,36 @@ import com.travelah.travelahapp.view.main.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.ui.components.contents.HomeContent
-import com.travelah.travelahapp.view.post.PostViewModel
 import com.travelah.travelahapp.data.Result
-import com.travelah.travelahapp.ui.common.UiState
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.ErrorText
 
 @Composable
 fun HomeScreen(
+    result: Result<List<Post>>,
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
-    postViewModel: PostViewModel = viewModel(
-        factory = ViewModelFactory.getInstance(LocalContext.current)
-    ),
 ) {
     val profileState: State<Profile?> = viewModel.getProfile().observeAsState()
-    val uiState = rememberUpdatedState(viewModel.tokenState.collectAsState().value)
 
-    val refreshCount by remember { mutableStateOf(1) }
-
-    when (uiState.value) {
-        is UiState.Success -> {
-            // API call
-            LaunchedEffect(key1 = refreshCount) {
-                postViewModel.getMostLikedPost("Bearer ${(uiState.value as UiState.Success<String>).data}")
-            }
+    when (result) {
+        is Result.Loading -> {
+            Text(text = stringResource(R.string.loading))
         }
-        else -> {}
-    }
-
-    postViewModel.mostLikedPost.observeAsState(initial = Result.Loading).let {
-        when (it.value) {
-            is Result.Loading -> {
-                Text(text = stringResource(R.string.loading))
-            }
-            is Result.Success -> {
-                HomeContent(
-                    listPost = (it.value as Result.Success<List<Post>>).data,
-                    profileName = profileState.value?.fullName ?: "",
-                    modifier = modifier
-                        .padding(20.dp)
-                        .fillMaxWidth()
-                )
-            }
-            is Result.Error -> {
-                ErrorText(text = stringResource(id = R.string.failed_error))
-            }
+        is Result.Success -> {
+            HomeContent(
+                listPost = result.data,
+                profileName = profileState.value?.fullName ?: "",
+                modifier = modifier
+                    .padding(20.dp)
+                    .fillMaxWidth()
+            )
+        }
+        is Result.Error -> {
+            ErrorText(text = stringResource(id = R.string.failed_error))
         }
     }
 }

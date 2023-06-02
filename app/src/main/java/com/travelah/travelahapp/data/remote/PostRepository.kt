@@ -23,7 +23,7 @@ class PostRepository private constructor(
 
         wrapEspressoIdlingResource {
             try {
-                val response = apiService.getAllMostLikedPost(token)
+                val response = apiService.getAllMostLikedPost("Bearer $token")
                 if (response.status) {
                     emit(Result.Success(response.data))
                 } else {
