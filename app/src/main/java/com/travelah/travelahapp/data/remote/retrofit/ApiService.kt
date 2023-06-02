@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.data.remote.retrofit
 
 import com.travelah.travelahapp.data.remote.models.LoginResponse
+import com.travelah.travelahapp.data.remote.models.MostLikedPostResponse
 import com.travelah.travelahapp.data.remote.models.ProfileResponse
 import com.travelah.travelahapp.data.remote.models.RegisterResponse
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
@@ -22,4 +23,9 @@ interface ApiService {
     suspend fun profile(
         @Header("Authorization") authorization: String,
     ): ProfileResponse
+
+    @GET("posts/most-liked")
+    suspend fun mostLikedPost(
+        @Header("Authorization") authorization: String,
+    ): MostLikedPostResponse
 }
