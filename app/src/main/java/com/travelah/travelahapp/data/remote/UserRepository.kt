@@ -68,7 +68,7 @@ class UserRepository private constructor(
         wrapEspressoIdlingResource {
             try {
                 val response = apiService.register(RegisterBody(email, password, fullName))
-                if (response.status == true) {
+                if (response.status) {
                     emit(Result.Success(response.message))
                 } else {
                     emit(Result.Error(response.message))

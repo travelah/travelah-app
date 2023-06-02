@@ -3,6 +3,7 @@ package com.travelah.travelahapp.view
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.travelah.travelahapp.data.remote.PostRepository
 import com.travelah.travelahapp.data.remote.UserRepository
 import com.travelah.travelahapp.di.Injection
 import com.travelah.travelahapp.view.login.LoginViewModel
@@ -11,6 +12,7 @@ import com.travelah.travelahapp.view.register.RegisterViewModel
 
 class ViewModelFactory private constructor(
     private val userRepository: UserRepository,
+    private val postRepository: PostRepository
 ) :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
@@ -36,7 +38,8 @@ class ViewModelFactory private constructor(
         fun getInstance(context: Context): ViewModelFactory =
             instance ?: synchronized(this) {
                 instance ?: ViewModelFactory(
-                    Injection.provideRepository(context),
+                    Injection.provideUserRepository(context),
+                    Injection.providePostRepository(context)
                 )
             }.also { instance = it }
     }
