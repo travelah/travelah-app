@@ -30,4 +30,6 @@
     <string name="hi">Hi</string>
     <string name="history">History</string>
     <string name="most_liked_post">Most Liked Post</string>
+    <string name="no_history_data">No history data available</string>
+    <string name="no_most_liked_post_data">No most liked post data available</string>
 </resources>

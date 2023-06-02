@@ -112,8 +112,10 @@ fun HomeContent(
                 ) {
                     SubHeaderHome(title = stringResource(R.string.history), onClick = {})
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
+//                        ErrorText(text = stringResource(R.string.no_history_data))
                         HistoryChatCardHome(
                             latestChat = "Ini rekomendasi yang diinginkan",
                             date = "31 Mei 2023"
@@ -137,8 +139,10 @@ fun HomeContent(
                 ) {
                     SubHeaderHome(title = stringResource(R.string.most_liked_post), onClick = {})
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
+//                        ErrorText(text = stringResource(R.string.no_most_liked_post_data))
                         PostCardHome(
                             username = "zuhalal",
                             title = "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
