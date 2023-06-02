@@ -1,6 +1,5 @@
 package com.travelah.travelahapp.ui.components.contents
 
-import android.text.TextUtils.replace
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,17 +16,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.remote.models.Post
-import com.travelah.travelahapp.ui.components.elements.HistoryChatCardHome
-import com.travelah.travelahapp.ui.components.elements.PostCardHome
-import com.travelah.travelahapp.ui.components.elements.SubHeaderHome
 import androidx.compose.foundation.lazy.items
-import com.travelah.travelahapp.ui.components.elements.ErrorText
+import com.travelah.travelahapp.ui.components.elements.*
 import com.travelah.travelahapp.utils.withDateFormatFromISO
 
 @Composable
 fun HomeContent(
     listPost: List<Post> = mutableListOf(),
-    onClickSeeChat: ()-> Unit,
+    onClickSeeChat: () -> Unit,
     onClickSeePost: () -> Unit,
     profileName: String = "",
     modifier: Modifier = Modifier,
@@ -91,14 +87,7 @@ fun HomeContent(
                         ),
                     )
                 }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF07AFFF),
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
+                PrimaryButton(onClick = {}, {
                     Image(
                         painter = painterResource(id = R.drawable.ic_baseline_add_24_white),
                         contentDescription = stringResource(R.string.tips),
@@ -111,15 +100,17 @@ fun HomeContent(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                }
-
+                })
                 Column(
                     verticalArrangement = Arrangement.spacedBy(
                         4.dp,
                         Alignment.CenterVertically
                     )
                 ) {
-                    SubHeaderHome(title = stringResource(R.string.history), onClick = onClickSeeChat)
+                    SubHeaderHome(
+                        title = stringResource(R.string.history),
+                        onClick = onClickSeeChat
+                    )
                     Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -146,13 +137,18 @@ fun HomeContent(
                         Alignment.CenterVertically
                     ),
                 ) {
-                    SubHeaderHome(title = stringResource(R.string.most_liked_post), onClick = onClickSeePost)
+                    SubHeaderHome(
+                        title = stringResource(R.string.most_liked_post),
+                        onClick = onClickSeePost
+                    )
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxWidth().height(342.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(342.dp)
                     ) {
                         if (listPost.isNotEmpty()) {
-                            items(listPost, key={it.id}) { data ->
+                            items(listPost, key = { it.id }) { data ->
                                 PostCardHome(
                                     username = "zuhalal",
                                     title = data.description,
