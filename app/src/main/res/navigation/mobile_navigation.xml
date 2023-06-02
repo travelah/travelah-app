@@ -25,6 +25,6 @@
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.travelah.travelahapp.view.main.fragment.profile.ProfileFragment"
-        android:label="title_profile"
+        android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
