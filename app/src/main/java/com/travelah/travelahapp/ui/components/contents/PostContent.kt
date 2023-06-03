@@ -12,7 +12,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.travelah.travelahapp.data.local.entity.PostEntity
-import com.travelah.travelahapp.ui.components.elements.PostCardHome
+import com.travelah.travelahapp.ui.components.elements.PostCard
 import com.travelah.travelahapp.utils.withDateFormatFromISO
 
 @Composable
@@ -27,7 +27,7 @@ fun PostContent(
     ) {
         items(posts, key = { it.id }) { post ->
             if (post != null) {
-                PostCardHome(
+                PostCard(
                     username = post.posterFullName,
                     profPic = post.profilePicOfUser,
                     title = post.description,

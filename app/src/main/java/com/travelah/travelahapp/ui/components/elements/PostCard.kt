@@ -23,7 +23,7 @@ import coil.util.DebugLogger
 import com.travelah.travelahapp.R
 
 @Composable
-fun PostCardHome(
+fun PostCard(
     profPic: String?,
     username: String,
     title: String,

@@ -168,7 +168,7 @@ fun HomeContent(
                     ) {
                         if (listPost.isNotEmpty()) {
                             items(listPost, key = { it.id }) { data ->
-                                PostCardHome(
+                                PostCard(
                                     username = data.posterFullName,
                                     profPic = data.profilePicOfUser,
                                     title = data.description,
