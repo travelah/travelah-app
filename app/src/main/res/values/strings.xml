@@ -30,4 +30,7 @@
     <string name="hi">Hi</string>
     <string name="history">History</string>
     <string name="most_liked_post">Most Liked Post</string>
+    <string name="group_chat_history"><u>Chat With Vela</u></string>
+    <string name="group_chat_header_sample">Today</string>
+    <string name="latest_chat_sample">Latest chat...</string>
 </resources>
