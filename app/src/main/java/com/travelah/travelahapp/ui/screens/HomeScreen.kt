@@ -2,30 +2,65 @@ package com.travelah.travelahapp.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.ui.components.contents.HomeContent
+import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.data.remote.models.Post
+import com.travelah.travelahapp.ui.components.elements.ErrorText
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
+    postResult: Result<List<Post>>,
+    chatResult: Result<List<HistoryChat>>,
+    onClickSeeChat: () -> Unit,
+    onClickSeePost: () -> Unit,
     viewModel: MainViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
+    modifier: Modifier = Modifier,
 ) {
     val profileState: State<Profile?> = viewModel.getProfile().observeAsState()
-    HomeContent(
-        profileName = profileState.value?.fullName ?: "",
-        modifier = modifier
-            .padding(20.dp)
-            .fillMaxWidth()
-    )
+
+    when (chatResult) {
+        is Result.Loading -> {
+            Text(text = stringResource(R.string.loading))
+        }
+        is Result.Success -> {
+            when (postResult) {
+                is Result.Loading -> {
+                    Text(text = stringResource(R.string.loading))
+                }
+                is Result.Success -> {
+                    HomeContent(
+                        listChat = chatResult.data,
+                        listPost = postResult.data,
+                        profileName = profileState.value?.fullName ?: "",
+                        modifier = modifier
+                            .padding(20.dp)
+                            .fillMaxWidth(),
+                        onClickSeeChat = onClickSeeChat,
+                        onClickSeePost = onClickSeePost
+                    )
+                }
+                is Result.Error -> {
+                    ErrorText(text = stringResource(id = R.string.failed_error))
+                }
+            }
+        }
+        is Result.Error -> {
+            ErrorText(text = stringResource(id = R.string.failed_error))
+        }
+    }
 }

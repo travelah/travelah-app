@@ -28,7 +28,7 @@ fun BubbleChat(modifier: Modifier = Modifier) {
             model = stringResource(id = R.string.profile_picture_link),
             contentDescription = stringResource(R.string.profile_image_content_desc),
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.ic_baseline_person_24),
+            placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
             modifier = Modifier.size(40.dp)
         )
         Box(

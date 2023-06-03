@@ -11,6 +11,7 @@ class MainViewModel(
     private val repository: UserRepository,
 ) : ViewModel() {
     fun getToken(): LiveData<String> = repository.getToken()
+
     fun getProfile(): LiveData<Profile> = repository.getProfile()
     fun logout() {
         viewModelScope.launch {

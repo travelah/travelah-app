@@ -2,6 +2,7 @@ package com.travelah.travelahapp.ui.components.contents
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -14,23 +15,46 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.travelah.travelahapp.R
-import com.travelah.travelahapp.ui.components.elements.HistoryChatCardHome
-import com.travelah.travelahapp.ui.components.elements.PostCardHome
-import com.travelah.travelahapp.ui.components.elements.SubHeaderHome
+import com.travelah.travelahapp.data.remote.models.Post
+import com.travelah.travelahapp.ui.components.elements.*
+import com.travelah.travelahapp.utils.withDateFormatFromISO
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.unit.Dp
+import com.travelah.travelahapp.data.remote.models.HistoryChat
 
 @Composable
 fun HomeContent(
+    listChat: List<HistoryChat> = mutableListOf(),
+    listPost: List<Post> = mutableListOf(),
+    onClickSeeChat: () -> Unit,
+    onClickSeePost: () -> Unit,
+    profileName: String = "",
     modifier: Modifier = Modifier,
-    profileName: String = ""
 ) {
-    Column(
-        modifier = modifier.verticalScroll(rememberScrollState()),
+    fun getHeightPost(): Dp {
+        return when (listPost.size) {
+            1 -> 160.dp
+            2 -> 284.dp
+            3 -> 416.dp
+            else -> 20.dp
+        }
+    }
+
+    fun getHeightChat(): Dp {
+        return when (listChat.size) {
+            1 -> 76.dp
+            2 -> 164.dp
+            3 -> 252.dp
+            else -> 20.dp
+        }
+    }
+
+    LazyColumn(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
+        item {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -82,14 +106,7 @@ fun HomeContent(
                         ),
                     )
                 }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF07AFFF),
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
+                PrimaryButton(onClick = {}, {
                     Image(
                         painter = painterResource(id = R.drawable.ic_baseline_add_24_white),
                         contentDescription = stringResource(R.string.tips),
@@ -102,61 +119,68 @@ fun HomeContent(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                }
-
+                })
                 Column(
                     verticalArrangement = Arrangement.spacedBy(
                         4.dp,
                         Alignment.CenterVertically
                     )
                 ) {
-                    SubHeaderHome(title = stringResource(R.string.history), onClick = {})
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    SubHeaderHome(
+                        title = stringResource(R.string.history),
+                        onClick = onClickSeeChat
+                    )
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(getHeightChat())
                     ) {
-                        HistoryChatCardHome(
-                            latestChat = "Ini rekomendasi yang diinginkan",
-                            date = "31 Mei 2023"
-                        )
-                        HistoryChatCardHome(
-                            latestChat = "Ini rekomendasi yang diinginkan 2",
-                            date = "31 Mei 2023"
-                        )
-                        HistoryChatCardHome(
-                            latestChat = "Ini rekomendasi yang diinginkan 3",
-                            date = "31 Mei 2023"
-                        )
+                        if (listChat.isNotEmpty()) {
+                            items(listChat, key = { it.id }) { data ->
+                                HistoryChatCardHome(
+                                    latestChat = if (data.chats.isNotEmpty()) data.chats[0].question else "-",
+                                    date = if (data.chats.isNotEmpty()) data.chats[0].createdAt.withDateFormatFromISO() else data.createdAt.withDateFormatFromISO()
+                                )
+                            }
+                        } else {
+                            item {
+                                ErrorText(text = stringResource(R.string.no_history_data))
+                            }
+                        }
                     }
                 }
-
                 Column(
                     verticalArrangement = Arrangement.spacedBy(
                         4.dp,
                         Alignment.CenterVertically
-                    )
+                    ),
                 ) {
-                    SubHeaderHome(title = stringResource(R.string.most_liked_post), onClick = {})
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    SubHeaderHome(
+                        title = stringResource(R.string.most_liked_post),
+                        onClick = onClickSeePost
+                    )
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(getHeightPost())
                     ) {
-                        PostCardHome(
-                            username = "zuhalal",
-                            title = "Jalan di bogor, ini rekomendasi tempat wisata yang keren banget",
-                            date = "31 Mei 2023",
-                            likeCount = 24
-                        )
-                        PostCardHome(
-                            username = "zuhalal",
-                            title = "Jalan di bekasi, ini rekomendasi tempat wisata yang keren banget",
-                            date = "31 Mei 2023",
-                            likeCount = 24
-                        )
-                        PostCardHome(
-                            username = "zuhalal",
-                            title = "Jalan di depok, ini rekomendasi tempat wisata yang keren banget",
-                            date = "31 Mei 2023",
-                            likeCount = 24
-                        )
+                        if (listPost.isNotEmpty()) {
+                            items(listPost, key = { it.id }) { data ->
+                                PostCardHome(
+                                    username = data.userFullName,
+                                    profPic = data.profilePicOfUser,
+                                    title = data.description,
+                                    date = data.createdAt.withDateFormatFromISO(),
+                                    likeCount = data.likeCount
+                                )
+                            }
+                        } else {
+                            item {
+                                ErrorText(text = stringResource(R.string.no_most_liked_post_data))
+                            }
+                        }
                     }
                 }
             }

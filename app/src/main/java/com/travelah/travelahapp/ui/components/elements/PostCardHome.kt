@@ -2,7 +2,6 @@ package com.travelah.travelahapp.ui.components.elements
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -12,22 +11,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.imageLoader
+import coil.request.ImageRequest
+import coil.util.DebugLogger
 import com.travelah.travelahapp.R
 
 @Composable
 fun PostCardHome(
+    profPic: String?,
     username: String,
-    title:String,
+    title: String,
     date: String,
     likeCount: Int,
     modifier: Modifier = Modifier
 ) {
+    val imageLoader = LocalContext.current.imageLoader.newBuilder()
+        .logger(DebugLogger())
+        .build()
+
     Box(
         modifier = modifier
             .height(112.dp)
@@ -47,11 +55,15 @@ fun PostCardHome(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
-                    model = stringResource(id = R.string.profile_picture_link),
+                    model = ImageRequest.Builder(LocalContext.current).data(
+                        profPic
+                    ).build(),
                     contentDescription = stringResource(R.string.profile_image_content_desc),
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(id = R.drawable.ic_baseline_person_24),
-                    modifier = Modifier.size(20.dp)
+                    placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
+                    error = painterResource(id = R.drawable.ic_baseline_person_black_24),
+                    modifier = Modifier.size(20.dp),
+                    imageLoader = imageLoader
                 )
                 Text(
                     username,
