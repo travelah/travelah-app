@@ -1,24 +1,32 @@
 package com.travelah.travelahapp.view.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material.MaterialTheme
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.travelah.travelahapp.R
-import com.travelah.travelahapp.ui.screens.HomeScreen
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
+import com.travelah.travelahapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     private lateinit var factory: ViewModelFactory
     private val mainViewModel: MainViewModel by viewModels { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
         factory = ViewModelFactory.getInstance(this)
 
@@ -31,11 +39,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        setContent {
-            MaterialTheme {
-                HomeScreen(viewModel = mainViewModel)
-            }
-        }
+        setContentView(binding.root)
+
+        val navView: BottomNavigationView = binding.navView
+
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_chat, R.id.navigation_post, R.id.navigation_profile
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,4 +71,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-

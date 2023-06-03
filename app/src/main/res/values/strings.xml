@@ -11,9 +11,9 @@
     <string name="register_welcome">Don’t have an account? Please register to start a new journey with us!</string>
     <string name="travelah_icon">Travelah Icon</string>
     <string name="invalid_input">Pastikan semua field sudah terisi</string>
-    <string name="next">Lanjut</string>
-    <string name="success">Sukses</string>
-    <string name="failed">Gagal</string>
+    <string name="next">Continue</string>
+    <string name="success">Success</string>
+    <string name="failed">Failed</string>
     <string name="login_failed_message">Anda gagal login.</string>
     <string name="login_successful_message">Anda berhasil login.</string>
     <string name="register_failed_message">Anda gagal mendaftar.</string>
@@ -30,4 +30,16 @@
     <string name="hi">Hi</string>
     <string name="history">History</string>
     <string name="most_liked_post">Most Liked Post</string>
+    <string name="no_history_data">No history data available</string>
+    <string name="no_most_liked_post_data">No most liked post data available</string>
+    <string name="failed_error">There\'s an error, please try again later</string>
+    <string name="loading">Loading...</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_post">Post</string>
+    <string name="title_profile">Profile</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

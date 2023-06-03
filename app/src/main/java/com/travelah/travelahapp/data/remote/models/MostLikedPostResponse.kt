@@ -5,9 +5,9 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class ProfileResponse(
+data class MostLikedPostResponse(
 	@field:SerializedName("data")
-	val data: Profile,
+	val data: List<Post>,
 
 	@field:SerializedName("message")
 	val message: String,
@@ -15,5 +15,4 @@ data class ProfileResponse(
 	@field:SerializedName("status")
 	val status: Boolean
 ) : Parcelable
-
 
