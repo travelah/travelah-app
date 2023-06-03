@@ -36,7 +36,7 @@ fun HomeContent(
             1 -> 160.dp
             2 -> 284.dp
             3 -> 416.dp
-            else -> 80.dp
+            else -> 20.dp
         }
     }
 
@@ -45,7 +45,7 @@ fun HomeContent(
             1 -> 76.dp
             2 -> 164.dp
             3 -> 252.dp
-            else -> 80.dp
+            else -> 20.dp
         }
     }
 
