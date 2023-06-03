@@ -36,7 +36,7 @@ fun HomeContent(
             1 -> 160.dp
             2 -> 284.dp
             3 -> 416.dp
-            else -> 20.dp
+            else -> 80.dp
         }
     }
 
@@ -169,7 +169,7 @@ fun HomeContent(
                         if (listPost.isNotEmpty()) {
                             items(listPost, key = { it.id }) { data ->
                                 PostCardHome(
-                                    username = data.userFullName,
+                                    username = data.posterFullName,
                                     profPic = data.profilePicOfUser,
                                     title = data.description,
                                     date = data.createdAt.withDateFormatFromISO(),
