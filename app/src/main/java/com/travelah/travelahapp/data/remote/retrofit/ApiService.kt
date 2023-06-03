@@ -39,4 +39,11 @@ interface ApiService {
         @Query("page") page: Int? = 1,
         @Query("take") take: Int? = 3
     ): AllPostResponse
+
+    @GET("posts/mypost")
+    suspend fun getAllMyPost(
+        @Header("Authorization") authorization: String,
+        @Query("page") page: Int? = 1,
+        @Query("take") take: Int? = 3
+    ): AllPostResponse
 }

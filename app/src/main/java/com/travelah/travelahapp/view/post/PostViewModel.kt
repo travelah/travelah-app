@@ -9,5 +9,6 @@ class PostViewModel(
     private val postRepository: PostRepository
 ) : ViewModel() {
     fun getMostLikedPost(token: String) = postRepository.getMostLikedPost(token)
-    fun getAllPost(token: String) = postRepository.getAllPost(token).cachedIn(viewModelScope)
+    fun getAllPost(token: String, isMyPost: Boolean) =
+        postRepository.getAllPost(token, isMyPost).cachedIn(viewModelScope)
 }

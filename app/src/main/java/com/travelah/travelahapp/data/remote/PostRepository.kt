@@ -10,6 +10,7 @@ import com.travelah.travelahapp.data.remote.pager.PostRemoteMediator
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.Post
+import com.travelah.travelahapp.data.remote.pager.MyPostPagingSource
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,7 @@ class PostRepository private constructor(
         return Gson().fromJson(stringRes, ErrorResponse::class.java)
     }
 
-    fun getMostLikedPost(token: String) : LiveData<Result<List<Post>>> = liveData {
+    fun getMostLikedPost(token: String): LiveData<Result<List<Post>>> = liveData {
         emit(Result.Loading)
 
         wrapEspressoIdlingResource {
@@ -49,15 +50,20 @@ class PostRepository private constructor(
         }
     }
 
-    fun getAllPost(token: String): Flow<PagingData<PostEntity>> {
+    fun getAllPost(token: String, isMyPost: Boolean = false): Flow<PagingData<PostEntity>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
-                pageSize = 3,
+                pageSize = 5,
             ),
-            remoteMediator = PostRemoteMediator(database, apiService, "Bearer $token"),
+            remoteMediator = if (isMyPost) null else PostRemoteMediator(
+                database,
+                apiService,
+                "Bearer $token"
+            ),
             pagingSourceFactory = {
-                database.postDao().getAllPost()
+                if (isMyPost) MyPostPagingSource(apiService, "Bearer $token") else database.postDao()
+                    .getAllPost()
             }
         ).flow
     }
