@@ -1,9 +1,6 @@
 package com.travelah.travelahapp.data.remote.retrofit
 
-import com.travelah.travelahapp.data.remote.models.LoginResponse
-import com.travelah.travelahapp.data.remote.models.MostLikedPostResponse
-import com.travelah.travelahapp.data.remote.models.ProfileResponse
-import com.travelah.travelahapp.data.remote.models.RegisterResponse
+import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
 import retrofit2.http.*
@@ -28,4 +25,11 @@ interface ApiService {
     suspend fun getAllMostLikedPost(
         @Header("Authorization") authorization: String,
     ): MostLikedPostResponse
+
+    @GET("stories")
+    suspend fun getAllHistoryChat(
+        @Header("Authorization") authorization: String,
+        @Query("page") page: Int? = 1,
+        @Query("size") size: Int? = 3
+    ): HistoryChatResponse
 }

@@ -3,6 +3,7 @@ package com.travelah.travelahapp.view
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.travelah.travelahapp.data.remote.ChatRepository
 import com.travelah.travelahapp.data.remote.PostRepository
 import com.travelah.travelahapp.data.remote.UserRepository
 import com.travelah.travelahapp.di.Injection
@@ -13,7 +14,8 @@ import com.travelah.travelahapp.view.register.RegisterViewModel
 
 class ViewModelFactory private constructor(
     private val userRepository: UserRepository,
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
+    private val chatRepository: ChatRepository
 ) :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
@@ -44,7 +46,8 @@ class ViewModelFactory private constructor(
             instance ?: synchronized(this) {
                 instance ?: ViewModelFactory(
                     Injection.provideUserRepository(context),
-                    Injection.providePostRepository()
+                    Injection.providePostRepository(),
+                    Injection.provideChatRepository()
                 )
             }.also { instance = it }
     }
