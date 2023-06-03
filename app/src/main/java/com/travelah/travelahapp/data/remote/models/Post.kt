@@ -13,10 +13,13 @@ data class Post(
 	val isUserDontLike: Boolean,
 
 	@field:SerializedName("latitude")
-	val latitude: Double? = null,
+	val latitude: Double,
 
-	@field:SerializedName("userFullName")
-	val userFullName: String,
+	@field:SerializedName("longitude")
+	val longitude: Double,
+
+	@field:SerializedName("posterFullName")
+	val posterFullName: String,
 
 	@field:SerializedName("description")
 	val description: String,
@@ -28,7 +31,7 @@ data class Post(
 	val userId: Int,
 
 	@field:SerializedName("commentCount")
-	val commentCount: Int? = null,
+	val commentCount: Int,
 
 	@field:SerializedName("createdAt")
 	val createdAt: String,
@@ -49,10 +52,7 @@ data class Post(
 	val postPhotoName: String? = null,
 
 	@field:SerializedName("isUserLike")
-	val isUserLike: Boolean? = null,
-
-	@field:SerializedName("longitude")
-	val longitude: Double? = null,
+	val isUserLike: Boolean,
 
 	@field:SerializedName("updatedAt")
 	val updatedAt: String? = null
