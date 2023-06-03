@@ -20,9 +20,11 @@ import com.travelah.travelahapp.ui.components.elements.*
 import com.travelah.travelahapp.utils.withDateFormatFromISO
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.unit.Dp
+import com.travelah.travelahapp.data.remote.models.HistoryChat
 
 @Composable
 fun HomeContent(
+    listChat: List<HistoryChat> = mutableListOf(),
     listPost: List<Post> = mutableListOf(),
     onClickSeeChat: () -> Unit,
     onClickSeePost: () -> Unit,
@@ -34,6 +36,15 @@ fun HomeContent(
             1 -> 160.dp
             2 -> 284.dp
             3 -> 408.dp
+            else -> 80.dp
+        }
+    }
+
+    fun getHeightChat(): Dp {
+        return when (listChat.size) {
+            1 -> 76.dp
+            2 -> 164.dp
+            3 -> 248.dp
             else -> 80.dp
         }
     }
@@ -118,23 +129,24 @@ fun HomeContent(
                     title = stringResource(R.string.history),
                     onClick = onClickSeeChat
                 )
-                Column(
+                LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(getHeightChat())
                 ) {
-//                        ErrorText(text = stringResource(R.string.no_history_data))
-                    HistoryChatCardHome(
-                        latestChat = "Ini rekomendasi yang diinginkan",
-                        date = "31 Mei 2023"
-                    )
-                    HistoryChatCardHome(
-                        latestChat = "Ini rekomendasi yang diinginkan 2",
-                        date = "31 Mei 2023"
-                    )
-                    HistoryChatCardHome(
-                        latestChat = "Ini rekomendasi yang diinginkan 3",
-                        date = "31 Mei 2023"
-                    )
+                    if (listChat.isNotEmpty()) {
+                        items(listChat, key = { it.id }) { data ->
+                            HistoryChatCardHome(
+                                latestChat = if (data.chats.isNotEmpty()) data.chats[0].question else "-",
+                                date = if (data.chats.isNotEmpty()) data.chats[0].createdAt.withDateFormatFromISO() else data.createdAt.withDateFormatFromISO()
+                            )
+                        }
+                    } else {
+                        item {
+                            ErrorText(text = stringResource(R.string.no_history_data))
+                        }
+                    }
                 }
             }
             Column(

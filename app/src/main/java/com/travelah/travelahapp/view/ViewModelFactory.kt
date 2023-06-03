@@ -7,6 +7,7 @@ import com.travelah.travelahapp.data.remote.ChatRepository
 import com.travelah.travelahapp.data.remote.PostRepository
 import com.travelah.travelahapp.data.remote.UserRepository
 import com.travelah.travelahapp.di.Injection
+import com.travelah.travelahapp.view.chat.ChatViewModel
 import com.travelah.travelahapp.view.login.LoginViewModel
 import com.travelah.travelahapp.view.main.MainViewModel
 import com.travelah.travelahapp.view.post.PostViewModel
@@ -35,6 +36,10 @@ class ViewModelFactory private constructor(
 
         if (modelClass.isAssignableFrom(PostViewModel::class.java)) {
             return PostViewModel(postRepository) as T
+        }
+
+        if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
+            return ChatViewModel(chatRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

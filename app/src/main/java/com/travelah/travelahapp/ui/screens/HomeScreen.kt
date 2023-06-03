@@ -16,12 +16,14 @@ import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.ui.components.contents.HomeContent
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.remote.models.HistoryChat
 import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.ErrorText
 
 @Composable
 fun HomeScreen(
-    result: Result<List<Post>>,
+    postResult: Result<List<Post>>,
+    chatResult: Result<List<HistoryChat>>,
     onClickSeeChat: () -> Unit,
     onClickSeePost: () -> Unit,
     viewModel: MainViewModel = viewModel(
@@ -31,20 +33,31 @@ fun HomeScreen(
 ) {
     val profileState: State<Profile?> = viewModel.getProfile().observeAsState()
 
-    when (result) {
+    when (chatResult) {
         is Result.Loading -> {
             Text(text = stringResource(R.string.loading))
         }
         is Result.Success -> {
-            HomeContent(
-                listPost = result.data,
-                profileName = profileState.value?.fullName ?: "",
-                modifier = modifier
-                    .padding(20.dp)
-                    .fillMaxWidth(),
-                onClickSeeChat = onClickSeeChat,
-                onClickSeePost = onClickSeePost
-            )
+            when (postResult) {
+                is Result.Loading -> {
+                    Text(text = stringResource(R.string.loading))
+                }
+                is Result.Success -> {
+                    HomeContent(
+                        listChat = chatResult.data,
+                        listPost = postResult.data,
+                        profileName = profileState.value?.fullName ?: "",
+                        modifier = modifier
+                            .padding(20.dp)
+                            .fillMaxWidth(),
+                        onClickSeeChat = onClickSeeChat,
+                        onClickSeePost = onClickSeePost
+                    )
+                }
+                is Result.Error -> {
+                    ErrorText(text = stringResource(id = R.string.failed_error))
+                }
+            }
         }
         is Result.Error -> {
             ErrorText(text = stringResource(id = R.string.failed_error))

@@ -26,7 +26,7 @@ interface ApiService {
         @Header("Authorization") authorization: String,
     ): MostLikedPostResponse
 
-    @GET("stories")
+    @GET("chats")
     suspend fun getAllHistoryChat(
         @Header("Authorization") authorization: String,
         @Query("page") page: Int? = 1,

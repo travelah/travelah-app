@@ -13,6 +13,7 @@ import com.travelah.travelahapp.R
 import com.travelah.travelahapp.databinding.FragmentHomeBinding
 import com.travelah.travelahapp.ui.screens.HomeScreen
 import com.travelah.travelahapp.view.ViewModelFactory
+import com.travelah.travelahapp.view.chat.ChatViewModel
 import com.travelah.travelahapp.view.post.PostViewModel
 
 class HomeFragment : Fragment() {
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
     private lateinit var factory: ViewModelFactory
     private val mainViewModel: MainViewModel by viewModels { factory }
     private val postViewModel: PostViewModel by viewModels { factory }
+    private val chatViewModel: ChatViewModel by viewModels { factory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,19 +48,22 @@ class HomeFragment : Fragment() {
         }
 
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
-            postViewModel.getMostLikedPost(token).observe(viewLifecycleOwner) { result ->
-                binding.composeView.apply {
-                    // Dispose of the Composition when the view's LifecycleOwner
-                    // is destroyed
-                    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-                    setContent {
-                        // In Compose world
-                        MaterialTheme {
-                            HomeScreen(
-                                result,
-                                onClickSeeChat = { handleClickChat() },
-                                onClickSeePost = { handleClickPost() }
-                            )
+            chatViewModel.getRecentHistoryChat(token).observe(viewLifecycleOwner) { chatResult ->
+                postViewModel.getMostLikedPost(token).observe(viewLifecycleOwner) { postResult ->
+                    binding.composeView.apply {
+                        // Dispose of the Composition when the view's LifecycleOwner
+                        // is destroyed
+                        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                        setContent {
+                            // In Compose world
+                            MaterialTheme {
+                                HomeScreen(
+                                    postResult,
+                                    chatResult,
+                                    onClickSeeChat = { handleClickChat() },
+                                    onClickSeePost = { handleClickPost() }
+                                )
+                            }
                         }
                     }
                 }
