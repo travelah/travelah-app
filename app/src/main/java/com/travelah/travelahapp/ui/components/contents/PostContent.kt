@@ -32,7 +32,12 @@ fun PostContent(
                     profPic = post.profilePicOfUser,
                     title = post.description,
                     date = post.createdAt.withDateFormatFromISO(),
-                    likeCount = post.likeCount
+                    likeCount = post.likeCount,
+                    dontLikeCount = post.dontLikeCount,
+                    commentCount = post.commentCount,
+                    isUserLike = post.isUserLike,
+                    isUserDontLike = post.isUserDontLike,
+                    hideDislike = false
                 )
             }
         }

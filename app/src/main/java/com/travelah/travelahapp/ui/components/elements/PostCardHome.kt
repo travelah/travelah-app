@@ -1,6 +1,5 @@
 package com.travelah.travelahapp.ui.components.elements
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,6 +29,11 @@ fun PostCardHome(
     title: String,
     date: String,
     likeCount: Int,
+    dontLikeCount: Int,
+    commentCount: Int = 0,
+    isUserLike: Boolean = false,
+    isUserDontLike: Boolean = false,
+    hideDislike: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val imageLoader = LocalContext.current.imageLoader.newBuilder()
@@ -87,20 +91,32 @@ fun PostCardHome(
                 ),
             )
             Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_baseline_thumb_up_24),
-                    contentDescription = stringResource(R.string.tips),
-                    modifier = Modifier.size(16.dp)
+                IconWithCount(
+                    icon = R.drawable.ic_baseline_comment_24,
+                    contentDescription = stringResource(R.string.comment_count),
+                    count = commentCount.toString()
                 )
-                Text(
-                    likeCount.toString(), style = MaterialTheme.typography.overline.copy(
-                        fontWeight = FontWeight.Bold
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    IconWithCount(
+                        icon = if (isUserLike) R.drawable.ic_baseline_thumb_up_travelah_blue_24 else R.drawable.ic_baseline_thumb_up_24,
+                        contentDescription = stringResource(R.string.like_count),
+                        count = likeCount.toString()
                     )
-                )
+                    if (!hideDislike) {
+                        IconWithCount(
+                            icon = if (isUserDontLike) R.drawable.ic_baseline_thumb_down_travelah_blue_24 else R.drawable.ic_baseline_thumb_down_24,
+                            contentDescription = stringResource(R.string.dislike_count),
+                            count = dontLikeCount.toString()
+                        )
+                    }
+                }
             }
         }
     }
