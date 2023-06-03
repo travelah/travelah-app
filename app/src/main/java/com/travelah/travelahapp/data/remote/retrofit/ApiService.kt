@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.data.remote.retrofit
 
+import androidx.room.Delete
 import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
@@ -32,4 +33,10 @@ interface ApiService {
         @Query("page") page: Int? = 1,
         @Query("size") size: Int? = 3
     ): HistoryChatResponse
+
+    @DELETE("chats/group/{id}")
+    suspend fun deleteGroupChat(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+    ): DeleteGroupChatResponse
 }

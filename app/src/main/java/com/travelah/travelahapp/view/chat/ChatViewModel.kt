@@ -7,4 +7,6 @@ class ChatViewModel(
 private val chatRepository: ChatRepository
 ) : ViewModel() {
     fun getRecentHistoryChat(token: String) = chatRepository.getHistoryChat(token)
+
+    fun deleteGroupChatById(token: String, id: Int) = chatRepository.deleteGroupChat(token, id)
 }
