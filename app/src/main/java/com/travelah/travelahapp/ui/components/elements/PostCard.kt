@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.elements
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +35,8 @@ fun PostCard(
     isUserLike: Boolean = false,
     isUserDontLike: Boolean = false,
     hideDislike: Boolean = true,
+    onClickLike: ()-> Unit? = {},
+    onClickDontLike: ()-> Unit? = {},
     modifier: Modifier = Modifier
 ) {
     val imageLoader = LocalContext.current.imageLoader.newBuilder()
@@ -107,13 +110,15 @@ fun PostCard(
                     IconWithCount(
                         icon = if (isUserLike) R.drawable.ic_baseline_thumb_up_travelah_blue_24 else R.drawable.ic_baseline_thumb_up_24,
                         contentDescription = stringResource(R.string.like_count),
-                        count = likeCount.toString()
+                        count = likeCount.toString(),
+                        onClick = { onClickLike() }
                     )
                     if (!hideDislike) {
                         IconWithCount(
                             icon = if (isUserDontLike) R.drawable.ic_baseline_thumb_down_travelah_blue_24 else R.drawable.ic_baseline_thumb_down_24,
                             contentDescription = stringResource(R.string.dislike_count),
-                            count = dontLikeCount.toString()
+                            count = dontLikeCount.toString(),
+                            onClick = { onClickDontLike() }
                         )
                     }
                 }

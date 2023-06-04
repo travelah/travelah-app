@@ -9,11 +9,13 @@ import com.travelah.travelahapp.data.local.entity.PostEntity
 import com.travelah.travelahapp.data.remote.pager.PostRemoteMediator
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
+import com.travelah.travelahapp.data.remote.models.LikePostResponse
 import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.data.remote.pager.MyPostPagingSource
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 
 class PostRepository private constructor(
@@ -62,10 +64,47 @@ class PostRepository private constructor(
                 "Bearer $token"
             ),
             pagingSourceFactory = {
-                if (isMyPost) MyPostPagingSource(apiService, "Bearer $token") else database.postDao()
+                if (isMyPost) MyPostPagingSource(
+                    apiService,
+                    "Bearer $token"
+                ) else database.postDao()
                     .getAllPost()
             }
         ).flow
+    }
+
+    fun likeDislikePost(
+        token: String,
+        id: Int,
+        isLike: Boolean
+    ): Flow<Result<LikePostResponse>> = flow {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.likeDislikePost(
+                    "Bearer $token",
+                    id,
+                    if (isLike) "LIKE" else "DONTLIKE"
+                )
+                if (response.status) {
+                    emit(Result.Success(response))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
     }
 
     companion object {

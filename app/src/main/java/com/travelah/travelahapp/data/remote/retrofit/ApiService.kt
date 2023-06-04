@@ -46,4 +46,11 @@ interface ApiService {
         @Query("page") page: Int? = 1,
         @Query("take") take: Int? = 3
     ): AllPostResponse
+
+    @POST("posts/like/{id}")
+    suspend fun likeDislikePost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Query("likeType") likeType: String,
+    ): LikePostResponse
 }

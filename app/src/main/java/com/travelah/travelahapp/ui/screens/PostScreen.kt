@@ -17,9 +17,11 @@ import com.travelah.travelahapp.ui.components.contents.PostContent
 @Composable
 fun PostScreen(
     posts: LazyPagingItems<PostEntity>,
+    token: String,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+
     LaunchedEffect(key1 = posts.loadState) {
         if (posts.loadState.refresh is LoadState.Error) {
             Toast.makeText(
@@ -37,7 +39,7 @@ fun PostScreen(
             )
         } else {
             PostContent(
-                posts = posts, modifier = modifier
+                posts = posts, token = token, modifier = modifier
                     .padding(20.dp)
                     .fillMaxWidth()
             )

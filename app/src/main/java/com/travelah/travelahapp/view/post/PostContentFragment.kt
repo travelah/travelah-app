@@ -43,7 +43,8 @@ class PostContentFragment : Fragment() {
                         MaterialTheme {
                             val posts = postViewModel.getAllPost(token, index == 2).collectAsLazyPagingItems()
                             PostScreen(
-                                posts
+                                posts,
+                                token
                             )
                         }
                     }
