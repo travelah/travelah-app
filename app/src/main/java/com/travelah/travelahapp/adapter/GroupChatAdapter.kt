@@ -12,14 +12,16 @@ import com.travelah.travelahapp.utils.withDateFormatFromISO
 import kotlinx.parcelize.Parcelize
 
 class GroupChatAdapter(private val listGroupChat: Map<String, List<HistoryChat>>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var onItemLongClickCallback: OnItemLongClickCallback? = null
+    private var onItemClickCallback: OnItemClickCallback? = null
 
-    fun setOnItemLongClickCallback(onItemLongClickCallback: OnItemLongClickCallback) {
-        this.onItemLongClickCallback = onItemLongClickCallback
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
     }
 
-    interface OnItemLongClickCallback {
-        fun onItemLongClicked(data: Chat)
+    interface OnItemClickCallback {
+        fun onItemClicked(data: Chat)
+
+        fun onItemDelete(groupChatId: Int)
     }
 
     private enum class ViewType {
@@ -86,9 +88,11 @@ class GroupChatAdapter(private val listGroupChat: Map<String, List<HistoryChat>>
                 tvLatestChat.text = groupChatItem.chats[0].response
                 tvLatestChatDate.text = groupChatItem.chats[0].updatedAt.withDateFormatFromISO()
             }
-            binding.root.setOnLongClickListener {
-                onItemLongClickCallback?.onItemLongClicked(groupChatItem.chats[0])
-                true
+            binding.root.setOnClickListener {
+                onItemClickCallback?.onItemClicked(groupChatItem.chats[0])
+            }
+            binding.buttonDeleteGroupChat.setOnClickListener {
+                onItemClickCallback?.onItemDelete(groupChatItem.chats[0].groupChatId)
             }
         }
     }

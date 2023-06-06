@@ -15,6 +15,8 @@ import com.travelah.travelahapp.R
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
 import com.travelah.travelahapp.databinding.ActivityMainBinding
+import com.travelah.travelahapp.view.chat.ChatFragment
+import com.travelah.travelahapp.view.chat.DetailChatActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,6 +57,15 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val currentDestination = navController.currentDestination?.id
+
+        if (currentDestination == R.id.navigation_chat) {
+            menu?.findItem(R.id.new_chat)?.isVisible = true
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu, menu)
@@ -66,6 +77,11 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_logout -> {
                 mainViewModel.logout()
                 true
+            }
+            R.id.new_chat -> {
+                val intent = Intent(this@MainActivity, DetailChatActivity::class.java)
+                startActivity(intent)
+                return true
             }
             else -> true
         }
