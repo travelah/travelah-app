@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class MostLikedPostResponse(
+data class AllPostResponse(
 	@field:SerializedName("data")
 	val data: List<Post>,
 

@@ -168,12 +168,16 @@ fun HomeContent(
                     ) {
                         if (listPost.isNotEmpty()) {
                             items(listPost, key = { it.id }) { data ->
-                                PostCardHome(
+                                PostCard(
                                     username = data.posterFullName,
                                     profPic = data.profilePicOfUser,
                                     title = data.description,
                                     date = data.createdAt.withDateFormatFromISO(),
-                                    likeCount = data.likeCount
+                                    likeCount = data.likeCount,
+                                    dontLikeCount = data.dontLikeCount,
+                                    commentCount = data.commentCount,
+                                    isUserLike = data.isUserLike,
+                                    isUserDontLike = data.isUserDontLike,
                                 )
                             }
                         } else {
