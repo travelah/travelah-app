@@ -23,6 +23,9 @@
     <string name="profile_picture_link">https://avatars.githubusercontent.com/u/74417769?v=4</string>
     <string name="profile_image_content_desc">Profile Image</string>
     <string name="tips">tips</string>
+    <string name="like_count">Like Count</string>
+    <string name="dislike_count">Dislike Count</string>
+    <string name="comment_count">Comment Count</string>
     <string name="new_chat">New Chat</string>
     <string name="tips_chat">Don’t know what to say? you can ask FAQ or ask recommendation some places to Vela like “recommend me the best place in Bali!” or say anything like that.</string>
     <string name="help_today_question">What can I help you today?</string>
@@ -45,4 +48,6 @@
     <string name="title_post">Post</string>
     <string name="title_profile">Profile</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_text_1">All Post</string>
+    <string name="tab_text_2">My Post</string>
 </resources>

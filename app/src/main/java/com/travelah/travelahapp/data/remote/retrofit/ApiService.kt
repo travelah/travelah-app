@@ -25,13 +25,13 @@ interface ApiService {
     @GET("posts/most-liked")
     suspend fun getAllMostLikedPost(
         @Header("Authorization") authorization: String,
-    ): MostLikedPostResponse
+    ): AllPostResponse
 
     @GET("chats")
     suspend fun getAllHistoryChat(
         @Header("Authorization") authorization: String,
         @Query("page") page: Int? = 1,
-        @Query("size") size: Int? = 3
+        @Query("take") take: Int? = 3
     ): HistoryChatResponse
 
     @DELETE("chats/group/{id}")
@@ -39,4 +39,24 @@ interface ApiService {
         @Header("Authorization") authorization: String,
         @Path("id") id: Int,
     ): DeleteGroupChatResponse
+    @GET("posts")
+    suspend fun getAllPost(
+        @Header("Authorization") authorization: String,
+        @Query("page") page: Int? = 1,
+        @Query("take") take: Int? = 3
+    ): AllPostResponse
+
+    @GET("posts/mypost")
+    suspend fun getAllMyPost(
+        @Header("Authorization") authorization: String,
+        @Query("page") page: Int? = 1,
+        @Query("take") take: Int? = 3
+    ): AllPostResponse
+
+    @POST("posts/like/{id}")
+    suspend fun likeDislikePost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Query("likeType") likeType: String,
+    ): LikePostResponse
 }

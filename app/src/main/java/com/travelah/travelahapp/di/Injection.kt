@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.travelah.travelahapp.data.database.ChatDatabase
+import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.ChatRepository
 import com.travelah.travelahapp.data.remote.PostRepository
 import com.travelah.travelahapp.data.remote.SettingPreferences
@@ -20,14 +20,15 @@ object Injection {
         return UserRepository.getInstance(apiService, pref)
     }
 
-    fun providePostRepository(): PostRepository {
+    fun providePostRepository(context: Context): PostRepository {
         val apiService = RetrofitConfig.getApiService()
-        return PostRepository.getInstance(apiService)
+        val database = TravelahDatabase.getInstance(context)
+        return PostRepository.getInstance(apiService, database)
     }
 
     fun provideChatRepository(context: Context): ChatRepository {
         val apiService = RetrofitConfig.getApiService()
-        val database = ChatDatabase.getDatabase(context)
+        val database = TravelahDatabase.getInstance(context)
         return ChatRepository.getInstance(database, apiService)
     }
 }
