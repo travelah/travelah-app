@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Travelah App</string>
+    <string name="package_name">com.travelah.travelahapp</string>
     <string name="travelah">Travelah</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
@@ -56,4 +57,8 @@
     <string name="location">Location</string>
     <string name="no_location">No Location</string>
     <string name="change"><u>Change</u></string>
+    <string name="not_put_the_picture">Please insert picture first.</string>
+    <string name="not_put_the_description">Please insert description first.</string>
+    <string name="upload_success">Post uploaded successfully</string>
+    <string name="add_edit">Add/Edit</string>
 </resources>

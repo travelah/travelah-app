@@ -3,6 +3,9 @@ package com.travelah.travelahapp.data.remote.retrofit
 import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
@@ -53,4 +56,14 @@ interface ApiService {
         @Path("id") id: Int,
         @Query("likeType") likeType: String,
     ): LikePostResponse
+
+    @Multipart
+    @POST("posts")
+    suspend fun createPost(
+        @Header("Authorization") authorization: String,
+        @Part("description") description: RequestBody,
+        @Part("latitude") latitude: RequestBody,
+        @Part("longitude") longitude: RequestBody,
+        @Part photo: MultipartBody.Part,
+    ): CreatePostResponse
 }
