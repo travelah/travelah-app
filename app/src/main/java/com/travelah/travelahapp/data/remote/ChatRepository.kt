@@ -2,8 +2,12 @@ package com.travelah.travelahapp.data.remote
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.*
 import com.google.gson.Gson
+import com.travelah.travelahapp.data.ChatRemoteMediator
 import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.data.database.ChatDatabase
+import com.travelah.travelahapp.data.database.ChatItem
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.HistoryChat
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
@@ -12,6 +16,7 @@ import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 import retrofit2.HttpException
 
 class ChatRepository private constructor(
+    private val chatDatabase: ChatDatabase,
     private val apiService: ApiService,
 ) {
     private fun convertErrorResponse(stringRes: String?): ErrorResponse {
@@ -44,6 +49,21 @@ class ChatRepository private constructor(
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
+    fun getHistoryGroupChat(token: String): LiveData<PagingData<ChatItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            remoteMediator = ChatRemoteMediator(chatDatabase, apiService, token),
+            pagingSourceFactory = {
+                chatDatabase.chatDao().getAllGroupChat()
+            }
+        ).liveData
+    }
+
+
+
     fun deleteGroupChat(token: String, id: Int) : LiveData<Result<String>> = liveData {
         emit(Result.Loading)
 
@@ -74,10 +94,11 @@ class ChatRepository private constructor(
         @Volatile
         private var instance: ChatRepository? = null
         fun getInstance(
+            chatDatabase: ChatDatabase,
             apiService: ApiService,
         ): ChatRepository =
             instance ?: synchronized(this) {
-                instance ?: ChatRepository(apiService)
+                instance ?: ChatRepository(chatDatabase, apiService)
             }.also { instance = it }
     }
 }
