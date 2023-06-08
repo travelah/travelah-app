@@ -15,7 +15,6 @@ import com.travelah.travelahapp.R
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
 import com.travelah.travelahapp.databinding.ActivityMainBinding
-import com.travelah.travelahapp.view.maps.MapsActivity
 import com.travelah.travelahapp.view.post.AddEditPostActivity
 
 class MainActivity : AppCompatActivity() {
