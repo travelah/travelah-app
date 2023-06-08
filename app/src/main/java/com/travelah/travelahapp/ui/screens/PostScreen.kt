@@ -41,9 +41,10 @@ fun PostScreen(
             )
         } else {
             PostContent(
-                posts = posts, token = token, modifier = modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
+                posts = posts, token = token,
+                modifier = modifier
+                    .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 52.dp)
+                    .fillMaxWidth(),
             )
         }
     }

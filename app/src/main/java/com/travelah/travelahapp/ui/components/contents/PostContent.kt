@@ -72,7 +72,8 @@ fun PostContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(posts, key = { it.id }) { post ->
+        // not used key because already handled by the paging3
+        items(posts) { post ->
             if (post != null) {
                 PostCard(
                     username = post.posterFullName,

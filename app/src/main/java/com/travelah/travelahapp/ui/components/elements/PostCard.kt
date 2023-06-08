@@ -39,9 +39,9 @@ fun PostCard(
     onClickDontLike: ()-> Unit? = {},
     modifier: Modifier = Modifier
 ) {
-    val imageLoader = LocalContext.current.imageLoader.newBuilder()
-        .logger(DebugLogger())
-        .build()
+//    val imageLoader = LocalContext.current.imageLoader.newBuilder()
+//        .logger(DebugLogger())
+//        .build()
 
     Box(
         modifier = modifier
@@ -70,7 +70,7 @@ fun PostCard(
                     placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
                     error = painterResource(id = R.drawable.ic_baseline_person_black_24),
                     modifier = Modifier.size(20.dp),
-                    imageLoader = imageLoader
+//                    imageLoader = imageLoader
                 )
                 Text(
                     username,

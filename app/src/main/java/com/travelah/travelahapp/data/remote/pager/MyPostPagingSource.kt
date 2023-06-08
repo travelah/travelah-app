@@ -7,6 +7,8 @@ import com.travelah.travelahapp.data.remote.retrofit.ApiService
 
 class MyPostPagingSource(private val apiService: ApiService, private val token: String) :
     PagingSource<Int, PostEntity>() {
+    override val jumpingSupported: Boolean = true
+
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
     }

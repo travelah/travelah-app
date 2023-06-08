@@ -61,6 +61,7 @@ class PostRepository private constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = 5,
+                jumpThreshold = 15
             ),
             remoteMediator = if (isMyPost) null else PostRemoteMediator(
                 database,
