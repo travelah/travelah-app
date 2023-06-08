@@ -59,6 +59,7 @@ class PostRemoteMediator(
                 val data = responseData.data.map {
                     PostEntity(
                         id = it.id,
+                        title = it.title,
                         userId = it.userId,
                         latitude = it.latitude,
                         longitude = it.longitude,

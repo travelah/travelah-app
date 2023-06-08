@@ -18,6 +18,9 @@ data class Post(
 	@field:SerializedName("longitude")
 	val longitude: Double,
 
+	@field:SerializedName("title")
+	val title: String,
+
 	@field:SerializedName("posterFullName")
 	val posterFullName: String,
 

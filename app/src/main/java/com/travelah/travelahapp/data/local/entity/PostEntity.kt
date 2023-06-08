@@ -12,6 +12,7 @@ data class PostEntity(
     val id: Int,
     val userId: Int,
     val latitude: Double,
+    val title: String,
     val posterFullName: String,
     val description: String,
     val commentCount: Int,

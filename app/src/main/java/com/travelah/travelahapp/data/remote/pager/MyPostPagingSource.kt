@@ -20,6 +20,7 @@ class MyPostPagingSource(private val apiService: ApiService, private val token: 
             val convertedPost = responseData.data.map {
                 PostEntity(
                     id = it.id,
+                    title = it.title,
                     userId = it.userId,
                     latitude = it.latitude,
                     longitude = it.longitude,

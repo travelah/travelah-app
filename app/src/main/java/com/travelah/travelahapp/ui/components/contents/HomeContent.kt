@@ -171,7 +171,7 @@ fun HomeContent(
                                 PostCard(
                                     username = data.posterFullName,
                                     profPic = data.profilePicOfUser,
-                                    title = data.description,
+                                    title = data.title,
                                     date = data.createdAt.withDateFormatFromISO(),
                                     likeCount = data.likeCount,
                                     dontLikeCount = data.dontLikeCount,

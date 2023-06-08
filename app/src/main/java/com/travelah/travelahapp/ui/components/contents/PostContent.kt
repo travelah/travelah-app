@@ -78,7 +78,7 @@ fun PostContent(
                 PostCard(
                     username = post.posterFullName,
                     profPic = post.profilePicOfUser,
-                    title = post.description,
+                    title = post.title,
                     date = post.createdAt.withDateFormatFromISO(),
                     likeCount = post.likeCount,
                     dontLikeCount = post.dontLikeCount,
