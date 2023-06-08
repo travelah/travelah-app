@@ -9,7 +9,6 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -130,19 +129,8 @@ class AddEditPostActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == MAPS_RESULT) {
-            currLong = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getSerializableExtra("long")
-            } else {
-                @Suppress("DEPRECATION")
-                result.data?.getSerializableExtra("long")
-            } as? Double
-
-            currLat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getSerializableExtra("lat")
-            } else {
-                @Suppress("DEPRECATION")
-                result.data?.getSerializableExtra("lat")
-            } as? Double
+            currLong = result.data?.getDoubleExtra("long", 0.0)
+            currLat = result.data?.getDoubleExtra("lat", 0.0)
 
             currAddress = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 result.data?.getSerializableExtra("address", String::class.java)
