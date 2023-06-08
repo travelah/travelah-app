@@ -61,6 +61,7 @@ interface ApiService {
     @POST("posts")
     suspend fun createPost(
         @Header("Authorization") authorization: String,
+        @Part("title") title: RequestBody,
         @Part("description") description: RequestBody,
         @Part("latitude") latitude: RequestBody,
         @Part("longitude") longitude: RequestBody,

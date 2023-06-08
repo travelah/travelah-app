@@ -167,6 +167,9 @@ class AddEditPostActivity : AppCompatActivity() {
         if (getFile != null && binding.descriptionInput.error == null && binding.titlePostInput.error == null) {
             val file = reduceFileImage(getFile as File)
 
+            val title =
+                binding.titlePostInput.text.toString().toRequestBody("text/plain".toMediaType())
+
             val description =
                 binding.descriptionInput.text.toString().toRequestBody("text/plain".toMediaType())
 
@@ -184,6 +187,7 @@ class AddEditPostActivity : AppCompatActivity() {
                 if (token !== "") {
                     postViewModel.createPost(
                         imageMultipart,
+                        title,
                         description,
                         token,
                         long,

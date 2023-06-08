@@ -114,6 +114,7 @@ class PostRepository private constructor(
 
     fun createPost(
         photo: MultipartBody.Part,
+        title: RequestBody,
         description: RequestBody,
         token: String,
         long: RequestBody,
@@ -125,6 +126,7 @@ class PostRepository private constructor(
             try {
                 val response = apiService.createPost(
                     "Bearer $token",
+                    title,
                     description,
                     lat,
                     long,

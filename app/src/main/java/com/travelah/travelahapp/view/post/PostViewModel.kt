@@ -17,10 +17,11 @@ class PostViewModel(
         postRepository.likeDislikePost(token, id, isLiked)
     fun createPost(
         photo: MultipartBody.Part,
+        title: RequestBody,
         description: RequestBody,
         token: String,
         long: RequestBody,
         lat: RequestBody
     ) =
-        postRepository.createPost(photo, description, token, long, lat)
+        postRepository.createPost(photo, title, description, token, long, lat)
 }
