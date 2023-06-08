@@ -5,9 +5,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -25,6 +27,7 @@ import com.travelah.travelahapp.utils.rotateFile
 import com.travelah.travelahapp.utils.uriToFile
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
+import com.travelah.travelahapp.view.maps.MapsActivity
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -34,6 +37,10 @@ import java.io.File
 
 class AddEditPostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddEditPostBinding
+
+    private var currLat: Double? = null
+    private var currLong: Double? = null
+    private var currAddress: String? = null
 
     private var getFile: File? = null
     private lateinit var currentPhotoPath: String
@@ -60,6 +67,10 @@ class AddEditPostActivity : AppCompatActivity() {
 
         binding.cameraButton.setOnClickListener { startTakePhoto() }
         binding.galleryButton.setOnClickListener { startGallery() }
+        binding.changeLocationButton.setOnClickListener {
+            val intent = Intent(this, MapsActivity::class.java)
+            launcherIntentLocation.launch(intent)
+        }
     }
 
     private fun startTakePhoto() {
@@ -115,6 +126,35 @@ class AddEditPostActivity : AppCompatActivity() {
         }
     }
 
+    private val launcherIntentLocation = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == MAPS_RESULT) {
+            currLong = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                result.data?.getSerializableExtra("long")
+            } else {
+                @Suppress("DEPRECATION")
+                result.data?.getSerializableExtra("long")
+            } as? Double
+
+            currLat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                result.data?.getSerializableExtra("lat")
+            } else {
+                @Suppress("DEPRECATION")
+                result.data?.getSerializableExtra("lat")
+            } as? Double
+
+            currAddress = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                result.data?.getSerializableExtra("address", String::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                result.data?.getSerializableExtra("address")
+            } as? String
+
+            binding.locationText.text = currAddress
+        }
+    }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
@@ -142,8 +182,8 @@ class AddEditPostActivity : AppCompatActivity() {
             val description =
                 binding.descriptionInput.text.toString().toRequestBody("text/plain".toMediaType())
 
-            val long = 10.895632.toString().toRequestBody("text/plain".toMediaType())
-            val lat = (-6.302577).toString().toRequestBody("text/plain".toMediaType())
+            val long = currLong.toString().toRequestBody("text/plain".toMediaType())
+            val lat = currLat.toString().toRequestBody("text/plain".toMediaType())
 
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
@@ -171,9 +211,14 @@ class AddEditPostActivity : AppCompatActivity() {
                                     getString(R.string.upload_success),
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                finish()
                             }
                             is Result.Error -> {
-
+                                Toast.makeText(
+                                    this,
+                                    "Error cok",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
@@ -195,13 +240,14 @@ class AddEditPostActivity : AppCompatActivity() {
     }
 
     companion object {
-//        const val CAMERA_X_RESULT = 200
+        //        const val CAMERA_X_RESULT = 200
 //        const val PICTURE_VALUE = "picture"
 //        const val IS_BACK_CAMERA_VALUE = "isBackCamera"
 //        const val TAG = "AddEditPostActivity"      const val CAMERA_X_RESULT = 200
 //        const val PICTURE_VALUE = "picture"
 //        const val IS_BACK_CAMERA_VALUE = "isBackCamera"
 //        const val TAG = "AddEditPostActivity"
+        const val MAPS_RESULT = 201
 
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10

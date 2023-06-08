@@ -126,12 +126,16 @@
 
         <TextView
             android:id="@+id/locationText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:gravity="center"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:gravity="center_vertical"
             android:text="@string/no_location"
+            app:layout_constraintEnd_toStartOf="@+id/changeLocationButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view"
             app:drawableLeftCompat="@drawable/ic_baseline_location_on_24" />
@@ -141,11 +145,13 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
+            android:layout_marginStart="8dp"
             android:text="@string/change"
             android:textColor="@color/travelah_blue"
             android:textStyle="bold"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/locationText"
             app:layout_constraintTop_toBottomOf="@+id/view"
             app:strokeWidth="2dp" />
 

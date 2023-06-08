@@ -61,4 +61,5 @@
     <string name="not_put_the_description">Please insert description first.</string>
     <string name="upload_success">Post uploaded successfully</string>
     <string name="add_edit">Add/Edit</string>
+    <string name="add_post">Add Post</string>
 </resources>
