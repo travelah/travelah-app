@@ -1,6 +1,5 @@
 package com.travelah.travelahapp.ui.components.elements
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,9 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.imageLoader
 import coil.request.ImageRequest
-import coil.util.DebugLogger
 import com.travelah.travelahapp.R
 
 @Composable
