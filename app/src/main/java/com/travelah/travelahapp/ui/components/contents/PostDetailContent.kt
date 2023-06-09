@@ -112,7 +112,7 @@ fun PostDetailContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
-                    model = stringResource(id = R.string.profile_picture_link),
+                    model = result?.profilePicOfUser ?: postFromActivity?.profilePicOfUser,
                     contentDescription = stringResource(id = R.string.profile_image_content_desc),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
