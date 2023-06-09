@@ -58,5 +58,8 @@ data class Post(
 	val isUserLike: Boolean,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: String? = null
+	val updatedAt: String? = null,
+
+	@field:SerializedName("comments")
+	val comments: List<Comment>? = null
 ) : Parcelable
