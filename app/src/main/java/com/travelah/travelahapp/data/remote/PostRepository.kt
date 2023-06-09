@@ -1,6 +1,5 @@
 package com.travelah.travelahapp.data.remote
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.paging.*
@@ -17,10 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 
 class PostRepository private constructor(
     private val apiService: ApiService,
@@ -134,6 +130,32 @@ class PostRepository private constructor(
                 )
                 if (response.status) {
                     emit(Result.Success(response))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun getPostDetail(token: String, id: Int): LiveData<Result<Post>> = liveData {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.getPostDetail("Bearer $token", id)
+                if (response.status) {
+                    emit(Result.Success(response.data))
                 } else {
                     emit(Result.Error(response.message))
                 }

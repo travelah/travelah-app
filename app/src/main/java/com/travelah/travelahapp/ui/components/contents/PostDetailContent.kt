@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.contents
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,25 +13,72 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.IconWithCount
+import com.travelah.travelahapp.utils.withDateFormatFromISO
+import com.travelah.travelahapp.view.post.PostViewModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 @Composable
 fun PostDetailContent(
+    token: String,
+    result: Post?,
+    postFromActivity: Post?,
+    onBackClick: () -> Unit = {},
+    viewModel: PostViewModel,
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val id = result?.id ?: postFromActivity?.id ?: 0
+
+    fun likeDislikePost(id: Int, isLike: Boolean) {
+        scope.launch {
+            viewModel.likeDislikePost(token, id, isLike).catch {
+                Toast.makeText(
+                    context,
+                    "Error: " + it.message.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+            }.collect {
+                when (it) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        Toast.makeText(
+                            context,
+                            "You ${if (isLike) "liked" else "disliked"} a post",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    is Result.Error -> {
+                        Toast.makeText(
+                            context,
+                            "Failed to ${if (isLike) "liked" else "disliked"} a post: ${it.error}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
@@ -39,12 +87,13 @@ fun PostDetailContent(
     ) {
         Box {
             AsyncImage(
-                model = "https://images.pexels.com/photos/1766838/pexels-photo-1766838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                model = if (result != null) "${result.postPhotoPath}/${result.postPhotoName}" else "${postFromActivity?.postPhotoPath}/${postFromActivity?.postPhotoName}",
                 contentDescription = stringResource(id = R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.height(
                     if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 280.dp else 320.dp
-                )
+                ),
+                error = painterResource(id = R.drawable.ic_place_holder)
             )
             Icon(
                 imageVector = Icons.Default.ArrowBack,
@@ -68,23 +117,26 @@ fun PostDetailContent(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(40.dp)
-                        .clip(CircleShape)
+                        .clip(CircleShape),
+                    error = painterResource(id = R.drawable.ic_baseline_person_black_24)
                 )
                 Column {
                     Text(
-                        text = "Zuhal 'Alimul Hadi", style = MaterialTheme.typography.body1.copy(
+                        text = result?.posterFullName ?: "${postFromActivity?.posterFullName}",
+                        style = MaterialTheme.typography.body1.copy(
                             fontWeight = FontWeight.Medium
                         )
                     )
                     Text(
-                        text = "1 day ago",
+                        text = result?.createdAt?.withDateFormatFromISO()
+                            ?: "${postFromActivity?.createdAt?.withDateFormatFromISO()}",
                         style = MaterialTheme.typography.caption,
                         color = Color(0xFF737373)
                     )
                 }
             }
             Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In egestas ultrices dolor venenatis sodales. Nam in sem eget purus scelerisque semper. Sed fermentum odio sit amet ex cursus, sed convallis velit vulputate. Maecenas sollicitudin pretium tellus non consequat.  Curabitur quis aliquet dolor, placerat vulputate dui. Fusce cursus gravida nunc, vel fermentum nunc lobortis et. Integer augue urna, congue a tempus in, interdum id lectus. Donec quis ullamcorper urna, nec sagittis leo. Fusce eleifend molestie metus, at luctus sem vehicula vitae.",
+                result?.description ?: "${postFromActivity?.description}",
                 style = MaterialTheme.typography.body2
             )
             Row(
@@ -95,7 +147,7 @@ fun PostDetailContent(
                 IconWithCount(
                     icon = R.drawable.ic_baseline_comment_24,
                     contentDescription = stringResource(R.string.comment_count),
-                    count = "3",
+                    count = "${result?.commentCount ?: postFromActivity?.commentCount ?: 0}",
                     iconSize = 24.dp,
                     textStyle = MaterialTheme.typography.caption.copy(
                         fontWeight = FontWeight.Bold
@@ -106,20 +158,20 @@ fun PostDetailContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconWithCount(
-                        icon = if (true) R.drawable.ic_baseline_thumb_up_travelah_blue_24 else R.drawable.ic_baseline_thumb_up_24,
+                        icon = if (result?.isUserLike == true || postFromActivity?.isUserLike == true) R.drawable.ic_baseline_thumb_up_travelah_blue_24 else R.drawable.ic_baseline_thumb_up_24,
                         contentDescription = stringResource(R.string.like_count),
-                        count = "2",
-                        onClick = { },
+                        count = "${result?.likeCount ?: postFromActivity?.likeCount ?: 0}",
+                        onClick = { likeDislikePost(id, true) },
                         iconSize = 24.dp,
                         textStyle = MaterialTheme.typography.caption.copy(
                             fontWeight = FontWeight.Bold
                         )
                     )
                     IconWithCount(
-                        icon = if (false) R.drawable.ic_baseline_thumb_down_travelah_blue_24 else R.drawable.ic_baseline_thumb_down_24,
+                        icon = if (result?.isUserDontLike == true || postFromActivity?.isUserDontLike == true) R.drawable.ic_baseline_thumb_down_travelah_blue_24 else R.drawable.ic_baseline_thumb_down_24,
                         contentDescription = stringResource(R.string.dislike_count),
-                        count = "3",
-                        onClick = { },
+                        count = "${result?.dontLikeCount ?: postFromActivity?.dontLikeCount ?: 0}",
+                        onClick = { likeDislikePost(id, false) },
                         iconSize = 24.dp,
                         textStyle = MaterialTheme.typography.caption.copy(
                             fontWeight = FontWeight.Bold

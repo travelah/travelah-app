@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.contents
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +18,12 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.local.entity.PostEntity
+import com.travelah.travelahapp.data.mappers.toPost
+import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.PostCard
 import com.travelah.travelahapp.utils.withDateFormatFromISO
 import com.travelah.travelahapp.view.ViewModelFactory
+import com.travelah.travelahapp.view.post.PostDetailActivity
 import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -35,6 +39,14 @@ fun PostContent(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    fun onPostCardClick(postEntity: PostEntity) {
+        val intent = Intent(context, PostDetailActivity::class.java)
+        val newPost = postEntity.toPost()
+        intent.putExtra(PostDetailActivity.EXTRA_ID, newPost.id)
+        intent.putExtra(PostDetailActivity.EXTRA_POST, newPost)
+        context.startActivity(intent)
+    }
 
     fun likeDislikePost(id: Int, isLike: Boolean) {
         scope.launch {
@@ -91,6 +103,9 @@ fun PostContent(
                     },
                     onClickDontLike = {
                         likeDislikePost(post.id, false)
+                    },
+                    onClickCard = {
+                        onPostCardClick(post)
                     }
                 )
             }

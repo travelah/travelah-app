@@ -13,8 +13,12 @@ class PostViewModel(
     fun getMostLikedPost(token: String) = postRepository.getMostLikedPost(token)
     fun getAllPost(token: String, isMyPost: Boolean) =
         postRepository.getAllPost(token, isMyPost).cachedIn(viewModelScope)
+
+    fun getPostDetail(token: String, id: Int) = postRepository.getPostDetail(token, id)
+
     fun likeDislikePost(token: String, id: Int, isLiked: Boolean) =
         postRepository.likeDislikePost(token, id, isLiked)
+
     fun createPost(
         photo: MultipartBody.Part,
         title: RequestBody,

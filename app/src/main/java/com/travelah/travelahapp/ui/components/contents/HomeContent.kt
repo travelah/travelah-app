@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.contents
 
+import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,8 +20,10 @@ import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.*
 import com.travelah.travelahapp.utils.withDateFormatFromISO
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.view.post.PostDetailActivity
 
 @Composable
 fun HomeContent(
@@ -31,6 +34,8 @@ fun HomeContent(
     profileName: String = "",
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+
     fun getHeightPost(): Dp {
         return when (listPost.size) {
             1 -> 160.dp
@@ -47,6 +52,13 @@ fun HomeContent(
             3 -> 252.dp
             else -> 20.dp
         }
+    }
+
+    fun onPostCardClick(post: Post) {
+        val intent = Intent(context, PostDetailActivity::class.java)
+        intent.putExtra(PostDetailActivity.EXTRA_ID, post.id)
+        intent.putExtra(PostDetailActivity.EXTRA_POST, post)
+        context.startActivity(intent)
     }
 
     LazyColumn(
@@ -178,6 +190,9 @@ fun HomeContent(
                                     commentCount = data.commentCount,
                                     isUserLike = data.isUserLike,
                                     isUserDontLike = data.isUserDontLike,
+                                    onClickCard = {
+                                        onPostCardClick(data)
+                                    }
                                 )
                             }
                         } else {

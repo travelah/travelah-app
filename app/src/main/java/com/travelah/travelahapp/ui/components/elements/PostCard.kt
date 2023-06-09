@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.elements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -34,6 +35,7 @@ fun PostCard(
     hideDislike: Boolean = true,
     onClickLike: ()-> Unit? = {},
     onClickDontLike: ()-> Unit? = {},
+    onClickCard: ()-> Unit? = {},
     modifier: Modifier = Modifier
 ) {
 //    val imageLoader = LocalContext.current.imageLoader.newBuilder()
@@ -44,6 +46,7 @@ fun PostCard(
         modifier = modifier
             .height(112.dp)
             .fillMaxWidth()
+            .clickable { onClickCard() }
             .background(color = Color(0xFFE2F0F7), shape = RoundedCornerShape(16.dp))
             .padding(vertical = 8.dp, horizontal = 16.dp),
     ) {
