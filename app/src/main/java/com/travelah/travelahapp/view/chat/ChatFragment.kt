@@ -10,16 +10,16 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.adapter.GroupChatAdapter
 import com.travelah.travelahapp.data.Result
-import com.travelah.travelahapp.data.database.ChatItem
 import com.travelah.travelahapp.data.remote.models.Chat
-import com.travelah.travelahapp.data.remote.models.HistoryChat
 import com.travelah.travelahapp.databinding.FragmentChatBinding
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,21 +48,24 @@ class ChatFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        factory = activity?.let { ViewModelFactory.getInstance(it) }!!
+        factory = requireActivity().let { ViewModelFactory.getInstance(it) }!!
         _binding = FragmentChatBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        adapter = GroupChatAdapter()
 
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.rvGroupChat.layoutManager = LinearLayoutManager(requireContext())
+        adapter = GroupChatAdapter()
+        binding.rvGroupChat.adapter = adapter
 
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
             chatViewModel.getGroupChatHistory(token).observe(viewLifecycleOwner) {
-                adapter.submitData(viewLifecycleOwner.lifecycle, it)
-                binding.rvGroupChat.layoutManager = LinearLayoutManager(activity)
-                binding.rvGroupChat.adapter = adapter
-                Log.d("Success", "success add to submit data")
+                adapter.submitData(lifecycle, it)
             }
         }
-        return root
     }
 
     private fun setOnItemDeleteAction(token: String, groupChatId: Int) {
@@ -124,7 +127,7 @@ class ChatFragment : Fragment() {
 //        return differenceInDays.toInt()
 //    }
 
-    //            chatViewModel.getRecentHistoryChat(token).observe(viewLifecycleOwner) { chatResult ->
+//            chatViewModel.getRecentHistoryChat(token).observe(viewLifecycleOwner) { chatResult ->
 //                when (chatResult) {
 //                    is Result.Loading -> {
 //                        binding.tvCondition.text = getString(R.string.loading)

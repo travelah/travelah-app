@@ -4,19 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.paging.*
 import com.google.gson.Gson
-import com.travelah.travelahapp.data.ChatRemoteMediator
 import com.travelah.travelahapp.data.Result
-import com.travelah.travelahapp.data.database.ChatDatabase
-import com.travelah.travelahapp.data.database.ChatItem
+import com.travelah.travelahapp.data.local.entity.ChatEntity
+import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.HistoryChat
-import com.travelah.travelahapp.data.remote.models.body.RegisterBody
+import com.travelah.travelahapp.data.remote.pager.ChatRemoteMediator
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
 import retrofit2.HttpException
 
 class ChatRepository private constructor(
-    private val chatDatabase: ChatDatabase,
+    private val travelahDatabase: TravelahDatabase,
     private val apiService: ApiService,
 ) {
     private fun convertErrorResponse(stringRes: String?): ErrorResponse {
@@ -50,14 +49,14 @@ class ChatRepository private constructor(
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getHistoryGroupChat(token: String): LiveData<PagingData<ChatItem>> {
+    fun getHistoryGroupChat(token: String): LiveData<PagingData<ChatEntity>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = ChatRemoteMediator(chatDatabase, apiService, token),
+            remoteMediator = ChatRemoteMediator(travelahDatabase, apiService, token),
             pagingSourceFactory = {
-                chatDatabase.chatDao().getAllGroupChat()
+                travelahDatabase.chatDao().getAllGroupChat()
             }
         ).liveData
     }
@@ -94,11 +93,11 @@ class ChatRepository private constructor(
         @Volatile
         private var instance: ChatRepository? = null
         fun getInstance(
-            chatDatabase: ChatDatabase,
+            database: TravelahDatabase,
             apiService: ApiService,
         ): ChatRepository =
             instance ?: synchronized(this) {
-                instance ?: ChatRepository(chatDatabase, apiService)
+                instance ?: ChatRepository(database, apiService)
             }.also { instance = it }
     }
 }

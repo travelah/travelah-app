@@ -4,17 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.travelah.travelahapp.data.local.entity.ChatEntity
+import com.travelah.travelahapp.data.local.entity.ChatRemoteKeysEntity
 import com.travelah.travelahapp.data.local.entity.PostEntity
 import com.travelah.travelahapp.data.local.entity.PostRemoteKeysEntity
 
 @Database(
-    entities = [PostEntity::class, PostRemoteKeysEntity::class],
-    version = 1,
+    entities = [PostEntity::class, PostRemoteKeysEntity::class, ChatEntity::class, ChatRemoteKeysEntity::class],
+    version = 3,
     exportSchema = false
 )
 abstract class TravelahDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun postRemoteKeysDao(): PostRemoteKeysDao
+    abstract fun chatDao(): ChatDao
+    abstract fun chatRemoteKeysDao(): ChatRemoteKeysDao
+
 
     companion object {
         @Volatile

@@ -52,7 +52,7 @@ class ViewModelFactory private constructor(
                 instance ?: ViewModelFactory(
                     Injection.provideUserRepository(context),
                     Injection.providePostRepository(context),
-                    Injection.provideChatRepository()
+                    Injection.provideChatRepository(context)
                 )
             }.also { instance = it }
     }
