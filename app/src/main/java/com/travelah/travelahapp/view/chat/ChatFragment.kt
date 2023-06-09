@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.adapter.GroupChatAdapter
 import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.data.local.entity.ChatEntity
 import com.travelah.travelahapp.data.remote.models.Chat
 import com.travelah.travelahapp.databinding.FragmentChatBinding
 import com.travelah.travelahapp.view.ViewModelFactory
@@ -64,6 +65,17 @@ class ChatFragment : Fragment() {
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
             chatViewModel.getGroupChatHistory(token).observe(viewLifecycleOwner) {
                 adapter.submitData(lifecycle, it)
+                adapter.setOnItemClickCallback(object : GroupChatAdapter.OnItemClickCallback {
+                    override fun onItemClicked(data: ChatEntity) {
+                        val intent = Intent(requireActivity(), DetailChatActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                    override fun onItemDelete(groupChatId: Int) {
+                        setOnItemDeleteAction(token, groupChatId)
+                    }
+
+                })
             }
         }
     }
@@ -88,77 +100,8 @@ class ChatFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun isRecyclerViewVisible(visibility: Boolean) {
-        if (visibility) {
-            binding.tvCondition.visibility = View.GONE
-            binding.rvGroupChat.visibility = View.VISIBLE
-        } else {
-            binding.tvCondition.visibility = View.VISIBLE
-            binding.rvGroupChat.visibility = View.GONE
-        }
-    }
-
-//    private fun groupChatByDate(data: List<HistoryChat>): Map<String, List<HistoryChat>> {
-//        return data.groupBy { item ->
-//            val diff = calculateDateDifferenceAndFormat(item.updatedAt)
-//            when {
-//                diff == 0 -> "Today"
-//                diff == 1 -> "Yesterday"
-//                diff <= 7 -> "Previous 7 days"
-//                diff <= 30 -> "Previous 30 days"
-//                else -> "More than 30 days"
-//            }
-//        }
-//    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-//    private fun calculateDateDifferenceAndFormat(dateString: String): Int {
-//        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-//        val currentDate = Calendar.getInstance().time
-//
-//        val date = inputFormat.parse(dateString)
-//        val differenceInMillis: Long = currentDate.time - date.time
-//        val differenceInDays: Long = differenceInMillis / (1000 * 60 * 60 * 24)
-//
-//        return differenceInDays.toInt()
-//    }
-
-//            chatViewModel.getRecentHistoryChat(token).observe(viewLifecycleOwner) { chatResult ->
-//                when (chatResult) {
-//                    is Result.Loading -> {
-//                        binding.tvCondition.text = getString(R.string.loading)
-//                        isRecyclerViewVisible(false)
-//                    }
-//                    is Result.Success -> {
-//                        val chatList = chatResult.data
-//                        if (!chatList.isEmpty()) {
-//                            isRecyclerViewVisible(true)
-//                            adapter.submitData(viewLifecycleOwner.lifecycle, chatList)
-//                            adapter.setOnItemClickCallback(object :
-//                                GroupChatAdapter.OnItemClickCallback {
-//                                override fun onItemClicked(data: ChatItem) {
-//                                    val intent = Intent(activity, DetailChatActivity::class.java)
-//                                    startActivity(intent)
-//                                }
-//
-//                                override fun onItemDelete(groupChatId: Int) {
-//                                    setOnItemDeleteAction(token, groupChatId)
-//                                }
-//                            })
-//                        } else {
-//                            binding.tvCondition.text = getString(R.string.no_history_data)
-//                            isRecyclerViewVisible(false)
-//                        }
-//                    }
-//                    is Result.Error -> {
-//                        binding.tvCondition.text = getString(R.string.failed_error)
-//                        isRecyclerViewVisible(false)
-//                    }
-//                }
-//
-//            }
 }
