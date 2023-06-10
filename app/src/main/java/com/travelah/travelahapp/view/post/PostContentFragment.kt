@@ -45,6 +45,7 @@ class PostContentFragment : Fragment() {
                             PostScreen(
                                 posts,
                                 token,
+                                postViewModel
                             )
                         }
                     }

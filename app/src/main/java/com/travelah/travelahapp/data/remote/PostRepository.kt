@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.data.remote
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.liveData
 import androidx.paging.*
 import com.google.gson.Gson
@@ -22,6 +23,8 @@ class PostRepository private constructor(
     private val apiService: ApiService,
     private val database: TravelahDatabase
 ) {
+    private val postDetail: MediatorLiveData<Result<Post>> = MediatorLiveData()
+
     private fun convertErrorResponse(stringRes: String?): ErrorResponse {
         return Gson().fromJson(stringRes, ErrorResponse::class.java)
     }
@@ -148,30 +151,34 @@ class PostRepository private constructor(
         }
     }
 
-    fun getPostDetail(token: String, id: Int): LiveData<Result<Post>> = liveData {
-        emit(Result.Loading)
+    fun getLiveDataPostDetail(): LiveData<Result<Post>> {
+        return postDetail
+    }
 
-        wrapEspressoIdlingResource {
-            try {
-                val response = apiService.getPostDetail("Bearer $token", id)
-                if (response.status) {
-                    emit(Result.Success(response.data))
-                } else {
-                    emit(Result.Error(response.message))
+    suspend fun getPostDetail(token: String, id: Int): LiveData<Result<Post>> {
+        postDetail.value = Result.Loading
+
+        try {
+            val response = apiService.getPostDetail("Bearer $token", id)
+            if (response.status) {
+                postDetail.value = Result.Success(response.data)
+            } else {
+                postDetail.value = Result.Error(response.message)
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is HttpException -> {
+                    val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                    val msg = jsonRes.message
+                    postDetail.value = Result.Error(msg)
                 }
-            } catch (e: Exception) {
-                when (e) {
-                    is HttpException -> {
-                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
-                        val msg = jsonRes.message
-                        emit(Result.Error(msg))
-                    }
-                    else -> {
-                        emit(Result.Error(e.message.toString()))
-                    }
+                else -> {
+                    postDetail.value = Result.Error(e.message.toString())
                 }
             }
         }
+
+        return postDetail
     }
 
     companion object {

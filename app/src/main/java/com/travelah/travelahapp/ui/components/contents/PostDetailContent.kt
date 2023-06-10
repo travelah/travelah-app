@@ -12,8 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,7 +48,48 @@ fun PostDetailContent(
     val scope = rememberCoroutineScope()
     val id = result?.id ?: postFromActivity?.id ?: 0
 
+    var likeCount by remember { mutableStateOf(result?.likeCount ?: postFromActivity?.likeCount ?: 0) }
+    var isUserLike by remember { mutableStateOf(result?.isUserLike ?: postFromActivity?.isUserLike ?: false) }
+    var dontlikeCount by remember { mutableStateOf(result?.dontLikeCount ?: postFromActivity?.likeCount ?: 0) }
+    var isUserDontLike by remember { mutableStateOf(result?.isUserDontLike ?: postFromActivity?.isUserDontLike ?: false) }
+
+    fun handleOptimisticChanges(isLike: Boolean) {
+        if (isLike) {
+            if (!isUserLike) {
+                likeCount += 1
+                isUserLike = true
+                if (isUserDontLike) {
+                    dontlikeCount -= 1
+                }
+                isUserDontLike = false
+            } else {
+                likeCount -= 1
+                isUserLike = false
+            }
+        } else {
+            if (!isUserDontLike) {
+                dontlikeCount += 1
+                isUserDontLike = true
+                if (isUserLike) {
+                    likeCount -= 1
+                }
+                isUserLike = false
+            } else {
+                dontlikeCount -= 1
+                isUserDontLike = false
+            }
+        }
+    }
+
     fun likeDislikePost(id: Int, isLike: Boolean) {
+        // to handle if the optimistic changes failed
+        val likeCountTemp = likeCount
+        val isUserLikeTemp = isUserLike
+        val dontlikeCountTemp = dontlikeCount
+        val isUserDontLikeTemp = isUserDontLike
+
+        handleOptimisticChanges(isLike)
+
         scope.launch {
             viewModel.likeDislikePost(token, id, isLike).catch {
                 Toast.makeText(
@@ -73,6 +113,12 @@ fun PostDetailContent(
                             "Failed to ${if (isLike) "liked" else "disliked"} a post: ${it.error}",
                             Toast.LENGTH_LONG
                         ).show()
+
+                        // revert changes
+                        likeCount = likeCountTemp
+                        isUserLike = isUserLikeTemp
+                        dontlikeCount = dontlikeCountTemp
+                        isUserDontLike = isUserDontLikeTemp
                     }
                 }
             }
@@ -158,9 +204,9 @@ fun PostDetailContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconWithCount(
-                        icon = if (result?.isUserLike == true || postFromActivity?.isUserLike == true) R.drawable.ic_baseline_thumb_up_travelah_blue_24 else R.drawable.ic_baseline_thumb_up_24,
+                        icon = if (isUserLike) R.drawable.ic_baseline_thumb_up_travelah_blue_24 else R.drawable.ic_baseline_thumb_up_24,
                         contentDescription = stringResource(R.string.like_count),
-                        count = "${result?.likeCount ?: postFromActivity?.likeCount ?: 0}",
+                        count = "${likeCount ?: 0}",
                         onClick = { likeDislikePost(id, true) },
                         iconSize = 24.dp,
                         textStyle = MaterialTheme.typography.caption.copy(
@@ -168,9 +214,9 @@ fun PostDetailContent(
                         )
                     )
                     IconWithCount(
-                        icon = if (result?.isUserDontLike == true || postFromActivity?.isUserDontLike == true) R.drawable.ic_baseline_thumb_down_travelah_blue_24 else R.drawable.ic_baseline_thumb_down_24,
+                        icon = if (isUserDontLike) R.drawable.ic_baseline_thumb_down_travelah_blue_24 else R.drawable.ic_baseline_thumb_down_24,
                         contentDescription = stringResource(R.string.dislike_count),
-                        count = "${result?.dontLikeCount ?: postFromActivity?.dontLikeCount ?: 0}",
+                        count = "${dontlikeCount ?: 0}",
                         onClick = { likeDislikePost(id, false) },
                         iconSize = 24.dp,
                         textStyle = MaterialTheme.typography.caption.copy(

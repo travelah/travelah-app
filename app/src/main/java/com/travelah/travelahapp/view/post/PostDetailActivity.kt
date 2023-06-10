@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
@@ -12,6 +13,7 @@ import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
 import com.travelah.travelahapp.ui.screens.PostDetailScreen
 import com.travelah.travelahapp.view.main.MainActivity
+import com.travelah.travelahapp.data.Result
 
 class PostDetailActivity : AppCompatActivity() {
     private lateinit var factory: ViewModelFactory
@@ -34,7 +36,8 @@ class PostDetailActivity : AppCompatActivity() {
 
         mainViewModel.getToken().observe(this) { token ->
             if (token !== "") {
-                postViewModel.getPostDetail(token, id).observe(this) { result ->
+                postViewModel.getPostDetail(token, id)
+                postViewModel.getLatestDetail().observe(this) { result ->
                     setContent {
                         MaterialTheme {
                             PostDetailScreen(token, result, post, { onBackClick() }, postViewModel)

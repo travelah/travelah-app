@@ -10,15 +10,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.travelah.travelahapp.data.local.entity.PostEntity
 import com.travelah.travelahapp.ui.components.contents.PostContent
+import com.travelah.travelahapp.view.ViewModelFactory
+import com.travelah.travelahapp.view.post.PostViewModel
 
 @Composable
 fun PostScreen(
     posts: LazyPagingItems<PostEntity>,
     token: String,
+    viewModel: PostViewModel = viewModel(
+        factory = ViewModelFactory.getInstance(LocalContext.current)
+    ),
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -41,7 +47,9 @@ fun PostScreen(
             )
         } else {
             PostContent(
-                posts = posts, token = token,
+                posts = posts,
+                token = token,
+                viewModel = viewModel,
                 modifier = modifier
                     .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 52.dp)
                     .fillMaxWidth(),

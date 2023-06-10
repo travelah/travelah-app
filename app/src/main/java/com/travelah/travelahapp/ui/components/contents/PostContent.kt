@@ -12,17 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.local.entity.PostEntity
 import com.travelah.travelahapp.data.mappers.toPost
-import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.PostCard
 import com.travelah.travelahapp.utils.withDateFormatFromISO
-import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.post.PostDetailActivity
 import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
@@ -32,9 +29,7 @@ import kotlinx.coroutines.launch
 fun PostContent(
     posts: LazyPagingItems<PostEntity>,
     token: String,
-    viewModel: PostViewModel = viewModel(
-        factory = ViewModelFactory.getInstance(LocalContext.current)
-    ),
+    viewModel: PostViewModel,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
