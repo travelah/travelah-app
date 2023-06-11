@@ -33,6 +33,9 @@
     <string name="hi">Hi</string>
     <string name="history">History</string>
     <string name="most_liked_post">Most Liked Post</string>
+    <string name="group_chat_history"><u>Chat With Vela</u></string>
+    <string name="group_chat_header_sample">Today</string>
+    <string name="latest_chat_sample">Latest chat...</string>
     <string name="no_history_data">No history data available</string>
     <string name="no_most_liked_post_data">No most liked post data available</string>
     <string name="failed_error">There\'s an error, please try again later</string>
