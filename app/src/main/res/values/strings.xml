@@ -50,4 +50,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_text_1">All Post</string>
     <string name="tab_text_2">My Post</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor felis vitae nunc dignissim, at eleifend nisl fermentum. Mauris luctus placerat tellus, id tristique elit pulvinar in. Vestibulum vel dui at nulla venenatis ullamcorper. Integer ac suscipit enim.</string>
 </resources>
