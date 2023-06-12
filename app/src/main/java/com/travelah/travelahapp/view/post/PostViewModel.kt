@@ -65,4 +65,10 @@ class PostViewModel(
         lat: RequestBody
     ) =
         postRepository.createPost(photo, title, description, token, long, lat)
+
+    fun createPostComment(
+        description: String,
+        id: Int,
+        token: String,
+    ) = postRepository.createPostComment(description, id, token)
 }

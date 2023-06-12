@@ -36,6 +36,7 @@ fun PostCard(
     onClickLike: ()-> Unit? = {},
     onClickDontLike: ()-> Unit? = {},
     onClickCard: ()-> Unit? = {},
+    onClickComment: ()->Unit? = {},
     modifier: Modifier = Modifier
 ) {
 //    val imageLoader = LocalContext.current.imageLoader.newBuilder()
@@ -101,7 +102,8 @@ fun PostCard(
                 IconWithCount(
                     icon = R.drawable.ic_baseline_comment_24,
                     contentDescription = stringResource(R.string.comment_count),
-                    count = commentCount.toString()
+                    count = commentCount.toString(),
+                    onClick = { onClickComment() }
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

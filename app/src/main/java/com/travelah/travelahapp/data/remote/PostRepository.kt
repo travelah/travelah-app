@@ -10,6 +10,7 @@ import com.travelah.travelahapp.data.local.entity.PostEntity
 import com.travelah.travelahapp.data.remote.pager.PostRemoteMediator
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.models.*
+import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
 import com.travelah.travelahapp.data.remote.pager.MyPostPagingSource
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
@@ -130,6 +131,40 @@ class PostRepository private constructor(
                     lat,
                     long,
                     photo
+                )
+                if (response.status) {
+                    emit(Result.Success(response))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun createPostComment(
+        description: String,
+        id: Int,
+        token: String,
+    ): Flow<Result<CreatePostCommentResponse>> = flow {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.createCommentPost(
+                    "Bearer $token",
+                    id,
+                    CommentPostBody(description),
                 )
                 if (response.status) {
                     emit(Result.Success(response))

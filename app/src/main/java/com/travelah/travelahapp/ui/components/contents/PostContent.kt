@@ -20,6 +20,7 @@ import com.travelah.travelahapp.data.local.entity.PostEntity
 import com.travelah.travelahapp.data.mappers.toPost
 import com.travelah.travelahapp.ui.components.elements.PostCard
 import com.travelah.travelahapp.utils.withDateFormatFromISO
+import com.travelah.travelahapp.view.post.PostCommentActivity
 import com.travelah.travelahapp.view.post.PostDetailActivity
 import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
@@ -40,6 +41,13 @@ fun PostContent(
         val newPost = postEntity.toPost()
         intent.putExtra(PostDetailActivity.EXTRA_ID, newPost.id)
         intent.putExtra(PostDetailActivity.EXTRA_POST, newPost)
+        context.startActivity(intent)
+    }
+
+    fun onCommentButtonClick(id: Int?) {
+        val intent = Intent(context, PostCommentActivity::class.java)
+        intent.putExtra(PostDetailActivity.EXTRA_ID, id ?: 0)
+
         context.startActivity(intent)
     }
 
@@ -101,6 +109,9 @@ fun PostContent(
                     },
                     onClickCard = {
                         onPostCardClick(post)
+                    },
+                    onClickComment = {
+                        onCommentButtonClick(post.id)
                     }
                 )
             }

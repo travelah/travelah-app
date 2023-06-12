@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.view.post.PostCommentActivity
 import com.travelah.travelahapp.view.post.PostDetailActivity
 
 @Composable
@@ -58,6 +59,13 @@ fun HomeContent(
         val intent = Intent(context, PostDetailActivity::class.java)
         intent.putExtra(PostDetailActivity.EXTRA_ID, post.id)
         intent.putExtra(PostDetailActivity.EXTRA_POST, post)
+        context.startActivity(intent)
+    }
+
+    fun onCommentButtonClick(id: Int?) {
+        val intent = Intent(context, PostCommentActivity::class.java)
+        intent.putExtra(PostDetailActivity.EXTRA_ID, id ?: 0)
+
         context.startActivity(intent)
     }
 
@@ -192,7 +200,8 @@ fun HomeContent(
                                     isUserDontLike = data.isUserDontLike,
                                     onClickCard = {
                                         onPostCardClick(data)
-                                    }
+                                    },
+                                    onClickComment = { onCommentButtonClick(data.id) }
                                 )
                             }
                         } else {
