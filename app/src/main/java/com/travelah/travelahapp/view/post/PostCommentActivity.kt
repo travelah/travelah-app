@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.travelah.travelahapp.ui.screens.PostCommentScreen
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
@@ -12,6 +13,7 @@ import com.travelah.travelahapp.view.main.MainViewModel
 class PostCommentActivity : AppCompatActivity() {
     private lateinit var factory: ViewModelFactory
     private val mainViewModel: MainViewModel by viewModels { factory }
+    private val postViewModel: PostViewModel by viewModels { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +24,8 @@ class PostCommentActivity : AppCompatActivity() {
         mainViewModel.getToken().observe(this) { token ->
             setContent {
                 MaterialTheme {
-                    PostCommentScreen(id, token)
+                    val comments =  postViewModel.getAllPostComment(token, id).collectAsLazyPagingItems()
+                    PostCommentScreen(comments, id, token)
                 }
             }
         }

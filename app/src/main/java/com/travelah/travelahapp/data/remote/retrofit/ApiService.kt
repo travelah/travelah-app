@@ -85,5 +85,7 @@ interface ApiService {
     suspend fun getAllCommentPost(
         @Header("Authorization") authorization: String,
         @Path("id") id: Int,
+        @Query("page") page: Int? = 1,
+        @Query("take") take: Int? = 3
     ): PostCommentResponse
 }

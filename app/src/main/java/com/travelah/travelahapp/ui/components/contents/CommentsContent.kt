@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -20,10 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.remote.models.Comment
@@ -33,10 +32,11 @@ import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
 import com.travelah.travelahapp.data.Result
 import kotlinx.coroutines.launch
+import androidx.paging.compose.items
 
 @Composable
 fun CommentsContent(
-    comments: List<Comment> = mutableListOf(),
+    comments: LazyPagingItems<Comment>,
     id: Int,
     token: String,
     viewModel: PostViewModel = viewModel(
@@ -65,7 +65,7 @@ fun CommentsContent(
                     }
                     is Result.Success -> {
                         isLoading = false
-                        viewModel.getAllPostComment(token, id)
+                        comments.refresh()
 
                         Toast.makeText(
                             context,
@@ -107,7 +107,7 @@ fun CommentsContent(
                 modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "Comments (${comments.size})",
+                    text = "Comments (${comments.itemCount})",
                     style = MaterialTheme.typography.body1.copy(
                         fontWeight = FontWeight.Medium
                     )
@@ -121,45 +121,47 @@ fun CommentsContent(
                 .constrainAs(listComment) {
                     top.linkTo(commentHeader.bottom, margin = 12.dp)
                 }
-                .padding(20.dp),
+                .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(comments, key = { it.id }) { comment ->
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                if (comment != null) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        AsyncImage(
-                            model = comment.userProfilePicPath ?: "",
-                            contentDescription = stringResource(id = R.string.profile_image_content_desc),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clip(CircleShape),
-                            error = painterResource(id = R.drawable.ic_baseline_person_black_24)
-                        )
-                        Column {
-                            Text(
-                                text = comment.userFullName,
-                                style = MaterialTheme.typography.body2.copy(
-                                    fontWeight = FontWeight.Medium
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            AsyncImage(
+                                model = comment.userProfilePicPath ?: "",
+                                contentDescription = stringResource(id = R.string.profile_image_content_desc),
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(CircleShape),
+                                error = painterResource(id = R.drawable.ic_baseline_person_black_24)
+                            )
+                            Column {
+                                Text(
+                                    text = comment.userFullName,
+                                    style = MaterialTheme.typography.body2.copy(
+                                        fontWeight = FontWeight.Medium
+                                    )
                                 )
-                            )
-                            Text(
-                                text = comment.createdAt.withDateFormatFromISO(),
-                                style = MaterialTheme.typography.caption,
-                                color = Color(0xFF737373)
-                            )
+                                Text(
+                                    text = comment.createdAt.withDateFormatFromISO(),
+                                    style = MaterialTheme.typography.caption,
+                                    color = Color(0xFF737373)
+                                )
+                            }
                         }
+                        Text(
+                            comment.description,
+                            style = MaterialTheme.typography.body2
+                        )
+                        Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
                     }
-                    Text(
-                        comment.description,
-                        style = MaterialTheme.typography.body2
-                    )
-                    Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
                 }
             }
         }
@@ -180,7 +182,7 @@ fun CommentsContent(
                 onValueChange = { input = it },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                placeholder =  { Text(stringResource(R.string.comment_text_field_placeholder)) },
+                placeholder = { Text(stringResource(R.string.comment_text_field_placeholder)) },
                 trailingIcon = {
                     IconButton(
                         onClick = {
@@ -201,13 +203,5 @@ fun CommentsContent(
                 ),
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun CommentsContentPreview() {
-    MaterialTheme {
-        CommentsContent(mutableListOf(), 0, "")
     }
 }
