@@ -132,4 +132,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.11'
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    // circle image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

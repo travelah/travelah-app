@@ -50,4 +50,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_text_1">All Post</string>
     <string name="tab_text_2">My Post</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor felis vitae nunc dignissim, at eleifend nisl fermentum. Mauris luctus placerat tellus, id tristique elit pulvinar in. Vestibulum vel dui at nulla venenatis ullamcorper. Integer ac suscipit enim.</string>
+    <string name="camera">Camera</string>
+    <string name="galery">Gallery</string>
+    <string name="form_name">Name :</string>
+    <string name="form_age">Age :</string>
+    <string name="form_occupation">Occupation :</string>
+    <string name="form_location">Location :</string>
+    <string name="about_me_hint">About Me...</string>
+    <string name="save_changes">Save Changes</string>
 </resources>
