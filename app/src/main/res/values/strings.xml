@@ -34,6 +34,9 @@
     <string name="hi">Hi</string>
     <string name="history">History</string>
     <string name="most_liked_post">Most Liked Post</string>
+    <string name="group_chat_history"><u>Chat With Vela</u></string>
+    <string name="group_chat_header_sample">Today</string>
+    <string name="latest_chat_sample">Latest chat...</string>
     <string name="no_history_data">No history data available</string>
     <string name="no_most_liked_post_data">No most liked post data available</string>
     <string name="failed_error">There\'s an error, please try again later</string>
@@ -63,4 +66,13 @@
     <string name="add_edit">Add/Edit</string>
     <string name="add_post">Add Post</string>
     <string name="comment_text_field_placeholder">Write your comments here</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor felis vitae nunc dignissim, at eleifend nisl fermentum. Mauris luctus placerat tellus, id tristique elit pulvinar in. Vestibulum vel dui at nulla venenatis ullamcorper. Integer ac suscipit enim.</string>
+    <string name="camera">Camera</string>
+    <string name="galery">Gallery</string>
+    <string name="form_name">Name :</string>
+    <string name="form_age">Age :</string>
+    <string name="form_occupation">Occupation :</string>
+    <string name="form_location">Location :</string>
+    <string name="about_me_hint">About Me...</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

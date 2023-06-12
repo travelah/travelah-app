@@ -26,8 +26,9 @@ object Injection {
         return PostRepository.getInstance(apiService, database)
     }
 
-    fun provideChatRepository(): ChatRepository {
+    fun provideChatRepository(context: Context): ChatRepository {
         val apiService = RetrofitConfig.getApiService()
-        return ChatRepository.getInstance(apiService)
+        val database = TravelahDatabase.getInstance(context)
+        return ChatRepository.getInstance(database, apiService)
     }
 }
