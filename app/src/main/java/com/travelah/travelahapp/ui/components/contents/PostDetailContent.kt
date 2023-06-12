@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.contents
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -27,9 +28,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.data.local.entity.PostEntity
+import com.travelah.travelahapp.data.mappers.toPost
 import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.IconWithCount
 import com.travelah.travelahapp.utils.withDateFormatFromISO
+import com.travelah.travelahapp.view.post.PostCommentActivity
+import com.travelah.travelahapp.view.post.PostDetailActivity
 import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -125,6 +130,11 @@ fun PostDetailContent(
         }
     }
 
+    fun onCommentButtonClick() {
+        val intent = Intent(context, PostCommentActivity::class.java)
+        context.startActivity(intent)
+    }
+
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
@@ -197,7 +207,8 @@ fun PostDetailContent(
                     iconSize = 24.dp,
                     textStyle = MaterialTheme.typography.caption.copy(
                         fontWeight = FontWeight.Bold
-                    )
+                    ),
+                    onClick = { onCommentButtonClick() }
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

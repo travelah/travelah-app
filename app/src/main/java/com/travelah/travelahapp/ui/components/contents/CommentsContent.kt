@@ -28,10 +28,10 @@ fun CommentsContent(
     modifier: Modifier = Modifier
 ) {
     var input by remember { mutableStateOf("") }
-    ConstraintLayout(
-        modifier = Modifier.fillMaxWidth().height(520.dp)
-    ) {
 
+    ConstraintLayout(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Column(
             modifier = modifier
                 .height(500.dp)
@@ -92,7 +92,7 @@ fun CommentsContent(
                             }
                         }
                         Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit elit eliti elittititi.",
                             style = MaterialTheme.typography.body2
                         )
                         Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
