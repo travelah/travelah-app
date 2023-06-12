@@ -181,6 +181,32 @@ class PostRepository private constructor(
         return postDetail
     }
 
+    fun getAllCommentPost(token: String, id: Int): Flow<Result<List<Comment>>> = flow {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.getAllCommentPost("Bearer $token", id)
+                if (response.status) {
+                    emit(Result.Success(response.data))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: PostRepository? = null

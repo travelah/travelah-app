@@ -130,8 +130,10 @@ fun PostDetailContent(
         }
     }
 
-    fun onCommentButtonClick() {
+    fun onCommentButtonClick(id: Int?) {
         val intent = Intent(context, PostCommentActivity::class.java)
+        intent.putExtra(PostDetailActivity.EXTRA_ID, id ?: 0)
+
         context.startActivity(intent)
     }
 
@@ -208,7 +210,7 @@ fun PostDetailContent(
                     textStyle = MaterialTheme.typography.caption.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    onClick = { onCommentButtonClick() }
+                    onClick = { onCommentButtonClick(result?.id ?: postFromActivity?.id) }
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

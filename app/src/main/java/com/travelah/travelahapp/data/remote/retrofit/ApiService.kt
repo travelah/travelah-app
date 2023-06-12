@@ -80,4 +80,10 @@ interface ApiService {
         @Path("id") id: Int,
         @Body body: CommentPostBody
     ): CreatePostCommentResponse
+
+    @GET("posts/all-comments/{id}")
+    suspend fun getAllCommentPost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+    ): PostCommentResponse
 }

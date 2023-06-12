@@ -6,33 +6,39 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Comment(
-	@field:SerializedName("createdAt")
-	val createdAt: String,
+    @field:SerializedName("createdAt")
+    val createdAt: String,
 
-	@field:SerializedName("description")
-	val description: String,
+    @field:SerializedName("description")
+    val description: String,
 
-	@field:SerializedName("id")
-	val id: Int,
+    @field:SerializedName("id")
+    val id: Int,
 
-	@field:SerializedName("postId")
-	val postId: Int,
+    @field:SerializedName("postId")
+    val postId: Int,
 
-	@field:SerializedName("userId")
-	val userId: Int,
+    @field:SerializedName("userId")
+    val userId: Int,
 
-	@field:SerializedName("user")
-	val user: UserComment,
+    @field:SerializedName("user")
+    val user: UserComment,
 
-	@field:SerializedName("updatedAt")
-	val updatedAt: String? = null
-): Parcelable
+    @field:SerializedName("updatedAt")
+    val updatedAt: String? = null,
+
+    @field:SerializedName("userFullName")
+    val userFullName: String,
+
+    @field:SerializedName("userProfilePicPath")
+    val userProfilePicPath: String? = null
+) : Parcelable
 
 @Parcelize
 data class UserComment(
-	@field:SerializedName("profilePicPath")
-	val profilePicPath: String? = null,
+    @field:SerializedName("profilePicPath")
+    val profilePicPath: String? = null,
 
-	@field:SerializedName("fullName")
-	val fullName: String
-): Parcelable
+    @field:SerializedName("fullName")
+    val fullName: String
+) : Parcelable

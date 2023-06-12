@@ -3,6 +3,7 @@ package com.travelah.travelahapp.ui.components.contents
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,9 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.remote.models.Comment
+import com.travelah.travelahapp.utils.withDateFormatFromISO
 
 @Composable
 fun CommentsContent(
+    comments: List<Comment> = mutableListOf(),
     modifier: Modifier = Modifier
 ) {
     var input by remember { mutableStateOf("") }
@@ -60,7 +64,7 @@ fun CommentsContent(
             }
 
             LazyColumn(modifier = Modifier.padding(20.dp)) {
-                item {
+                items(comments, key = { it.id }) { comment ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -69,7 +73,7 @@ fun CommentsContent(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             AsyncImage(
-                                model = stringResource(R.string.profile_picture_link),
+                                model = comment.userProfilePicPath ?: "",
                                 contentDescription = stringResource(id = R.string.profile_image_content_desc),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -79,25 +83,28 @@ fun CommentsContent(
                             )
                             Column {
                                 Text(
-                                    text = "Zuhal 'Alimul Hadi",
+                                    text = comment.userFullName,
                                     style = MaterialTheme.typography.body2.copy(
                                         fontWeight = FontWeight.Medium
                                     )
                                 )
                                 Text(
-                                    text = "1 day ago",
+                                    text = comment.createdAt.withDateFormatFromISO(),
                                     style = MaterialTheme.typography.caption,
                                     color = Color(0xFF737373)
                                 )
                             }
                         }
                         Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit elit eliti elittititi.",
+                            comment.description,
                             style = MaterialTheme.typography.body2
                         )
                         Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
                     }
                 }
+//                item {
+//
+//                }
             }
         }
         val boxModifier = Modifier
