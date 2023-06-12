@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import com.travelah.travelahapp.data.remote.PostRepository
 import com.travelah.travelahapp.data.remote.models.Comment
 import com.travelah.travelahapp.ui.common.UiState
@@ -12,6 +13,7 @@ import com.travelah.travelahapp.data.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -26,7 +28,16 @@ class PostViewModel(
 
     fun getMostLikedPost(token: String) = postRepository.getMostLikedPost(token)
     fun getAllPost(token: String, isMyPost: Boolean) =
-        postRepository.getAllPost(token, isMyPost).cachedIn(viewModelScope)
+        postRepository.getAllPost(token, isMyPost).map {
+            val commentMap = mutableSetOf<Int>()
+            it.filter { comment ->
+                if (commentMap.contains(comment.id)) {
+                    false
+                } else {
+                    commentMap.add(comment.id)
+                }
+            }
+        }.cachedIn(viewModelScope)
 
     fun getPostDetail(token: String, id: Int) {
         viewModelScope.launch {
@@ -36,7 +47,16 @@ class PostViewModel(
 
     fun getLatestDetail() = postRepository.getLiveDataPostDetail()
     fun getAllPostComment(token: String, id: Int) =
-        postRepository.getAllCommentPost(token, id).cachedIn(viewModelScope)
+        postRepository.getAllCommentPost(token, id).map {
+            val commentMap = mutableSetOf<Int>()
+            it.filter { comment ->
+                if (commentMap.contains(comment.id)) {
+                    false
+                } else {
+                    commentMap.add(comment.id)
+                }
+            }
+        }.cachedIn(viewModelScope)
 
     fun likeDislikePost(token: String, id: Int, isLiked: Boolean) =
         postRepository.likeDislikePost(token, id, isLiked)

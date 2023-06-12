@@ -10,13 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.travelah.travelahapp.data.remote.models.Comment
 import com.travelah.travelahapp.ui.components.contents.CommentsContent
-import com.travelah.travelahapp.view.ViewModelFactory
-import com.travelah.travelahapp.view.post.PostViewModel
 
 @Composable
 fun PostCommentScreen(

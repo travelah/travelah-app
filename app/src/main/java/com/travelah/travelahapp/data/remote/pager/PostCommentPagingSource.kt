@@ -7,8 +7,6 @@ import com.travelah.travelahapp.data.remote.retrofit.ApiService
 
 class PostCommentPagingSource (private val apiService: ApiService, private val token: String, private val id: Int) :
     PagingSource<Int, Comment>() {
-    override val jumpingSupported: Boolean = true
-
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
     }
@@ -17,9 +15,8 @@ class PostCommentPagingSource (private val apiService: ApiService, private val t
         return try {
             val position = params.key ?: INITIAL_PAGE_INDEX
             val responseData = apiService.getAllCommentPost("Bearer $token", id, position, params.loadSize)
-            val convertedPost = responseData.data.mapIndexed { index, comment ->
-                comment.copy(id = (position * params.loadSize) + index) // Assign a unique key to each comment
-            }
+            val convertedPost = responseData.data
+
             LoadResult.Page(
                 data = convertedPost,
                 prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,

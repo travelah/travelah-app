@@ -2,6 +2,7 @@ package com.travelah.travelahapp.view.post
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
@@ -22,10 +23,13 @@ class PostCommentActivity : AppCompatActivity() {
         val id = intent.getIntExtra(PostDetailActivity.EXTRA_ID, 0)
 
         mainViewModel.getToken().observe(this) { token ->
-            setContent {
-                MaterialTheme {
-                    val comments =  postViewModel.getAllPostComment(token, id).collectAsLazyPagingItems()
-                    PostCommentScreen(comments, id, token)
+            if (token !== "" && id != 0) {
+                setContent {
+                    MaterialTheme {
+                        val comments =
+                            postViewModel.getAllPostComment(token, id).collectAsLazyPagingItems()
+                        PostCommentScreen(comments, id, token)
+                    }
                 }
             }
         }

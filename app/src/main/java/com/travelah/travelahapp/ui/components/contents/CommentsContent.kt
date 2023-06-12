@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
@@ -48,6 +49,7 @@ fun CommentsContent(
     var isLoading by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val snackbar = remember { SnackbarHostState() }
 
     fun handleSubmit() {
         scope.launch {
@@ -124,8 +126,17 @@ fun CommentsContent(
                 .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(comments, key = { it.id }) { comment ->
-                if (comment != null) {
+            if (comments.loadState.prepend == LoadState.Loading) item {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Color(0xFF07AFFF)
+                    )
+                }
+            }
+
+            items(comments, key={it.id}) { comment ->
+                comment?.let { comment ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -163,6 +174,23 @@ fun CommentsContent(
                         Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
                     }
                 }
+            }
+
+            when (val append = comments.loadState.append) {
+                LoadState.Loading -> item {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = Color(0xFF07AFFF)
+                        )
+                    }
+                }
+                is LoadState.Error -> item {
+                    LaunchedEffect(key1 = append) {
+                        snackbar.showSnackbar(append.error.message ?: "")
+                    }
+                }
+                else -> Unit
             }
         }
 
