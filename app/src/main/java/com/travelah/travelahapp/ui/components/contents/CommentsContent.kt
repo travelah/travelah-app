@@ -123,7 +123,7 @@ fun CommentsContent(
                 .constrainAs(listComment) {
                     top.linkTo(commentHeader.bottom, margin = 12.dp)
                 }
-                .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 80.dp),
+                .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 172.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             if (comments.loadState.prepend == LoadState.Loading) item {
@@ -135,8 +135,8 @@ fun CommentsContent(
                 }
             }
 
-            items(comments, key={it.id}) { comment ->
-                comment?.let { comment ->
+            items(comments, key = { it.id }) { commentItem ->
+                commentItem?.let { comment ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
