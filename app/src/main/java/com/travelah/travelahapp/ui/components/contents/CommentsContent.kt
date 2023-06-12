@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
@@ -87,8 +89,10 @@ fun CommentsContent(
     }
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
+        val (boxRef, commentHeader, listComment) = createRefs()
+
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(
@@ -97,84 +101,75 @@ fun CommentsContent(
                 )
             }
         }
-        Column(
-            modifier = modifier
-                .height(500.dp)
-                .clip(
-                    shape = RoundedCornerShape(
-                        topEnd = 24.dp,
-                        topStart = 24.dp,
-                        bottomEnd = 0.dp,
-                        bottomStart = 0.dp
+
+        Column(modifier = Modifier.constrainAs(commentHeader) {
+            top.linkTo(parent.top, margin = 16.dp)
+        }) {
+            Box(
+                modifier = Modifier.padding(20.dp)
+            ) {
+                Text(
+                    text = "Comments (${comments.size})",
+                    style = MaterialTheme.typography.body1.copy(
+                        fontWeight = FontWeight.Medium
                     )
                 )
-                .background(color = Color.White)
-        ) {
-
-            Column {
-                Box(
-                    modifier = Modifier.padding(20.dp)
-                ) {
-                    Text(
-                        text = "Comments (${comments.size})",
-                        style = MaterialTheme.typography.body1.copy(
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
-                }
-                Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
             }
+            Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
+        }
 
-            LazyColumn(
-                modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(comments, key = { it.id }) { comment ->
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+        LazyColumn(
+            modifier = Modifier
+                .constrainAs(listComment) {
+                    top.linkTo(commentHeader.bottom, margin = 12.dp)
+                }
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(comments, key = { it.id }) { comment ->
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            AsyncImage(
-                                model = comment.userProfilePicPath ?: "",
-                                contentDescription = stringResource(id = R.string.profile_image_content_desc),
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(CircleShape),
-                                error = painterResource(id = R.drawable.ic_baseline_person_black_24)
-                            )
-                            Column {
-                                Text(
-                                    text = comment.userFullName,
-                                    style = MaterialTheme.typography.body2.copy(
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                )
-                                Text(
-                                    text = comment.createdAt.withDateFormatFromISO(),
-                                    style = MaterialTheme.typography.caption,
-                                    color = Color(0xFF737373)
-                                )
-                            }
-                        }
-                        Text(
-                            comment.description,
-                            style = MaterialTheme.typography.body2
+                        AsyncImage(
+                            model = comment.userProfilePicPath ?: "",
+                            contentDescription = stringResource(id = R.string.profile_image_content_desc),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clip(CircleShape),
+                            error = painterResource(id = R.drawable.ic_baseline_person_black_24)
                         )
-                        Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
+                        Column {
+                            Text(
+                                text = comment.userFullName,
+                                style = MaterialTheme.typography.body2.copy(
+                                    fontWeight = FontWeight.Medium
+                                )
+                            )
+                            Text(
+                                text = comment.createdAt.withDateFormatFromISO(),
+                                style = MaterialTheme.typography.caption,
+                                color = Color(0xFF737373)
+                            )
+                        }
                     }
+                    Text(
+                        comment.description,
+                        style = MaterialTheme.typography.body2
+                    )
+                    Divider(startIndent = 0.dp, thickness = 1.dp, color = Color(0xFFCAC8C8))
                 }
             }
         }
+
         val boxModifier = Modifier
             .padding(top = 20.dp)
             .background(color = Color(0xFFA0D7FB))
             .padding(horizontal = 20.dp, vertical = 8.dp)
-
-        val (boxRef) = createRefs()
 
         Box(
             modifier = boxModifier
