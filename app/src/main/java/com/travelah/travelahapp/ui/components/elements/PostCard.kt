@@ -1,7 +1,7 @@
 package com.travelah.travelahapp.ui.components.elements
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -18,9 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.imageLoader
 import coil.request.ImageRequest
-import coil.util.DebugLogger
 import com.travelah.travelahapp.R
 
 @Composable
@@ -37,16 +35,19 @@ fun PostCard(
     hideDislike: Boolean = true,
     onClickLike: ()-> Unit? = {},
     onClickDontLike: ()-> Unit? = {},
+    onClickCard: ()-> Unit? = {},
+    onClickComment: ()->Unit? = {},
     modifier: Modifier = Modifier
 ) {
-    val imageLoader = LocalContext.current.imageLoader.newBuilder()
-        .logger(DebugLogger())
-        .build()
+//    val imageLoader = LocalContext.current.imageLoader.newBuilder()
+//        .logger(DebugLogger())
+//        .build()
 
     Box(
         modifier = modifier
             .height(112.dp)
             .fillMaxWidth()
+            .clickable { onClickCard() }
             .background(color = Color(0xFFE2F0F7), shape = RoundedCornerShape(16.dp))
             .padding(vertical = 8.dp, horizontal = 16.dp),
     ) {
@@ -70,7 +71,7 @@ fun PostCard(
                     placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
                     error = painterResource(id = R.drawable.ic_baseline_person_black_24),
                     modifier = Modifier.size(20.dp),
-                    imageLoader = imageLoader
+//                    imageLoader = imageLoader
                 )
                 Text(
                     username,
@@ -101,7 +102,8 @@ fun PostCard(
                 IconWithCount(
                     icon = R.drawable.ic_baseline_comment_24,
                     contentDescription = stringResource(R.string.comment_count),
-                    count = commentCount.toString()
+                    count = commentCount.toString(),
+                    onClick = { onClickComment() }
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

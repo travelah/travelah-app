@@ -15,6 +15,7 @@ import com.travelah.travelahapp.R
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
 import com.travelah.travelahapp.databinding.ActivityMainBinding
+import com.travelah.travelahapp.view.post.AddEditPostActivity
 import com.travelah.travelahapp.view.chat.ChatFragment
 import com.travelah.travelahapp.view.chat.DetailChatActivity
 
@@ -76,6 +77,11 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_logout -> {
                 mainViewModel.logout()
+                true
+            }
+            R.id.menu_add_post -> {
+                val intent = Intent(this, AddEditPostActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.new_chat -> {

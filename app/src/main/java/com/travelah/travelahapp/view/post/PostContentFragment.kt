@@ -37,14 +37,15 @@ class PostContentFragment : Fragment() {
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
             if (token != "") {
                 binding.composeView.apply {
-                    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
                     setContent {
                         // In Compose world
                         MaterialTheme {
                             val posts = postViewModel.getAllPost(token, index == 2).collectAsLazyPagingItems()
                             PostScreen(
                                 posts,
-                                token
+                                token,
+                                postViewModel
                             )
                         }
                     }

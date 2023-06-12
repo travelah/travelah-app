@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Travelah App</string>
+    <string name="package_name">com.travelah.travelahapp</string>
     <string name="travelah">Travelah</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
@@ -50,8 +51,22 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_text_1">All Post</string>
     <string name="tab_text_2">My Post</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor felis vitae nunc dignissim, at eleifend nisl fermentum. Mauris luctus placerat tellus, id tristique elit pulvinar in. Vestibulum vel dui at nulla venenatis ullamcorper. Integer ac suscipit enim.</string>
+    <string name="preview_desc">Preview for the picture that will be uploaded</string>
     <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="change_post_cover">Change post cover using:</string>
+    <string name="post_title">Post title</string>
+    <string name="description_hint">What do you want to share?</string>
+    <string name="location">Location</string>
+    <string name="no_location">No Location</string>
+    <string name="change"><u>Change</u></string>
+    <string name="not_put_the_picture">Please insert picture first.</string>
+    <string name="not_put_the_description">Please insert description first.</string>
+    <string name="upload_success">Post uploaded successfully</string>
+    <string name="add_edit">Add/Edit</string>
+    <string name="add_post">Add Post</string>
+    <string name="comment_text_field_placeholder">Write your comments here</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor felis vitae nunc dignissim, at eleifend nisl fermentum. Mauris luctus placerat tellus, id tristique elit pulvinar in. Vestibulum vel dui at nulla venenatis ullamcorper. Integer ac suscipit enim.</string>
     <string name="galery">Gallery</string>
     <string name="form_name">Name :</string>
     <string name="form_age">Age :</string>
