@@ -1,18 +1,10 @@
 package com.travelah.travelahapp.view.post
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
 import com.travelah.travelahapp.data.remote.PostRepository
-import com.travelah.travelahapp.data.remote.models.Comment
-import com.travelah.travelahapp.ui.common.UiState
-import com.travelah.travelahapp.data.Result
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -21,20 +13,15 @@ import okhttp3.RequestBody
 class PostViewModel(
     private val postRepository: PostRepository
 ) : ViewModel() {
-    private val _postComments: MutableStateFlow<UiState<PagingData<Comment>>> =
-        MutableStateFlow(UiState.Loading)
-    val postComments: StateFlow<UiState<PagingData<Comment>>>
-        get() = _postComments
-
     fun getMostLikedPost(token: String) = postRepository.getMostLikedPost(token)
     fun getAllPost(token: String, isMyPost: Boolean) =
         postRepository.getAllPost(token, isMyPost).map {
-            val commentMap = mutableSetOf<Int>()
-            it.filter { comment ->
-                if (commentMap.contains(comment.id)) {
+            val postMap = mutableSetOf<Int>()
+            it.filter { post ->
+                if (postMap.contains(post.id)) {
                     false
                 } else {
-                    commentMap.add(comment.id)
+                    postMap.add(post.id)
                 }
             }
         }.cachedIn(viewModelScope)

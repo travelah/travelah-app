@@ -88,7 +88,7 @@ fun PostContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // not used key because already handled by the paging3
-        items(posts) { post ->
+        items(posts, key = { it.id }) { post ->
             if (post != null) {
                 PostCard(
                     username = post.posterFullName,
