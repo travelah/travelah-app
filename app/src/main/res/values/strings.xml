@@ -67,7 +67,6 @@
     <string name="add_post">Add Post</string>
     <string name="comment_text_field_placeholder">Write your comments here</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor felis vitae nunc dignissim, at eleifend nisl fermentum. Mauris luctus placerat tellus, id tristique elit pulvinar in. Vestibulum vel dui at nulla venenatis ullamcorper. Integer ac suscipit enim.</string>
-    <string name="camera">Camera</string>
     <string name="galery">Gallery</string>
     <string name="form_name">Name :</string>
     <string name="form_age">Age :</string>
