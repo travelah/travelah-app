@@ -10,18 +10,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.travelah.travelahapp.data.remote.models.response.ChatDetailResponse
 import com.travelah.travelahapp.ui.components.contents.DetailChatContent
 import com.travelah.travelahapp.ui.components.elements.AppBarChat
 
 @Composable
-fun DetailChatScreen(modifier: Modifier = Modifier) {
+fun DetailChatScreen(chatResponse: ChatDetailResponse, modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
 
     Column(
         modifier = modifier.height(configuration.screenHeightDp.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        AppBarChat(fullName = "Zuhal 'Alimul Hadi")
-        DetailChatContent(modifier = Modifier)
+        AppBarChat(fullName = "Chat Detail")
+        DetailChatContent(listChat =  chatResponse.data, modifier = Modifier)
     }
 }

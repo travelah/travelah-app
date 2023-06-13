@@ -2,9 +2,9 @@ package com.travelah.travelahapp.ui.components.contents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
@@ -13,30 +13,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.travelah.travelahapp.data.remote.models.response.ChatItem
 import com.travelah.travelahapp.ui.components.elements.BubbleChat
 
 @Composable
-fun DetailChatContent(modifier: Modifier = Modifier) {
+fun DetailChatContent(listChat: List<ChatItem>, modifier: Modifier = Modifier) {
     var input by remember { mutableStateOf("") }
 
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            modifier = modifier.verticalScroll(rememberScrollState())
+       LazyColumn(
+            modifier = modifier.height(500.dp).fillMaxWidth()
         ) {
-            BubbleChat()
-            BubbleChat()
-            BubbleChat()
-            BubbleChat()
-            BubbleChat()
-            BubbleChat()
-            BubbleChat()
-            BubbleChat()
+            items(listChat, key = {it.id}) { chat ->
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    BubbleChat(chat, true)
+                    BubbleChat(chat, false)
+                }
+            }
         }
 
         val boxModifier = Modifier
-            .padding(top=20.dp)
+            .padding(top = 20.dp)
             .background(color = Color(0xFFA0D7FB))
             .padding(horizontal = 20.dp, vertical = 8.dp)
 

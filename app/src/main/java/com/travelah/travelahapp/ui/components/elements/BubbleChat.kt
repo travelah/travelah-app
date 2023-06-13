@@ -16,13 +16,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.remote.models.response.ChatItem
 
 @Composable
-fun BubbleChat(modifier: Modifier = Modifier) {
+fun BubbleChat(chat: ChatItem, isQuestion: Boolean = true, modifier: Modifier = Modifier) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(
+            8.dp,
+            if (!isQuestion) Alignment.Start else Alignment.End
+        ),
         verticalAlignment = Alignment.Bottom,
-        modifier = modifier.fillMaxWidth(0.7f).padding(12.dp)
+        modifier = modifier
+            .fillMaxWidth(0.7f)
+            .padding(12.dp)
     ) {
         AsyncImage(
             model = stringResource(id = R.string.profile_picture_link),
@@ -38,7 +44,7 @@ fun BubbleChat(modifier: Modifier = Modifier) {
                 .padding(16.dp)
         ) {
             Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                if (isQuestion) chat.question else chat.response,
                 style = MaterialTheme.typography.caption
             )
         }
