@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.travelah.travelahapp.data.remote.models.response.ChatDetailResponse
 import com.travelah.travelahapp.ui.screens.DetailChatScreen
 import com.travelah.travelahapp.utils.SocketHandler
@@ -31,31 +32,14 @@ class DetailChatActivity : AppCompatActivity() {
                 SocketHandler.setSocket(token)
                 SocketHandler.establishConnection()
 
-                val payload = JSONObject()
-                payload.put("groupId", 3)
-
-                SocketHandler.getSocket().emit("getAllChatFromGroupChat", payload)
-
-                // Listen for the response from the server
-                SocketHandler.getSocket().on("chatRetrieved"
-                ) { args ->
-                    val response = args[0] as JSONObject
-                    Log.d("response", response.toString())
-                    val chats = ChatDetailResponse.fromJson(response)
-
-                    runOnUiThread {
-                        if (chats != null) {
-                            setContent {
-                                MaterialTheme {
-                                    DetailChatScreen(ChatDetailResponse.fromJson(response))
-                                }
-                            }
+                runOnUiThread {
+                    setContent {
+                        MaterialTheme {
+                            val chats = chatViewModel.getAllChatInGroup(3, token).collectAsLazyPagingItems()
+                            DetailChatScreen(chats, token)
                         }
                     }
-                    // Handle the response received from the server
-                    // ...
                 }
-
                 SocketHandler.getSocket().on("groupChatCreationError"
                 ) { args ->
                     val response = args[0] as JSONObject

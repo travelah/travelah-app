@@ -7,11 +7,16 @@ import com.google.gson.Gson
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.local.entity.ChatEntity
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
+import com.travelah.travelahapp.data.remote.models.Comment
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.data.remote.models.response.ChatItem
+import com.travelah.travelahapp.data.remote.pager.ChatListPagingSource
 import com.travelah.travelahapp.data.remote.pager.ChatRemoteMediator
+import com.travelah.travelahapp.data.remote.pager.PostCommentPagingSource
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
+import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 
 class ChatRepository private constructor(
@@ -61,8 +66,6 @@ class ChatRepository private constructor(
         ).liveData
     }
 
-
-
     fun deleteGroupChat(token: String, id: Int) : LiveData<Result<String>> = liveData {
         emit(Result.Loading)
 
@@ -87,6 +90,18 @@ class ChatRepository private constructor(
                 }
             }
         }
+    }
+
+    fun getAllChatInGroup(groupId: Int, token: String): Flow<PagingData<ChatItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                initialLoadSize = 15
+            ),
+            pagingSourceFactory = {
+                ChatListPagingSource(groupId, token)
+            }
+        ).flow
     }
 
     companion object {
