@@ -1,6 +1,5 @@
 package com.travelah.travelahapp.ui.components.elements
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -21,66 +20,32 @@ import com.travelah.travelahapp.data.remote.models.response.ChatItem
 
 @Composable
 fun BubbleChat(chat: ChatItem, isQuestion: Boolean = true, modifier: Modifier = Modifier) {
-    if (!isQuestion) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                8.dp,
-                Alignment.Start
-            ),
-            verticalAlignment = Alignment.Bottom,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(12.dp)
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(
+            8.dp,
+            if (!isQuestion) Alignment.Start else Alignment.End
+        ),
+        verticalAlignment = Alignment.Bottom,
+        modifier = modifier
+            .fillMaxWidth(0.7f)
+            .padding(12.dp)
+    ) {
+        AsyncImage(
+            model = stringResource(id = R.string.profile_picture_link),
+            contentDescription = stringResource(R.string.profile_image_content_desc),
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
+            modifier = Modifier.size(40.dp)
+        )
+        Box(
+            modifier = Modifier
+                .clip(CircleShape)
+                .background(color = Color(0xFFE8F7FD))
+                .padding(16.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_app),
-                contentDescription =
-                "Profile image travelah",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape),
-            )
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(color = Color(0xFFE8F7FD))
-                    .padding(16.dp)
-            ) {
-                Text(
-                    chat.response,
-                    style = MaterialTheme.typography.caption
-                )
-            }
-        }
-    } else {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                8.dp,
-                Alignment.End
-            ),
-            verticalAlignment = Alignment.Bottom,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(color = Color(0xFFE8F7FD))
-                    .padding(16.dp)
-            ) {
-                Text(
-                    chat.question,
-                    style = MaterialTheme.typography.caption
-                )
-            }
-            AsyncImage(
-                model = stringResource(id = R.string.profile_picture_link),
-                contentDescription = stringResource(R.string.profile_image_content_desc),
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
-                modifier = Modifier.size(40.dp),
-                error = painterResource(id = R.drawable.ic_baseline_person_black_24)
+            Text(
+                if (isQuestion) chat.question else chat.response,
+                style = MaterialTheme.typography.caption
             )
         }
     }

@@ -17,8 +17,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.travelah.travelahapp.data.remote.models.response.ChatItem
 import com.travelah.travelahapp.ui.components.elements.BubbleChat
-import com.travelah.travelahapp.utils.SocketHandler
-import org.json.JSONObject
 
 @Composable
 fun DetailChatContent(listChat: LazyPagingItems<ChatItem>, token: String, modifier: Modifier = Modifier) {
@@ -30,27 +28,6 @@ fun DetailChatContent(listChat: LazyPagingItems<ChatItem>, token: String, modifi
     val onNewDataReceived: (List<ChatItem>) -> Unit = { newData ->
         chatItems.clear()
         chatItems.addAll(newData)
-    }
-
-    fun handleSubmit() {
-        val payload = JSONObject()
-
-        val currentPage = listChat.loadState.append as? LoadState.NotLoading
-            ?: listChat.loadState.refresh as? LoadState.NotLoading
-
-        val currentPageNumber = currentPage?.endOfPaginationReached?.let {
-            if (it) listChat.itemCount else listChat.itemCount - 1
-        } ?: 0
-
-        payload.put("groupId", 3)
-        payload.put("question", input)
-        payload.put("userId", 1)
-        payload.put("token", token)
-        payload.put("page", (currentPageNumber / 5) + 1)
-        payload.put("take", 5)
-
-        SocketHandler.getSocket().emit("createChatByGroup", payload)
-        listChat.refresh()
     }
 
     ConstraintLayout(
@@ -107,7 +84,7 @@ fun DetailChatContent(listChat: LazyPagingItems<ChatItem>, token: String, modifi
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
                     IconButton(
-                        onClick = { handleSubmit() },
+                        onClick = {},
                     ) {
                         Icon(
                             Icons.Default.Send,
