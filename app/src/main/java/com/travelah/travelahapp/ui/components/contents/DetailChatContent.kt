@@ -15,10 +15,21 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.travelah.travelahapp.data.remote.models.response.ChatItem
 import com.travelah.travelahapp.ui.components.elements.BubbleChat
+import com.travelah.travelahapp.utils.SocketHandler
+import org.json.JSONObject
 
 @Composable
 fun DetailChatContent(listChat: List<ChatItem>, modifier: Modifier = Modifier) {
     var input by remember { mutableStateOf("") }
+
+    fun handleSubmit() {
+        val payload = JSONObject()
+        payload.put("groupId", 3)
+        payload.put("question", input)
+        payload.put("userId", 1)
+
+        SocketHandler.getSocket().emit("createChatByGroup", payload)
+    }
 
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
@@ -54,7 +65,7 @@ fun DetailChatContent(listChat: List<ChatItem>, modifier: Modifier = Modifier) {
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = {
                     IconButton(
-                        onClick = {},
+                        onClick = { handleSubmit() },
                     ) {
                         Icon(
                             Icons.Default.Send,
