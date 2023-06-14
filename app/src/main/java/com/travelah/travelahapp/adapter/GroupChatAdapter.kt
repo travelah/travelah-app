@@ -58,92 +58,12 @@ class GroupChatAdapter: PagingDataAdapter<ChatEntity, RecyclerView.ViewHolder>(D
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChatEntity>() {
             override fun areItemsTheSame(oldItem: ChatEntity, newItem: ChatEntity): Boolean {
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: ChatEntity, newItem: ChatEntity): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.latestChat == newItem.latestChat && oldItem.latestChatDate == newItem.latestChatDate
             }
         }
     }
 }
-
-//private fun groupChatByDate(data: List<ChatEntity>): Map<String, List<ChatEntity>> {
-//    return data.groupBy { item ->
-//        val diff = calculateDateDifferenceAndFormat(item.latestChatDate)
-//        when {
-//            diff < 1 -> "Today"
-//            diff < 2 -> "Yesterday"
-//            diff <= 7 -> "Previous 7 days"
-//            diff <= 30 -> "Previous 30 days"
-//            else -> "More than 30 days"
-//        }
-//    }
-//}
-
-//private fun calculateDateDifferenceAndFormat(dateString: String): Int {
-//    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-//    val currentDate = Calendar.getInstance().time
-//
-//    val date = inputFormat.parse(dateString)
-//    val differenceInMillis: Long = currentDate.time - date.time
-//    val differenceInDays: Long = differenceInMillis / (1000 * 60 * 60 * 24)
-//
-//    return differenceInDays.toInt()
-//}
-
-//class HeaderViewHolder(val binding: ItemGroupChatHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
-//    fun bind(group: String) {
-//        binding.tvGroupChatHeader.text = group
-//    }
-//}
-
-//override fun getItemViewType(position: Int): Int {
-//    var count = 0
-//    for ((group, chats) in groupChatData) {
-//        if (position == count) {
-//            return GroupChatAdapter.ViewType.HEADER.ordinal
-//        }
-//        count++
-//        if (position < count + chats.size) {
-//            return GroupChatAdapter.ViewType.ITEM.ordinal
-//        }
-//        count += chats.size
-//    }
-//    return super.getItemViewType(position)
-//}
-
-// onBind
-//var count = 0
-//for ((group, messages) in groupChatData) {
-//    if (position == count) {
-//        (holder as HeaderViewHolder).bind(group)
-//        return
-//    }
-//    count++
-//    if (position < count + messages.size) {
-//        (holder as GroupChatAdapter.GroupChatViewHolder).bind(messages[position - count])
-//        return
-//    }
-//    count += messages.size
-//}
-
-// return viewHolder
-//return when (viewType) {
-//    GroupChatAdapter.ViewType.HEADER.ordinal -> {
-//        val headerBinding = ItemGroupChatHeaderBinding.inflate(inflater, parent, false)
-//        HeaderViewHolder(headerBinding)
-//    }
-//    else -> {
-//        val itemBinding = ItemGroupChatBinding.inflate(inflater, parent, false)
-//        GroupChatViewHolder(itemBinding)
-//    }
-//}
-
-
-//private enum class ViewType {
-//    HEADER,
-//    ITEM
-//}
-
-// private val groupChatData: Map<String, List<ChatEntity>> = groupChatByDate(snapshot().items)

@@ -50,10 +50,9 @@ class ChatRemoteMediator(
             val responseData = apiService.getAllHistoryChat("Bearer $token", page, state.config.pageSize)
             var endOfPaginationData = responseData.data.isEmpty()
             val listGroupChat: List<ChatEntity> = responseData.data.map {
-                ChatEntity(
-                    it.chats[0].groupChatId, it.chats[0].response, it.chats[0].updatedAt
-                )
+                ChatEntity(it.chats[0].groupChatId, it.chats[0].response, it.chats[0].updatedAt)
             }
+
             val prevKey = if (page == 1) null else page - 1
             val nextKey = if (endOfPaginationReached) null else page + 1
             val keys = responseData.data.map {
@@ -64,7 +63,6 @@ class ChatRemoteMediator(
                     database.chatRemoteKeysDao().deleteRemoteKeys()
                     database.chatDao().deleteAll()
                 }
-
                 database.chatRemoteKeysDao().insertAll(keys)
                 database.chatDao().insertGroupChat(listGroupChat)
             }

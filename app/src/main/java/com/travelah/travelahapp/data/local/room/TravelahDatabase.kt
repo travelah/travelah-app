@@ -11,7 +11,7 @@ import com.travelah.travelahapp.data.local.entity.PostRemoteKeysEntity
 
 @Database(
     entities = [PostEntity::class, PostRemoteKeysEntity::class, ChatEntity::class, ChatRemoteKeysEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class TravelahDatabase : RoomDatabase() {

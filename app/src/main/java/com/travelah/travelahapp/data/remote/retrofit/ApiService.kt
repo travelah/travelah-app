@@ -1,9 +1,10 @@
 package com.travelah.travelahapp.data.remote.retrofit
 
-import androidx.room.Delete
 import com.travelah.travelahapp.data.remote.models.*
-import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
+import com.travelah.travelahapp.data.remote.models.body.RegisterBody
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface ApiService {
@@ -59,4 +60,16 @@ interface ApiService {
         @Path("id") id: Int,
         @Query("likeType") likeType: String,
     ): LikePostResponse
+
+    @Multipart
+    @PUT("users/profile")
+    suspend fun updateProfile(
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part?,
+        @Part("fullName") fullName: RequestBody?,
+        @Part("age") age: RequestBody?,
+        @Part("occupation") occupation: RequestBody?,
+        @Part("location") location: RequestBody?,
+        @Part("aboutMe") aboutMe: RequestBody?
+    ): UpdateProfileResponse
 }
