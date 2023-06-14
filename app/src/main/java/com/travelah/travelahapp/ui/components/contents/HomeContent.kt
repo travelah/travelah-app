@@ -172,7 +172,7 @@ fun HomeContent(
                         if (listChat.isNotEmpty()) {
                             items(listChat, key = { it.id }) { data ->
                                 HistoryChatCardHome(
-                                    latestChat = if (data.chats.isNotEmpty()) data.chats[0].question else "-",
+                                    latestChat = if (data.chats.isNotEmpty()) data.chats[0].response else "-",
                                     date = if (data.chats.isNotEmpty()) data.chats[0].createdAt.withDateFormatFromISO() else data.createdAt.withDateFormatFromISO(),
                                     onClickSeeChat = { onChatCardClick(data.id) }
                                 )
