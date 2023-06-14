@@ -52,7 +52,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             searchView.visibility = View.GONE
             supportActionBar?.hide()
         } else {
-            searchView.visibility = View.GONE
+            searchView.visibility = View.VISIBLE
         }
 
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
