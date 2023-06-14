@@ -81,7 +81,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             if (addressList.isNotEmpty()) {
                                 val address = addressList!![0]
                                 val fullAddress = address.getAddressLine(0)
-                                Log.d("abc", fullAddress)
                                 // on below line we are creating a variable for our location
                                 // where we will add our locations latitude and longitude.
                                 val latLng = LatLng(address.latitude, address.longitude)
@@ -137,6 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(placeLoc)
                     .title(place.place)
             )
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(placeLoc, 15f))
         }
 
 //        mMap.setOnPoiClickListener { pointOfInterest ->
