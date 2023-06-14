@@ -18,6 +18,7 @@ class DetailChatActivity : AppCompatActivity() {
     private lateinit var factory: ViewModelFactory
 
     private val mainViewModel: MainViewModel by viewModels { factory }
+    private val chatViewModel: ChatViewModel by viewModels { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,45 +26,46 @@ class DetailChatActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val id = intent.getIntExtra(EXTRA_ID, 0)
+        chatViewModel.changeId(intent.getIntExtra(EXTRA_ID, 0))
 
         mainViewModel.getToken().observe(this) {token ->
-            if (token != "" && id != 0) {
-                Log.d("abcde", token)
-                SocketHandler.setSocket(token)
-                SocketHandler.establishConnection()
+            if (token != "") {
+                chatViewModel.idChat.observe(this) { id ->
+                    SocketHandler.setSocket(token)
+                    SocketHandler.establishConnection()
 
-                val payload = JSONObject()
-                payload.put("groupId", id)
-                payload.put("token", token)
+                    val payload = JSONObject()
+                    payload.put("groupId", id)
+                    payload.put("token", token)
 
-                SocketHandler.getSocket().emit("getAllChatFromGroupChat", payload)
+                    SocketHandler.getSocket().emit("getAllChatFromGroupChat", payload)
 
-                // Listen for the response from the server
-                SocketHandler.getSocket().on("chatRetrieved"
-                ) { args ->
-                    val response = args[0] as JSONObject
-                    val chats = ChatDetailResponse.fromJson(response)
+                    // Listen for the response from the server
+                    SocketHandler.getSocket().on("chatRetrieved"
+                    ) { args ->
+                        val response = args[0] as JSONObject
+                        val chats = ChatDetailResponse.fromJson(response)
 
-                    runOnUiThread {
-                        if (chats != null) {
-                            setContent {
-                                MaterialTheme {
-                                    DetailChatScreen(token, id, ChatDetailResponse.fromJson(response))
+                        Log.d("chatsss", chats.toString())
+
+                        runOnUiThread {
+                            if (chats != null) {
+                                setContent {
+                                    MaterialTheme {
+                                        DetailChatScreen(token, id, ChatDetailResponse.fromJson(response))
+                                    }
                                 }
                             }
                         }
                     }
-                    // Handle the response received from the server
-                    // ...
-                }
 
-                SocketHandler.getSocket().on("groupChatCreationError"
-                ) { args ->
-                    val response = args[0] as JSONObject
-                    Log.e("error:", response.toString())
-                    // Handle the response received from the server
-                    // ...
+                    SocketHandler.getSocket().on("groupChatCreationError"
+                    ) { args ->
+                        val response = args[0] as JSONObject
+                        Log.e("error:", response.toString())
+                        // Handle the response received from the server
+                        // ...
+                    }
                 }
             }
         }

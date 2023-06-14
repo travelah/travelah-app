@@ -77,6 +77,11 @@ fun HomeContent(
         context.startActivity(intent)
     }
 
+    fun onNewChatClick() {
+        val intent = Intent(context, DetailChatActivity::class.java)
+        context.startActivity(intent)
+    }
+
     LazyColumn(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,7 +139,7 @@ fun HomeContent(
                         ),
                     )
                 }
-                PrimaryButton(onClick = {}, {
+                PrimaryButton(onClick = { onNewChatClick() }, {
                     Image(
                         painter = painterResource(id = R.drawable.ic_baseline_add_24_white),
                         contentDescription = stringResource(R.string.tips),
