@@ -11,14 +11,12 @@ import com.travelah.travelahapp.ui.screens.DetailChatScreen
 import com.travelah.travelahapp.utils.SocketHandler
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
-import io.socket.emitter.Emitter
 import org.json.JSONObject
 
 class DetailChatActivity : AppCompatActivity() {
     private lateinit var factory: ViewModelFactory
 
     private val mainViewModel: MainViewModel by viewModels { factory }
-    private val chatViewModel: ChatViewModel by viewModels { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +31,7 @@ class DetailChatActivity : AppCompatActivity() {
 
                 val payload = JSONObject()
                 payload.put("groupId", 3)
+                payload.put("token", token)
 
                 SocketHandler.getSocket().emit("getAllChatFromGroupChat", payload)
 
@@ -47,7 +46,7 @@ class DetailChatActivity : AppCompatActivity() {
                         if (chats != null) {
                             setContent {
                                 MaterialTheme {
-                                    DetailChatScreen(ChatDetailResponse.fromJson(response))
+                                    DetailChatScreen(token, ChatDetailResponse.fromJson(response))
                                 }
                             }
                         }
