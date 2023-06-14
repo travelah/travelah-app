@@ -60,9 +60,10 @@ class ProfileFragment : Fragment() {
             Glide.with(requireActivity())
                 .load(it.photo)
                 .into(binding.imageProfile)
-        binding.buttonEdit.setOnClickListener {
-            val intent = Intent(requireActivity(), EditProfileActivity::class.java)
-            startActivity(intent)
+            binding.buttonEdit.setOnClickListener {
+                val intent = Intent(requireActivity(), EditProfileActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
