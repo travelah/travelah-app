@@ -34,8 +34,9 @@ fun DetailChatContent(
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
     val counter = remember { mutableStateOf(0) }
+
+    val context = LocalContext.current
 
     fun handleInput(value: String) {
         input = value

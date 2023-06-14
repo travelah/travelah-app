@@ -2,7 +2,9 @@ package com.travelah.travelahapp.ui.components.elements
 
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -13,10 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +43,7 @@ fun BubbleChat(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
 
     fun onRecommendationClick(places: Places) {
         val intent = Intent(context, MapsActivity::class.java)
@@ -61,6 +67,18 @@ fun BubbleChat(
                     .clip(CircleShape)
                     .background(color = Color(0xFFE8F7FD))
                     .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .pointerInput(Unit){
+                        detectTapGestures(
+                            onLongPress = {
+                                clipboardManager.setText(AnnotatedString(chat.question))
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.message_copied),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        )
+                    }
             ) {
                 Text(
                     chat.question,
@@ -98,6 +116,18 @@ fun BubbleChat(
                     .clip(CircleShape)
                     .background(color = Color(0xFFE8F7FD))
                     .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .pointerInput(Unit){
+                        detectTapGestures(
+                            onLongPress = {
+                                clipboardManager.setText(AnnotatedString(chat.response))
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.message_copied),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        )
+                    }
             ) {
                 Text(
                     chat.response,
