@@ -1,12 +1,13 @@
 package com.travelah.travelahapp.ui.components.elements
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -55,7 +57,8 @@ fun BubbleChat(
                 contentDescription = stringResource(R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp),
+                error = painterResource(id = R.drawable.ic_baseline_person_black_24)
             )
 
         }
@@ -87,31 +90,67 @@ fun BubbleChat(
                 )
             }
         }
-    }
-    if (chat.altIntent1 != null && chat.altIntent2 != null && (chat.chatType == 1)) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(16.dp)
-        ) {
-            PrimaryButton(onClick = { onClickAlt() }, content = {
-                Text(
-                    text = chat.altIntent1, style = MaterialTheme.typography.caption.copy(
-                        fontSize = 10.sp,
-                        color = Color.White
-                    )
-                )
-            }, modifier = Modifier.weight(0.5f))
-            PrimaryButton(
-                onClick = { onClickAlt2() }, modifier = Modifier.weight(0.5f),
-                content = {
-                    Text(
-                        text = chat.altIntent2, style = MaterialTheme.typography.caption.copy(
-                            fontSize = 10.sp,
-                            color = Color.White
+        if (chat.altIntent1 != null && chat.altIntent2 != null && (chat.chatType == 1)) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .height(96.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                PrimaryButton(
+                    onClick = { onClickAlt() },
+                    modifier = Modifier.fillMaxWidth(),
+                    content = {
+                        Text(
+                            text = chat.altIntent1, style = MaterialTheme.typography.caption.copy(
+                                fontSize = 10.sp,
+                                color = Color.White,
+                            ),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
-                    )
-                },
+                    },
                 )
+                PrimaryButton(
+                    onClick = { onClickAlt2() },
+                    modifier = Modifier.fillMaxWidth(),
+                    content = {
+                        Text(
+                            text = chat.altIntent2, style = MaterialTheme.typography.caption.copy(
+                                fontSize = 10.sp,
+                                color = Color.White
+                            ),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                    },
+                )
+            }
+        }
+        if (chat.places.isNotEmpty() && chat.chatType == 2) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                for (place in chat.places) {
+                    key("${place.lat} ${place.lng}") {
+                        PrimaryButton(onClick = {
+
+                        }, content = {
+                            Text(
+                                text = place.place,
+                                style = MaterialTheme.typography.caption.copy(
+                                    fontSize = 10.sp,
+                                    color = Color.White
+                                )
+                            )
+                        }, modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
         }
     }
 }
