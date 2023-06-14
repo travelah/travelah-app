@@ -19,6 +19,7 @@ fun DetailChatScreen(
     token: String,
     id: Int,
     chatResponse: ChatDetailResponse,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val configuration = LocalConfiguration.current
@@ -27,7 +28,12 @@ fun DetailChatScreen(
         modifier = modifier.height(configuration.screenHeightDp.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        AppBarChat(fullName = "Chat Detail")
-        DetailChatContent(token = token, id = id, listChat = chatResponse.data, modifier = Modifier)
+        AppBarChat(fullName = "Chat Detail", onBackClick = onBackClick)
+        DetailChatContent(
+            token = token,
+            id = id,
+            listChat = chatResponse.data,
+            modifier = Modifier
+        )
     }
 }

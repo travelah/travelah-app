@@ -28,7 +28,7 @@ class DetailChatActivity : AppCompatActivity() {
 
         chatViewModel.changeId(intent.getIntExtra(EXTRA_ID, 0))
 
-        mainViewModel.getToken().observe(this) {token ->
+        mainViewModel.getToken().observe(this) { token ->
             if (token != "") {
                 chatViewModel.idChat.observe(this) { id ->
                     SocketHandler.setSocket(token)
@@ -41,7 +41,8 @@ class DetailChatActivity : AppCompatActivity() {
                     SocketHandler.getSocket().emit("getAllChatFromGroupChat", payload)
 
                     // Listen for the response from the server
-                    SocketHandler.getSocket().on("chatRetrieved"
+                    SocketHandler.getSocket().on(
+                        "chatRetrieved"
                     ) { args ->
                         val response = args[0] as JSONObject
                         val chats = ChatDetailResponse.fromJson(response)
@@ -52,14 +53,20 @@ class DetailChatActivity : AppCompatActivity() {
                             if (chats != null) {
                                 setContent {
                                     MaterialTheme {
-                                        DetailChatScreen(token, id, ChatDetailResponse.fromJson(response))
+                                        DetailChatScreen(
+                                            token,
+                                            id,
+                                            ChatDetailResponse.fromJson(response),
+                                            { onBackClick() }
+                                        )
                                     }
                                 }
                             }
                         }
                     }
 
-                    SocketHandler.getSocket().on("groupChatCreationError"
+                    SocketHandler.getSocket().on(
+                        "groupChatCreationError"
                     ) { args ->
                         val response = args[0] as JSONObject
                         Log.e("error:", response.toString())
@@ -69,6 +76,10 @@ class DetailChatActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun onBackClick() {
+        finish()
     }
 
     override fun onDestroy() {

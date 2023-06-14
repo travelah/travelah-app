@@ -25,7 +25,12 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
-fun DetailChatContent(token: String, id: Int, listChat: List<ChatItem>, modifier: Modifier = Modifier) {
+fun DetailChatContent(
+    token: String,
+    id: Int,
+    listChat: List<ChatItem>,
+    modifier: Modifier = Modifier
+) {
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -43,7 +48,8 @@ fun DetailChatContent(token: String, id: Int, listChat: List<ChatItem>, modifier
         payload.put("token", token)
 
         SocketHandler.getSocket().emit("createChatByGroup", payload)
-        SocketHandler.getSocket().on("chatRetrieved"
+        SocketHandler.getSocket().on(
+            "chatRetrieved"
         ) { args ->
             val response = args[0] as JSONObject?
 
@@ -56,7 +62,8 @@ fun DetailChatContent(token: String, id: Int, listChat: List<ChatItem>, modifier
         }
     }
 
-    SocketHandler.getSocket().on("chatCreationError"
+    SocketHandler.getSocket().on(
+        "chatCreationError"
     ) { args ->
         val response = args[0] as JSONObject?
 
