@@ -43,8 +43,31 @@ fun DetailChatContent(
 
     fun handleSubmit() {
         val payload = JSONObject()
+
+        val backTrackFollowUp = mutableListOf<String>()
+
+        if (listChat.isNotEmpty()) {
+            // check previous follow up question till N where N is chat where chat type is not 3
+            for (i in listChat.size - 1 downTo 0) {
+                if (listChat[i].chatType == 3) {
+                    backTrackFollowUp.add(listChat[i].question)
+                } else {
+                    break
+                }
+            }
+        }
+
+        backTrackFollowUp.reverse()
+
+        val followUpQuestion =
+            if (backTrackFollowUp.isNotEmpty()) backTrackFollowUp.reduce { acc, string -> "$acc $string" } else null
+
         payload.put("groupId", id)
         payload.put("question", input)
+        payload.put(
+            "followUpQuestion",
+            if (followUpQuestion != null) "$followUpQuestion $input" else null
+        )
         payload.put("token", token)
 
         SocketHandler.getSocket().emit("createChatByGroup", payload)
@@ -55,8 +78,11 @@ fun DetailChatContent(
 
             if (response != null) {
                 input = ""
-                coroutineScope.launch {
-                    listState.animateScrollToItem(index = listChat.size)
+
+                if (listChat.isNotEmpty()) {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(index = listChat.size - 1)
+                    }
                 }
             }
         }
@@ -79,8 +105,10 @@ fun DetailChatContent(
     }
 
     LaunchedEffect(key1 = counter) {
-        coroutineScope.launch {
-            listState.animateScrollToItem(index = listChat.size)
+        if (listChat.isNotEmpty()) {
+            coroutineScope.launch {
+                listState.animateScrollToItem(index = listChat.size - 1)
+            }
         }
     }
 
