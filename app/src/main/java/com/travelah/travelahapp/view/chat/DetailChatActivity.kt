@@ -11,6 +11,7 @@ import com.travelah.travelahapp.ui.screens.DetailChatScreen
 import com.travelah.travelahapp.utils.SocketHandler
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
+import com.travelah.travelahapp.view.post.PostDetailActivity
 import org.json.JSONObject
 
 class DetailChatActivity : AppCompatActivity() {
@@ -24,13 +25,16 @@ class DetailChatActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        val id = intent.getIntExtra(EXTRA_ID, 0)
+
         mainViewModel.getToken().observe(this) {token ->
-            if (token != "") {
+            if (token != "" && id != 0) {
+                Log.d("abcde", token)
                 SocketHandler.setSocket(token)
                 SocketHandler.establishConnection()
 
                 val payload = JSONObject()
-                payload.put("groupId", 3)
+                payload.put("groupId", id)
                 payload.put("token", token)
 
                 SocketHandler.getSocket().emit("getAllChatFromGroupChat", payload)
@@ -39,14 +43,13 @@ class DetailChatActivity : AppCompatActivity() {
                 SocketHandler.getSocket().on("chatRetrieved"
                 ) { args ->
                     val response = args[0] as JSONObject
-                    Log.d("response", response.toString())
                     val chats = ChatDetailResponse.fromJson(response)
 
                     runOnUiThread {
                         if (chats != null) {
                             setContent {
                                 MaterialTheme {
-                                    DetailChatScreen(token, ChatDetailResponse.fromJson(response))
+                                    DetailChatScreen(token, id, ChatDetailResponse.fromJson(response))
                                 }
                             }
                         }
@@ -69,5 +72,9 @@ class DetailChatActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         SocketHandler.closeConnection()
+    }
+
+    companion object {
+        const val EXTRA_ID = "extra_id"
     }
 }

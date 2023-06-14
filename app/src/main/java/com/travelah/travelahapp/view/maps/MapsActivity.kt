@@ -14,18 +14,14 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.appcompat.widget.SearchView.VISIBLE
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.remote.models.Places
-import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.databinding.ActivityMapsBinding
 import com.travelah.travelahapp.view.post.AddEditPostActivity
-import com.travelah.travelahapp.view.post.PostDetailActivity
 import java.io.IOException
 
 

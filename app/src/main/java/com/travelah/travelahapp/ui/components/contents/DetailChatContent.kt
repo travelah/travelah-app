@@ -1,7 +1,6 @@
 package com.travelah.travelahapp.ui.components.contents
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,7 +25,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
-fun DetailChatContent(token: String, listChat: List<ChatItem>, modifier: Modifier = Modifier) {
+fun DetailChatContent(token: String, id: Int, listChat: List<ChatItem>, modifier: Modifier = Modifier) {
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -39,7 +38,7 @@ fun DetailChatContent(token: String, listChat: List<ChatItem>, modifier: Modifie
 
     fun handleSubmit() {
         val payload = JSONObject()
-        payload.put("groupId", 3)
+        payload.put("groupId", id)
         payload.put("question", input)
         payload.put("token", token)
 

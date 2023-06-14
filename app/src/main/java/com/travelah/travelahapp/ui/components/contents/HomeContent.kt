@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.view.chat.DetailChatActivity
 import com.travelah.travelahapp.view.post.PostCommentActivity
 import com.travelah.travelahapp.view.post.PostDetailActivity
 
@@ -65,6 +66,13 @@ fun HomeContent(
     fun onCommentButtonClick(id: Int?) {
         val intent = Intent(context, PostCommentActivity::class.java)
         intent.putExtra(PostDetailActivity.EXTRA_ID, id ?: 0)
+
+        context.startActivity(intent)
+    }
+
+    fun onChatCardClick(id: Int) {
+        val intent = Intent(context, DetailChatActivity::class.java)
+        intent.putExtra(DetailChatActivity.EXTRA_ID, id)
 
         context.startActivity(intent)
     }
@@ -160,7 +168,8 @@ fun HomeContent(
                             items(listChat, key = { it.id }) { data ->
                                 HistoryChatCardHome(
                                     latestChat = if (data.chats.isNotEmpty()) data.chats[0].question else "-",
-                                    date = if (data.chats.isNotEmpty()) data.chats[0].createdAt.withDateFormatFromISO() else data.createdAt.withDateFormatFromISO()
+                                    date = if (data.chats.isNotEmpty()) data.chats[0].createdAt.withDateFormatFromISO() else data.createdAt.withDateFormatFromISO(),
+                                    onClickSeeChat = { onChatCardClick(data.id) }
                                 )
                             }
                         } else {

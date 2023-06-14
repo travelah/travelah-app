@@ -15,7 +15,12 @@ import com.travelah.travelahapp.ui.components.contents.DetailChatContent
 import com.travelah.travelahapp.ui.components.elements.AppBarChat
 
 @Composable
-fun DetailChatScreen(token: String, chatResponse: ChatDetailResponse, modifier: Modifier = Modifier) {
+fun DetailChatScreen(
+    token: String,
+    id: Int,
+    chatResponse: ChatDetailResponse,
+    modifier: Modifier = Modifier
+) {
     val configuration = LocalConfiguration.current
 
     Column(
@@ -23,6 +28,6 @@ fun DetailChatScreen(token: String, chatResponse: ChatDetailResponse, modifier: 
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         AppBarChat(fullName = "Chat Detail")
-        DetailChatContent(token = token, listChat =  chatResponse.data, modifier = Modifier)
+        DetailChatContent(token = token, id = id, listChat = chatResponse.data, modifier = Modifier)
     }
 }

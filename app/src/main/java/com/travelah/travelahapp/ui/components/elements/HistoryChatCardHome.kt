@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.elements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -17,11 +18,15 @@ import androidx.compose.ui.unit.dp
 fun HistoryChatCardHome(
     latestChat: String,
     date: String,
+    onClickSeeChat: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .height(76.dp)
+            .clickable {
+                onClickSeeChat()
+            }
             .fillMaxWidth()
             .background(color = Color(0xFFE2F0F7), shape = RoundedCornerShape(16.dp))
             .padding(vertical = 12.dp, horizontal = 16.dp),
