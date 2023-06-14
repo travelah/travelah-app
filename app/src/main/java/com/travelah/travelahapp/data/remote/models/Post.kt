@@ -18,6 +18,9 @@ data class Post(
 	@field:SerializedName("longitude")
 	val longitude: Double,
 
+	@field:SerializedName("title")
+	val title: String,
+
 	@field:SerializedName("posterFullName")
 	val posterFullName: String,
 
@@ -55,5 +58,8 @@ data class Post(
 	val isUserLike: Boolean,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: String? = null
+	val updatedAt: String? = null,
+
+	@field:SerializedName("comments")
+	val comments: List<Comment>? = null
 ) : Parcelable

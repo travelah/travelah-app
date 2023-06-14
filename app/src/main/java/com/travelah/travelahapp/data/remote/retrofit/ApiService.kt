@@ -1,8 +1,9 @@
 package com.travelah.travelahapp.data.remote.retrofit
 
 import com.travelah.travelahapp.data.remote.models.*
-import com.travelah.travelahapp.data.remote.models.body.LoginBody
+import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
+import com.travelah.travelahapp.data.remote.models.body.LoginBody
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -72,4 +73,34 @@ interface ApiService {
         @Part("location") location: RequestBody?,
         @Part("aboutMe") aboutMe: RequestBody?
     ): UpdateProfileResponse
+    @POST("posts")
+    suspend fun createPost(
+        @Header("Authorization") authorization: String,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("latitude") latitude: RequestBody,
+        @Part("longitude") longitude: RequestBody,
+        @Part photo: MultipartBody.Part,
+    ): CreatePostResponse
+
+    @GET("posts/detail/{id}")
+    suspend fun getPostDetail(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+    ): PostDetailResponse
+
+    @POST("posts/comment/{id}")
+    suspend fun createCommentPost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Body body: CommentPostBody
+    ): CreatePostCommentResponse
+
+    @GET("posts/all-comments/{id}")
+    suspend fun getAllCommentPost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Query("page") page: Int? = 1,
+        @Query("take") take: Int? = 3
+    ): PostCommentResponse
 }

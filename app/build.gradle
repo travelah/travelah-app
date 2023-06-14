@@ -94,7 +94,7 @@ dependencies {
 
     // paging
     implementation "androidx.paging:paging-runtime-ktx:3.1.0"
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha17'
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
 
     // maps
     implementation 'com.google.android.gms:play-services-maps:18.0.0'
@@ -138,4 +138,14 @@ dependencies {
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-view:${camerax_version}"
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+
+    // circle image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //
+    implementation ('io.socket:socket.io-client:2.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
 }

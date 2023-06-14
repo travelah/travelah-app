@@ -12,6 +12,8 @@ import com.travelah.travelahapp.view.login.LoginViewModel
 import com.travelah.travelahapp.view.main.MainViewModel
 import com.travelah.travelahapp.view.post.PostViewModel
 import com.travelah.travelahapp.view.register.RegisterViewModel
+import com.travelah.travelahapp.view.splashscreen.SplashScreenActivity
+import com.travelah.travelahapp.view.splashscreen.SplashScreenViewModel
 
 class ViewModelFactory private constructor(
     private val userRepository: UserRepository,
@@ -40,6 +42,10 @@ class ViewModelFactory private constructor(
 
         if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
             return ChatViewModel(chatRepository) as T
+        }
+
+        if (modelClass.isAssignableFrom(SplashScreenViewModel::class.java)) {
+            return SplashScreenViewModel(userRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

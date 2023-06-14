@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.contents
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,15 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.local.entity.PostEntity
+import com.travelah.travelahapp.data.mappers.toPost
 import com.travelah.travelahapp.ui.components.elements.PostCard
 import com.travelah.travelahapp.utils.withDateFormatFromISO
-import com.travelah.travelahapp.view.ViewModelFactory
+import com.travelah.travelahapp.view.post.PostCommentActivity
+import com.travelah.travelahapp.view.post.PostDetailActivity
 import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -28,13 +30,26 @@ import kotlinx.coroutines.launch
 fun PostContent(
     posts: LazyPagingItems<PostEntity>,
     token: String,
-    viewModel: PostViewModel = viewModel(
-        factory = ViewModelFactory.getInstance(LocalContext.current)
-    ),
+    viewModel: PostViewModel,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    fun onPostCardClick(postEntity: PostEntity) {
+        val intent = Intent(context, PostDetailActivity::class.java)
+        val newPost = postEntity.toPost()
+        intent.putExtra(PostDetailActivity.EXTRA_ID, newPost.id)
+        intent.putExtra(PostDetailActivity.EXTRA_POST, newPost)
+        context.startActivity(intent)
+    }
+
+    fun onCommentButtonClick(id: Int?) {
+        val intent = Intent(context, PostCommentActivity::class.java)
+        intent.putExtra(PostDetailActivity.EXTRA_ID, id ?: 0)
+
+        context.startActivity(intent)
+    }
 
     fun likeDislikePost(id: Int, isLike: Boolean) {
         scope.launch {
@@ -72,12 +87,13 @@ fun PostContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // not used key because already handled by the paging3
         items(posts, key = { it.id }) { post ->
             if (post != null) {
                 PostCard(
                     username = post.posterFullName,
                     profPic = post.profilePicOfUser,
-                    title = post.description,
+                    title = post.title,
                     date = post.createdAt.withDateFormatFromISO(),
                     likeCount = post.likeCount,
                     dontLikeCount = post.dontLikeCount,
@@ -90,6 +106,12 @@ fun PostContent(
                     },
                     onClickDontLike = {
                         likeDislikePost(post.id, false)
+                    },
+                    onClickCard = {
+                        onPostCardClick(post)
+                    },
+                    onClickComment = {
+                        onCommentButtonClick(post.id)
                     }
                 )
             }

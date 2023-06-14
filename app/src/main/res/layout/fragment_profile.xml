@@ -26,6 +26,7 @@
             android:id="@+id/buttonEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:background="@drawable/button_background"
             android:drawableStart="@drawable/ic_edit_24"
             android:text="Edit"
@@ -33,6 +34,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:paddingHorizontal="8dp"
+            android:padding="4dp"
             app:layout_constraintTop_toTopOf="@id/imageProfile"
             app:layout_constraintEnd_toEndOf="parent"/>
 
