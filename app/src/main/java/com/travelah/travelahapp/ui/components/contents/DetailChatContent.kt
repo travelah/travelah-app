@@ -25,12 +25,18 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
-fun DetailChatContent(token: String, id: Int, listChat: List<ChatItem>, modifier: Modifier = Modifier) {
+fun DetailChatContent(
+    token: String,
+    id: Int,
+    listChat: List<ChatItem>,
+    modifier: Modifier = Modifier
+) {
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
     val counter = remember { mutableStateOf(0) }
+
+    val context = LocalContext.current
 
     fun handleInput(value: String) {
         input = value
@@ -38,25 +44,53 @@ fun DetailChatContent(token: String, id: Int, listChat: List<ChatItem>, modifier
 
     fun handleSubmit() {
         val payload = JSONObject()
+
+        val backTrackFollowUp = mutableListOf<String>()
+
+        if (listChat.isNotEmpty()) {
+            // check previous follow up question till N where N is chat where chat type is not 3
+            for (i in listChat.size - 1 downTo 0) {
+                if (listChat[i].chatType == 3) {
+                    backTrackFollowUp.add(listChat[i].question)
+                } else {
+                    break
+                }
+            }
+        }
+
+        backTrackFollowUp.reverse()
+
+        val followUpQuestion =
+            if (backTrackFollowUp.isNotEmpty()) backTrackFollowUp.reduce { acc, string -> "$acc $string" } else null
+
         payload.put("groupId", id)
         payload.put("question", input)
+        payload.put(
+            "followUpQuestion",
+            if (followUpQuestion != null) "$followUpQuestion $input" else null
+        )
         payload.put("token", token)
 
         SocketHandler.getSocket().emit("createChatByGroup", payload)
-        SocketHandler.getSocket().on("chatRetrieved"
+        SocketHandler.getSocket().on(
+            "chatRetrieved"
         ) { args ->
             val response = args[0] as JSONObject?
 
             if (response != null) {
                 input = ""
-                coroutineScope.launch {
-                    listState.animateScrollToItem(index = listChat.size)
+
+                if (listChat.isNotEmpty()) {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(index = listChat.size - 1)
+                    }
                 }
             }
         }
     }
 
-    SocketHandler.getSocket().on("chatCreationError"
+    SocketHandler.getSocket().on(
+        "chatCreationError"
     ) { args ->
         val response = args[0] as JSONObject?
 
@@ -72,8 +106,10 @@ fun DetailChatContent(token: String, id: Int, listChat: List<ChatItem>, modifier
     }
 
     LaunchedEffect(key1 = counter) {
-        coroutineScope.launch {
-            listState.animateScrollToItem(index = listChat.size)
+        if (listChat.isNotEmpty()) {
+            coroutineScope.launch {
+                listState.animateScrollToItem(index = listChat.size - 1)
+            }
         }
     }
 

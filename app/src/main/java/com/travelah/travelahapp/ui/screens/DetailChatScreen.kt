@@ -2,10 +2,7 @@ package com.travelah.travelahapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -19,6 +16,7 @@ fun DetailChatScreen(
     token: String,
     id: Int,
     chatResponse: ChatDetailResponse,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val configuration = LocalConfiguration.current
@@ -27,7 +25,12 @@ fun DetailChatScreen(
         modifier = modifier.height(configuration.screenHeightDp.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        AppBarChat(fullName = "Chat Detail")
-        DetailChatContent(token = token, id = id, listChat = chatResponse.data, modifier = Modifier)
+        AppBarChat(fullName = "Chat Detail", onBackClick = onBackClick)
+        DetailChatContent(
+            token = token,
+            id = id,
+            listChat = chatResponse.data,
+            modifier = Modifier
+        )
     }
 }
