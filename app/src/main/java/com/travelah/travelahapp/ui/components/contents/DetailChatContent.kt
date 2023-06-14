@@ -1,8 +1,7 @@
 package com.travelah.travelahapp.ui.components.contents
 
-import android.util.Log
+import android.app.Activity
 import android.widget.Toast
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,15 +14,13 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.paging.LoadState
-import com.travelah.travelahapp.data.remote.models.response.ChatDetailResponse
+import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.remote.models.response.ChatItem
 import com.travelah.travelahapp.ui.components.elements.BubbleChat
-import com.travelah.travelahapp.ui.screens.DetailChatScreen
 import com.travelah.travelahapp.utils.SocketHandler
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -32,6 +29,7 @@ fun DetailChatContent(token: String, listChat: List<ChatItem>, modifier: Modifie
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     val counter = remember { mutableStateOf(0) }
 
     fun handleInput(value: String) {
@@ -54,6 +52,21 @@ fun DetailChatContent(token: String, listChat: List<ChatItem>, modifier: Modifie
                 coroutineScope.launch {
                     listState.animateScrollToItem(index = listChat.size)
                 }
+            }
+        }
+    }
+
+    SocketHandler.getSocket().on("chatCreationError"
+    ) { args ->
+        val response = args[0] as JSONObject
+
+        if (response != null) {
+            (context as? Activity)?.runOnUiThread {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.failed_send_chat),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
