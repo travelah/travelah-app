@@ -5,21 +5,27 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.appcompat.widget.SearchView.VISIBLE
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.remote.models.Places
+import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.databinding.ActivityMapsBinding
 import com.travelah.travelahapp.view.post.AddEditPostActivity
+import com.travelah.travelahapp.view.post.PostDetailActivity
 import java.io.IOException
 
 
@@ -39,6 +45,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         val searchView = binding.idSearchView
+
+        val place = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_PLACES, Places::class.java)
+        } else {
+            @Suppress("deprecation")
+            intent.getParcelableExtra(EXTRA_PLACES)
+        }
+
+        if (place != null) {
+            searchView.visibility = View.GONE
+            supportActionBar?.hide()
+        } else {
+            searchView.visibility = View.GONE
+        }
 
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -107,6 +127,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isCompassEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = true
 
+        val place = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_PLACES, Places::class.java)
+        } else {
+            @Suppress("deprecation")
+            intent.getParcelableExtra(EXTRA_PLACES)
+        }
+
+        if (place != null) {
+            val placeLoc = LatLng(place.lat, place.lng)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(placeLoc)
+                    .title(place.place)
+            )
+        }
+
 //        mMap.setOnPoiClickListener { pointOfInterest ->
 //            val poiMarker = mMap.addMarker(
 //                MarkerOptions()
@@ -164,6 +200,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
-        private const val TAG = "MapsActivity"
+        const val EXTRA_PLACES = "extra_places"
     }
 }

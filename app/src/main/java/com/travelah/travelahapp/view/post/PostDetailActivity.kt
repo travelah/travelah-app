@@ -31,6 +31,7 @@ class PostDetailActivity : AppCompatActivity() {
         val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_POST, Post::class.java)
         } else {
+            @Suppress("deprecation")
             intent.getParcelableExtra(EXTRA_POST)
         }
 

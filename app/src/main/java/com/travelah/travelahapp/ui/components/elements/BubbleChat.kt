@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.elements
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,7 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
+import com.travelah.travelahapp.data.local.entity.PostEntity
+import com.travelah.travelahapp.data.mappers.toPost
+import com.travelah.travelahapp.data.remote.models.Places
 import com.travelah.travelahapp.data.remote.models.response.ChatItem
+import com.travelah.travelahapp.view.maps.MapsActivity
+import com.travelah.travelahapp.view.post.PostDetailActivity
 
 @Composable
 fun BubbleChat(
@@ -30,6 +37,14 @@ fun BubbleChat(
     onClickAlt2: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
+    fun onRecommendationClick(places: Places) {
+        val intent = Intent(context, MapsActivity::class.java)
+        intent.putExtra(MapsActivity.EXTRA_PLACES, places)
+        context.startActivity(intent)
+    }
+
     if (isQuestion) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(
@@ -136,17 +151,17 @@ fun BubbleChat(
             ) {
                 for (place in chat.places) {
                     key("${place.lat} ${place.lng}") {
-                        PrimaryButton(onClick = {
-
-                        }, content = {
-                            Text(
-                                text = place.place,
-                                style = MaterialTheme.typography.caption.copy(
-                                    fontSize = 10.sp,
-                                    color = Color.White
+                        PrimaryButton(
+                            onClick = { onRecommendationClick(place) },
+                            content = {
+                                Text(
+                                    text = place.place,
+                                    style = MaterialTheme.typography.caption.copy(
+                                        fontSize = 10.sp,
+                                        color = Color.White
+                                    )
                                 )
-                            )
-                        }, modifier = Modifier.fillMaxWidth()
+                            }, modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
