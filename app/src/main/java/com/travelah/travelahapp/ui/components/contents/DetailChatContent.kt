@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.contents
 
 import android.app.Activity
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -45,7 +46,7 @@ fun DetailChatContent(token: String, listChat: List<ChatItem>, modifier: Modifie
         SocketHandler.getSocket().emit("createChatByGroup", payload)
         SocketHandler.getSocket().on("chatRetrieved"
         ) { args ->
-            val response = args[0] as JSONObject
+            val response = args[0] as JSONObject?
 
             if (response != null) {
                 input = ""
@@ -58,7 +59,7 @@ fun DetailChatContent(token: String, listChat: List<ChatItem>, modifier: Modifie
 
     SocketHandler.getSocket().on("chatCreationError"
     ) { args ->
-        val response = args[0] as JSONObject
+        val response = args[0] as JSONObject?
 
         if (response != null) {
             (context as? Activity)?.runOnUiThread {

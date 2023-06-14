@@ -3,6 +3,8 @@ package com.travelah.travelahapp.data.remote.models.response
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.travelah.travelahapp.data.remote.models.Places
+import org.json.JSONArray
 import org.json.JSONObject
 
 @Parcelize
@@ -23,6 +25,27 @@ data class ChatDetailResponse(
 
             for (i in 0 until dataArray.length()) {
                 val item = dataArray.getJSONObject(i)
+                var places: JSONArray? = null
+
+                try {
+                    places = item?.getJSONArray("places")
+                } catch (_: Exception) {}
+
+                val listPlace = mutableListOf<Places>()
+
+                if (places != null) {
+                    for (j in 0 until places.length()) {
+                        val place = places.getJSONObject(j)
+                        val placeObj = Places(
+                            lat = place.getDouble("lat"),
+                            lng = place.getDouble("lng"),
+                            place = place.getString("place")
+                        )
+
+                        listPlace.add(placeObj)
+                    }
+                }
+
                 val chatItem = ChatItem(
                     groupChatId = item.getInt("groupChatId"),
                     createdAt = item.getString("createdAt"),
@@ -31,14 +54,15 @@ data class ChatDetailResponse(
                     bookmarked = item.getBoolean("bookmarked"),
                     id = item.getInt("id"),
                     userId = item.getInt("userId"),
-                    user = User(
+                    user = UserChat(
                         profilePicPath = item.getJSONObject("user").optString("profilePicPath"),
                         profilePicName = item.getJSONObject("user").optString("profilePicName")
                     ),
                     chatType = item.getInt("chatType"),
                     updatedAt = item.getString("updatedAt"),
                     altIntent1 = item.getString("altIntent1"),
-                    altIntent2 = item.getString("altIntent2")
+                    altIntent2 = item.getString("altIntent2"),
+                    places = listPlace
                 )
                 data.add(chatItem)
             }
@@ -52,7 +76,7 @@ data class ChatDetailResponse(
 }
 
 @Parcelize
-data class User(
+data class UserChat(
     @field:SerializedName("profilePicPath")
     val profilePicPath: String? = null,
 
@@ -84,7 +108,7 @@ data class ChatItem(
     val userId: Int,
 
     @field:SerializedName("user")
-    val user: User,
+    val user: UserChat,
 
     @field:SerializedName("chatType")
     val chatType: Int,
@@ -94,6 +118,9 @@ data class ChatItem(
 
     @field:SerializedName("altIntent2")
     val altIntent2: String? = null,
+
+    @field:SerializedName("places")
+    val places: List<Places>,
 
     @field:SerializedName("updatedAt")
     val updatedAt: String,
