@@ -8,9 +8,11 @@ import com.travelah.travelahapp.data.remote.PostRepository
 import com.travelah.travelahapp.data.remote.UserRepository
 import com.travelah.travelahapp.di.Injection
 import com.travelah.travelahapp.view.chat.ChatViewModel
+import com.travelah.travelahapp.view.editprofile.EditProfileViewModel
 import com.travelah.travelahapp.view.login.LoginViewModel
 import com.travelah.travelahapp.view.main.MainViewModel
 import com.travelah.travelahapp.view.post.PostViewModel
+import com.travelah.travelahapp.view.profile.ProfileViewModel
 import com.travelah.travelahapp.view.register.RegisterViewModel
 import com.travelah.travelahapp.view.splashscreen.SplashScreenActivity
 import com.travelah.travelahapp.view.splashscreen.SplashScreenViewModel
@@ -47,6 +49,15 @@ class ViewModelFactory private constructor(
         if (modelClass.isAssignableFrom(SplashScreenViewModel::class.java)) {
             return SplashScreenViewModel(userRepository) as T
         }
+
+        if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
+            return ProfileViewModel(userRepository) as T
+        }
+
+        if (modelClass.isAssignableFrom(EditProfileViewModel::class.java)) {
+            return EditProfileViewModel(userRepository) as T
+        }
+
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
 
