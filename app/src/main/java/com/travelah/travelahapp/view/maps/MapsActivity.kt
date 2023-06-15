@@ -91,7 +91,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 mMap.addMarker(MarkerOptions().position(latLng).title(location))
 
                                 // below line is to animate camera to that position.
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                             }
                         }
                     } catch (e: IOException) {
@@ -129,6 +129,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         if (place != null) {
+            currLat = place.lat
+            currLong = place.lng
             val placeLoc = LatLng(place.lat, place.lng)
             mMap.addMarker(
                 MarkerOptions()

@@ -155,7 +155,7 @@ fun CommentsContent(
                             )
                             Column {
                                 Text(
-                                    text = comment.userFullName,
+                                    text = comment.userFullName ?: "-",
                                     style = MaterialTheme.typography.body2.copy(
                                         fontWeight = FontWeight.Medium
                                     )

@@ -4,11 +4,13 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,8 +19,10 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.databinding.ActivityAddEditPostBinding
 import com.travelah.travelahapp.utils.createCustomTempFile
 import com.travelah.travelahapp.utils.reduceFileImage
@@ -56,6 +60,26 @@ class AddEditPostActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(PostDetailActivity.EXTRA_POST, Post::class.java)
+        } else {
+            @Suppress("deprecation")
+            intent.getParcelableExtra(PostDetailActivity.EXTRA_POST)
+        }
+
+        post?.let {
+            binding.apply {
+                titlePostInput.setText(it.title)
+                descriptionInput.setText(it.description)
+                locationText.text = it.location
+            }
+
+            Glide.with(this).load("${post.postPhotoPath}/${post.postPhotoName}")
+                .into(binding.previewImageView)
+            currLat = post.latitude
+            currLong = post.longitude
+        }
+
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -68,6 +92,10 @@ class AddEditPostActivity : AppCompatActivity() {
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.changeLocationButton.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
+            if (post != null) {
+                intent.putExtra(PostDetailActivity.EXTRA_POST, post)
+            }
+
             launcherIntentLocation.launch(intent)
         }
     }
@@ -94,12 +122,30 @@ class AddEditPostActivity : AppCompatActivity() {
         if (it.resultCode == RESULT_OK) {
             val myFile = File(currentPhotoPath)
 
-            myFile.let { file ->
-                rotateFile(file, true)
-                binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
+            val exif = ExifInterface(myFile)
+            val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            var angle: Float = 0F
+
+            angle = when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> {
+                    90F
+                }
+                ExifInterface.ORIENTATION_ROTATE_180 -> {
+                    180F
+                }
+                ExifInterface.ORIENTATION_ROTATE_270 -> {
+                    270F
+                }
+                else -> {
+                    0F
+                }
             }
 
-            getFile = myFile
+            myFile.let { file ->
+                rotateFile(file, angle)
+                getFile = file
+                binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
+            }
         }
     }
 
@@ -185,32 +231,73 @@ class AddEditPostActivity : AppCompatActivity() {
 
             mainViewModel.getToken().observe(this) { token ->
                 if (token !== "") {
-                    postViewModel.createPost(
-                        imageMultipart,
-                        title,
-                        description,
-                        token,
-                        long,
-                        lat
-                    ).observe(this) { result ->
-                        when (result) {
-                            is Result.Loading -> {
 
+                    val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.getParcelableExtra(PostDetailActivity.EXTRA_POST, Post::class.java)
+                    } else {
+                        @Suppress("deprecation")
+                        intent.getParcelableExtra(PostDetailActivity.EXTRA_POST)
+                    }
+
+                    if (post != null) {
+                        postViewModel.updatePost(
+                            post.id,
+                            imageMultipart,
+                            title,
+                            description,
+                            token,
+                            long,
+                            lat
+                        ).observe(this) { result ->
+                            when (result) {
+                                is Result.Loading -> {
+
+                                }
+                                is Result.Success -> {
+                                    Toast.makeText(
+                                        this,
+                                        getString(R.string.upload_success),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
+                                }
+                                is Result.Error -> {
+                                    Toast.makeText(
+                                        this,
+                                        "Error cok: ${result.error}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                            is Result.Success -> {
-                                Toast.makeText(
-                                    this,
-                                    getString(R.string.upload_success),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                finish()
-                            }
-                            is Result.Error -> {
-                                Toast.makeText(
-                                    this,
-                                    "Error cok",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        }
+                    } else {
+                        postViewModel.createPost(
+                            imageMultipart,
+                            title,
+                            description,
+                            token,
+                            long,
+                            lat
+                        ).observe(this) { result ->
+                            when (result) {
+                                is Result.Loading -> {
+
+                                }
+                                is Result.Success -> {
+                                    Toast.makeText(
+                                        this,
+                                        getString(R.string.upload_success),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
+                                }
+                                is Result.Error -> {
+                                    Toast.makeText(
+                                        this,
+                                        "Error cok: ${result.error}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
                     }

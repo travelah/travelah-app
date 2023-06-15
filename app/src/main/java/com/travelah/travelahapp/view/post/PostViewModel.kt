@@ -58,6 +58,17 @@ class PostViewModel(
     ) =
         postRepository.createPost(photo, title, description, token, long, lat)
 
+    fun updatePost(
+        id: Int,
+        photo: MultipartBody.Part,
+        title: RequestBody,
+        description: RequestBody,
+        token: String,
+        long: RequestBody,
+        lat: RequestBody
+    ) =
+        postRepository.updatePost(id, photo, title, description, token, long, lat)
+
     fun createPostComment(
         description: String,
         id: Int,

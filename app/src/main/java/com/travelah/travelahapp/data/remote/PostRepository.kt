@@ -153,6 +153,48 @@ class PostRepository private constructor(
         }
     }
 
+    fun updatePost(
+        id: Int,
+        photo: MultipartBody.Part,
+        title: RequestBody,
+        description: RequestBody,
+        token: String,
+        long: RequestBody,
+        lat: RequestBody
+    ): LiveData<Result<CreatePostResponse>> = liveData {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.updatePost(
+                    "Bearer $token",
+                    id,
+                    title,
+                    description,
+                    lat,
+                    long,
+                    photo
+                )
+                if (response.status) {
+                    emit(Result.Success(response))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
     fun createPostComment(
         description: String,
         id: Int,

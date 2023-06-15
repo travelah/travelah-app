@@ -86,6 +86,18 @@ interface ApiService {
         @Part photo: MultipartBody.Part,
     ): CreatePostResponse
 
+    @Multipart
+    @PATCH("posts/{id}")
+    suspend fun updatePost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("latitude") latitude: RequestBody,
+        @Part("longitude") longitude: RequestBody,
+        @Part photo: MultipartBody.Part,
+    ): CreatePostResponse
+
     @GET("posts/detail/{id}")
     suspend fun getPostDetail(
         @Header("Authorization") authorization: String,

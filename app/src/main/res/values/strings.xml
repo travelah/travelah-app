@@ -81,4 +81,5 @@
     <string name="cancel">Cancel</string>
     <string name="delete_post_confirmation">Are you sure want to delete this post?</string>
     <string name="ok">OK</string>
+    <string name="edit_post">Edit Post</string>
 </resources>

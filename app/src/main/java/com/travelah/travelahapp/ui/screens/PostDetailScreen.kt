@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.screens
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,9 +25,12 @@ import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.ui.components.elements.AppBarChat
 import com.travelah.travelahapp.ui.components.elements.ConfirmDialog
 import com.travelah.travelahapp.view.ViewModelFactory
+import com.travelah.travelahapp.view.post.AddEditPostActivity
+import com.travelah.travelahapp.view.post.PostDetailActivity
 import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun PostDetailScreen(
@@ -43,6 +48,16 @@ fun PostDetailScreen(
     val context = LocalContext.current
     val showModal = remember { mutableStateOf(false) }
     val isOffline = remember { mutableStateOf(false) }
+
+    fun onEditPostClick(post: Post?) {
+        val intent = Intent(context, AddEditPostActivity::class.java)
+
+        if (post != null) {
+            intent.putExtra(PostDetailActivity.EXTRA_ID, post.id)
+            intent.putExtra(PostDetailActivity.EXTRA_POST, post)
+        }
+        context.startActivity(intent)
+    }
 
     fun deletePost(id: Int) {
         scope.launch {
@@ -127,11 +142,17 @@ fun PostDetailScreen(
                             IconButton(onClick = {
                                 showModal.value = true
                                 isOffline.value = false
-                            }
-                            ) {
+                            }) {
                                 Icon(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = "Delete"
+                                )
+                            }
+
+                            IconButton(onClick = { onEditPostClick(result.data) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Edit"
                                 )
                             }
                         }
@@ -159,6 +180,13 @@ fun PostDetailScreen(
                                 Icon(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = "Delete"
+                                )
+                            }
+
+                            IconButton(onClick = { onEditPostClick(postFromActivity) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Edit"
                                 )
                             }
                         }

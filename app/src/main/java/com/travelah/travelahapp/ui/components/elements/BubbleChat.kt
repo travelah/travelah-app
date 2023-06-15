@@ -51,8 +51,6 @@ fun BubbleChat(
         context.startActivity(intent)
     }
 
-    Log.d("defg", chat.toString())
-
     if (isQuestion) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(

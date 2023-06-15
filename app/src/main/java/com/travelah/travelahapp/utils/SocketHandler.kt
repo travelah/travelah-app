@@ -1,7 +1,8 @@
 package com.travelah.travelahapp.utils
 
+import com.travelah.travelahapp.data.remote.retrofit.RetrofitConfig
 import io.socket.client.IO
-    import io.socket.client.Socket
+import io.socket.client.Socket
 import okhttp3.OkHttpClient
 import java.net.URISyntaxException
 
@@ -27,7 +28,7 @@ object SocketHandler {
                 }
                 .build()
 
-            mSocket = IO.socket("http://10.0.2.2:3000", options)
+            mSocket = IO.socket("${RetrofitConfig.BASE_URL}:3000", options)
         } catch (_: URISyntaxException) {
 
         }
