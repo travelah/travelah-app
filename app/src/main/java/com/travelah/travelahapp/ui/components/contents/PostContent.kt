@@ -11,13 +11,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
+import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.local.entity.PostEntity
 import com.travelah.travelahapp.data.mappers.toPost
+import com.travelah.travelahapp.ui.components.elements.ErrorText
 import com.travelah.travelahapp.ui.components.elements.PostCard
 import com.travelah.travelahapp.utils.withDateFormatFromISO
 import com.travelah.travelahapp.view.post.PostCommentActivity
@@ -87,6 +90,11 @@ fun PostContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (posts.itemCount == 0) {
+            item {
+                ErrorText(stringResource(R.string.no_post_data_available))
+            }
+        }
         // not used key because already handled by the paging3
         items(posts, key = { it.id }) { post ->
             if (post != null) {

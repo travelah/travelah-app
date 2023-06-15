@@ -12,7 +12,7 @@ fun ErrorText(text: String, modifier: Modifier = Modifier) {
     Text(
         text,
         style = MaterialTheme.typography.body2.copy(
-            color = Color(0xFFDC362E),
+            color = Color.Black,
             textAlign = TextAlign.Center
         ),
         modifier = modifier
