@@ -7,7 +7,6 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -53,7 +52,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             searchView.visibility = View.GONE
             supportActionBar?.hide()
         } else {
-            searchView.visibility = View.GONE
+            searchView.visibility = View.VISIBLE
         }
 
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
