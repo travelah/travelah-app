@@ -17,4 +17,22 @@ data class Profile(
 
     @field:SerializedName("email")
     val email: String,
+
+    @field:SerializedName("aboutMe")
+    val aboutMe: String,
+
+    @field:SerializedName("occupation")
+    val occupation: String,
+
+    @field:SerializedName("location")
+    val location: String,
+
+    @field:SerializedName("profilePicPath")
+    val profilePicPath: String,
+
+    @field:SerializedName("profilePicName")
+    val profilePicName: String,
+
+    @field:SerializedName("age")
+    val age: Int
 ) : Parcelable
