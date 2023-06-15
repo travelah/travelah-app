@@ -9,6 +9,8 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.travelah.travelahapp.data.local.entity.ChatEntity
 import com.travelah.travelahapp.data.local.entity.ChatRemoteKeysEntity
+import com.travelah.travelahapp.data.local.entity.PostEntity
+import com.travelah.travelahapp.data.local.entity.PostRemoteKeysEntity
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
 
@@ -18,7 +20,6 @@ class ChatRemoteMediator(
     private val apiService: ApiService,
     private val token: String
 ): RemoteMediator<Int, ChatEntity>() {
-
     override suspend fun initialize(): InitializeAction {
         return InitializeAction.LAUNCH_INITIAL_REFRESH
     }
@@ -40,33 +41,41 @@ class ChatRemoteMediator(
             }
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
+                Log.d("Append", remoteKeys?.id.toString())
                 val nextKey = remoteKeys?.nextKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 nextKey
             }
         }
 
-        try {
-            val responseData = apiService.getAllHistoryChat("Bearer $token", page, state.config.pageSize)
-            var endOfPaginationData = responseData.data.isEmpty()
-            val listGroupChat: List<ChatEntity> = responseData.data.map {
-                ChatEntity(it.chats[0].groupChatId, it.chats[0].response, it.chats[0].updatedAt)
-            }
+        Log.d("Check", page.toString())
 
-            val prevKey = if (page == 1) null else page - 1
-            val nextKey = if (endOfPaginationReached) null else page + 1
-            val keys = responseData.data.map {
-                ChatRemoteKeysEntity(id = it.chats[0].id, prevKey = prevKey, nextKey = nextKey)
-            }
+        try {
+            Log.d("Api call", page.toString())
+            val responseData = apiService.getAllHistoryChat(token, page, state.config.pageSize)
+            var endOfPaginationReached = responseData.data.isEmpty()
+
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.chatRemoteKeysDao().deleteRemoteKeys()
                     database.chatDao().deleteAll()
                 }
+
+                val prevKey = if (page == 1) null else page - 1
+                val nextKey = if (endOfPaginationReached) null else page + 1
+
+                val listGroupChat = responseData.data.map {
+                    ChatEntity(it.chats[0].groupChatId, it.chats[0].response, it.chats[0].updatedAt)
+                }
+
+                val keys = responseData.data.map {
+                    ChatRemoteKeysEntity(id = it.chats[0].groupChatId, prevKey = prevKey, nextKey = nextKey)
+                }
+
                 database.chatRemoteKeysDao().insertAll(keys)
                 database.chatDao().insertGroupChat(listGroupChat)
             }
-            return MediatorResult.Success(endOfPaginationReached == endOfPaginationData)
+            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {
             return MediatorResult.Error(e)
         }
@@ -77,11 +86,13 @@ class ChatRemoteMediator(
             database.chatRemoteKeysDao().getRemoteKeysId(data.id)
         }
     }
+
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, ChatEntity>): ChatRemoteKeysEntity? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
             database.chatRemoteKeysDao().getRemoteKeysId(data.id)
         }
     }
+
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, ChatEntity>): ChatRemoteKeysEntity? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->

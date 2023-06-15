@@ -27,7 +27,7 @@ object SocketHandler {
                 }
                 .build()
 
-            mSocket = IO.socket("http://192.168.8.7:3000", options)
+            mSocket = IO.socket("https://travelah-h7wjymk3wa-uc.a.run.app", options)
         } catch (_: URISyntaxException) {
 
         }
