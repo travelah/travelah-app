@@ -46,8 +46,6 @@ class DetailChatActivity : AppCompatActivity() {
                         val response = args[0] as JSONObject
                         val chats = ChatDetailResponse.fromJson(response)
 
-                        Log.d("chatsss", chats.toString())
-
                         runOnUiThread {
                             if (chats != null) {
                                 setContent {
