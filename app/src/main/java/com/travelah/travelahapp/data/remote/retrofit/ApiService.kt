@@ -73,6 +73,10 @@ interface ApiService {
         @Part("location") location: RequestBody?,
         @Part("aboutMe") aboutMe: RequestBody?
     ): UpdateProfileResponse
+
+    @GET
+
+
     @POST("posts")
     suspend fun createPost(
         @Header("Authorization") authorization: String,
