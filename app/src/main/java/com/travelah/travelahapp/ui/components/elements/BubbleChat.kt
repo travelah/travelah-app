@@ -17,12 +17,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
@@ -38,6 +40,7 @@ fun BubbleChat(
     onClickAlt2: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
 
@@ -63,15 +66,18 @@ fun BubbleChat(
                     .clip(CircleShape)
                     .background(color = Color(0xFFE8F7FD))
                     .padding(horizontal = 24.dp, vertical = 16.dp)
-                    .pointerInput(Unit){
+                    .widthIn(max = (configuration.screenWidthDp  * 0.7f).dp)
+                    .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
                                 clipboardManager.setText(AnnotatedString(chat.question))
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.message_copied),
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast
+                                    .makeText(
+                                        context,
+                                        context.getString(R.string.message_copied),
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
                             }
                         )
                     }
@@ -86,7 +92,10 @@ fun BubbleChat(
                 contentDescription = stringResource(R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
-                modifier = Modifier.size(40.dp).clip(CircleShape),
+                modifier = Modifier
+                    .size(40.dp)
+                    .defaultMinSize(40.dp)
+                    .clip(CircleShape),
                 error = painterResource(id = R.drawable.ic_baseline_person_black_24)
             )
 
@@ -105,22 +114,26 @@ fun BubbleChat(
             Image(
                 painter = painterResource(id = R.drawable.vela),
                 contentDescription = stringResource(R.string.chatbot_profile_desc),
-                modifier = Modifier.size(40.dp).clip(CircleShape)
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
             )
             Box(
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(color = Color(0xFFE8F7FD))
                     .padding(horizontal = 24.dp, vertical = 16.dp)
-                    .pointerInput(Unit){
+                    .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
                                 clipboardManager.setText(AnnotatedString(chat.response))
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.message_copied),
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast
+                                    .makeText(
+                                        context,
+                                        context.getString(R.string.message_copied),
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
                             }
                         )
                     }
