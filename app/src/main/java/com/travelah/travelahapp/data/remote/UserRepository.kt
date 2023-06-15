@@ -1,18 +1,21 @@
 package com.travelah.travelahapp.data.remote
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
-import com.travelah.travelahapp.data.remote.retrofit.ApiService
-import retrofit2.HttpException
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.remote.models.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.Profile
+import com.travelah.travelahapp.data.remote.models.ProfileData
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
+import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource
-import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.HttpException
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -101,6 +104,41 @@ class UserRepository private constructor(
     fun getProfile(): LiveData<Profile> {
         return pref.getProfileSetting().asLiveData()
     }
+
+    fun updateProfile(
+        token: String,
+        photo: MultipartBody.Part?,
+        fullName: RequestBody?,
+        age: RequestBody?,
+        occupation: RequestBody?,
+        location: RequestBody?,
+        aboutMe: RequestBody?
+
+    ): LiveData<String> = liveData {
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.updateProfile("Bearer $token", photo, fullName, age, occupation, location, aboutMe)
+                response.data?.let { pref.updateProfile(it) }
+                emit(response.message.toString())
+                Log.d("success message", response.message.toString())
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        Log.e("http exception message", msg)
+                        emit(msg)
+                    }
+                    else -> {
+                        Log.e("error message", e.message.toString())
+                        emit(e.message.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    fun getUpdatedProfile(): LiveData<ProfileData> = pref.getUpdatedProfile().asLiveData()
 
     companion object {
         @Volatile

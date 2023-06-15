@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.travelah.travelahapp.adapter.GroupChatAdapter
 import com.travelah.travelahapp.data.Result
@@ -54,6 +55,7 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvGroupChat.layoutManager = LinearLayoutManager(requireContext())
         adapter = GroupChatAdapter()
+        adapter.refresh()
         binding.rvGroupChat.adapter = adapter
 
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
@@ -66,7 +68,7 @@ class ChatFragment : Fragment() {
                     }
 
                     override fun onItemDelete(groupChatId: Int) {
-                        setOnItemDeleteAction(token, groupChatId)
+                        setOnItemDeleteAction(token, groupChatId, it)
                     }
 
                 })
@@ -74,7 +76,11 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun setOnItemDeleteAction(token: String, groupChatId: Int) {
+    private fun setOnItemDeleteAction(
+        token: String,
+        groupChatId: Int,
+        data: PagingData<ChatEntity>
+    ) {
         val alertDialog = AlertDialog.Builder(requireContext())
             .setTitle("Delete Item")
             .setMessage("Do you want to delete this item?")
@@ -84,6 +90,7 @@ class ChatFragment : Fragment() {
                         if (response is Result.Success) {
                             Toast.makeText(activity, "Item succesfully deleted", Toast.LENGTH_SHORT)
                                 .show()
+                            adapter.refresh()
                         }
                     }
             }
