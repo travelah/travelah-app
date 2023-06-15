@@ -11,6 +11,10 @@ import com.travelah.travelahapp.data.remote.pager.PostRemoteMediator
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
+import com.travelah.travelahapp.data.remote.models.response.CreatePostCommentResponse
+import com.travelah.travelahapp.data.remote.models.response.CreatePostResponse
+import com.travelah.travelahapp.data.remote.models.response.ErrorResponse
+import com.travelah.travelahapp.data.remote.models.response.LikePostResponse
 import com.travelah.travelahapp.data.remote.pager.MyPostPagingSource
 import com.travelah.travelahapp.data.remote.pager.PostCommentPagingSource
 import com.travelah.travelahapp.data.remote.retrofit.ApiService

@@ -22,7 +22,7 @@ import com.travelah.travelahapp.utils.withDateFormatFromISO
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
-import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.data.remote.models.response.HistoryChat
 import com.travelah.travelahapp.view.chat.DetailChatActivity
 import com.travelah.travelahapp.view.post.PostCommentActivity
 import com.travelah.travelahapp.view.post.PostDetailActivity

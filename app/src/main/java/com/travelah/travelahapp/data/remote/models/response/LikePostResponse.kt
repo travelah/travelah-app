@@ -1,13 +1,13 @@
-package com.travelah.travelahapp.data.remote.models
+package com.travelah.travelahapp.data.remote.models.response
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 
 @Parcelize
 data class LikePostResponse(
-	val data: LikePost,
-	val message: String,
-	val status: Boolean
+    val data: LikePost,
+    val message: String,
+    val status: Boolean
 ) : Parcelable
 
 @Parcelize

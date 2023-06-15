@@ -6,7 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.travelah.travelahapp.data.Result
-import com.travelah.travelahapp.data.remote.models.ErrorResponse
+import com.travelah.travelahapp.data.remote.models.response.ErrorResponse
 import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.data.remote.models.ProfileData
 import com.travelah.travelahapp.data.remote.models.body.LoginBody

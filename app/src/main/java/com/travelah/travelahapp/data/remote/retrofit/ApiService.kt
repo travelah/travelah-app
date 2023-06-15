@@ -4,6 +4,7 @@ import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
+import com.travelah.travelahapp.data.remote.models.response.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*

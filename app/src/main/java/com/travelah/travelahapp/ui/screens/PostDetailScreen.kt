@@ -4,6 +4,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +47,12 @@ fun PostDetailScreen(
             is Result.Success -> {
                 AppBarChat(
                     fullName = stringResource(R.string.post_detail),
-                    onBackClick = onBackClick
+                    onBackClick = onBackClick,
+                    actions = {
+                        IconButton(onClick = {}) {
+                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                        }
+                    }
                 )
                 PostDetailContent(
                     token = token,

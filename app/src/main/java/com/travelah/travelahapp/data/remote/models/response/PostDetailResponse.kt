@@ -1,7 +1,8 @@
-package com.travelah.travelahapp.data.remote.models
+package com.travelah.travelahapp.data.remote.models.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.travelah.travelahapp.data.remote.models.Post
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
