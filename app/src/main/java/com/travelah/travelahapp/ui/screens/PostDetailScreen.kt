@@ -4,13 +4,11 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +21,7 @@ import com.travelah.travelahapp.ui.components.contents.PostDetailContent
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.ui.components.elements.AppBarChat
+import com.travelah.travelahapp.ui.components.elements.ConfirmDialog
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.flow.catch
@@ -42,6 +41,8 @@ fun PostDetailScreen(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val showModal = remember { mutableStateOf(false) }
+    val isOffline = remember { mutableStateOf(false) }
 
     fun deletePost(id: Int) {
         scope.launch {
@@ -74,6 +75,39 @@ fun PostDetailScreen(
         }
     }
 
+    if (showModal.value) {
+        ConfirmDialog(
+            confirmButton = {
+                TextButton(onClick = {
+                    deletePost(
+                        if (isOffline.value) postFromActivity?.id
+                            ?: 0 else if (result is Result.Success) result.data.id else 0
+                    )
+                    onBackClick()
+                })
+                { Text(text = stringResource(R.string.ok), color = Color(0xFF07AFFF)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showModal.value = false })
+                { Text(text = stringResource(R.string.cancel), color = Color(0xFF07AFFF)) }
+            },
+            title = {
+                Text(
+                    text = stringResource(R.string.delete_post),
+                    color = Color.Black
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(
+                        R.string.delete_post_confirmation,
+                    ),
+                    color = Color.Black
+                )
+            },
+        )
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         when (result) {
             is Result.Loading -> {
@@ -90,7 +124,10 @@ fun PostDetailScreen(
                     onBackClick = onBackClick,
                     actions = {
                         if (profile.id == result.data.userId) {
-                            IconButton(onClick = { deletePost(result.data.id) }
+                            IconButton(onClick = {
+                                showModal.value = true
+                                isOffline.value = false
+                            }
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Delete,
@@ -114,7 +151,10 @@ fun PostDetailScreen(
                     onBackClick = onBackClick,
                     actions = {
                         if (profile.id == postFromActivity?.userId) {
-                            IconButton(onClick = { deletePost(postFromActivity?.id ?: 0) }
+                            IconButton(onClick = {
+                                showModal.value = true
+                                isOffline.value = true
+                            }
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Delete,
