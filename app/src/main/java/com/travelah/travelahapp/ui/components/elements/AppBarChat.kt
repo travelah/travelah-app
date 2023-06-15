@@ -8,13 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AppBarChat(modifier: Modifier = Modifier, fullName: String) {
-    var showMenu by remember { mutableStateOf(false) }
+fun AppBarChat(fullName: String, onBackClick: () -> Unit, modifier: Modifier = Modifier) {
+//    var showMenu by remember { mutableStateOf(true) }
     TopAppBar(
         modifier = modifier,
         backgroundColor = Color(0xFFA0D7FB),
         navigationIcon = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = onBackClick) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
             }
         },
@@ -22,14 +22,14 @@ fun AppBarChat(modifier: Modifier = Modifier, fullName: String) {
             Text(text = fullName)
         },
         actions = {
-            DropdownMenu(
-                expanded = showMenu,
-                onDismissRequest = { showMenu = false }
-            ) {
-                DropdownMenuItem(onClick = {}) {
-                    Text(text = "Call me")
-                }
-            }
+//            DropdownMenu(
+//                expanded = showMenu,
+//                onDismissRequest = { showMenu = false }
+//            ) {
+//                DropdownMenuItem(onClick = {}) {
+//                    Text(text = "Delete Chat")
+//                }
+//            }
         }
     )
 }
