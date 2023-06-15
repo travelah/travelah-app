@@ -11,7 +11,6 @@ import com.travelah.travelahapp.ui.screens.DetailChatScreen
 import com.travelah.travelahapp.utils.SocketHandler
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.main.MainViewModel
-import com.travelah.travelahapp.view.post.PostDetailActivity
 import org.json.JSONObject
 
 class DetailChatActivity : AppCompatActivity() {

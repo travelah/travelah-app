@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AppBarChat(fullName: String, onBackClick: () -> Unit, modifier: Modifier = Modifier) {
-//    var showMenu by remember { mutableStateOf(true) }
     TopAppBar(
         modifier = modifier,
         backgroundColor = Color(0xFFA0D7FB),

@@ -76,4 +76,5 @@
     <string name="failed_send_chat">Chat failed to send</string>
     <string name="message_copied">Message copied to clipboard</string>
     <string name="chatbot_profile_desc">Chatbot profile image</string>
+    <string name="post_detail">Post Detail</string>
 </resources>
