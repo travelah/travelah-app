@@ -32,6 +32,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"
+            android:paddingHorizontal="8dp"
             android:padding="4dp"
             app:layout_constraintTop_toTopOf="@id/imageProfile"
             app:layout_constraintEnd_toEndOf="parent"/>

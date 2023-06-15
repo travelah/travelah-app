@@ -1,6 +1,5 @@
 package com.travelah.travelahapp.data.remote.retrofit
 
-import androidx.room.Delete
 import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
@@ -64,6 +63,16 @@ interface ApiService {
     ): LikePostResponse
 
     @Multipart
+    @PUT("users/profile")
+    suspend fun updateProfile(
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part?,
+        @Part("fullName") fullName: RequestBody?,
+        @Part("age") age: RequestBody?,
+        @Part("occupation") occupation: RequestBody?,
+        @Part("location") location: RequestBody?,
+        @Part("aboutMe") aboutMe: RequestBody?
+    ): UpdateProfileResponse
     @POST("posts")
     suspend fun createPost(
         @Header("Authorization") authorization: String,
