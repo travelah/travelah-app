@@ -64,6 +64,7 @@ class ChatFragment : Fragment() {
                 adapter.setOnItemClickCallback(object : GroupChatAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: ChatEntity) {
                         val intent = Intent(requireActivity(), DetailChatActivity::class.java)
+                        intent.putExtra(DetailChatActivity.EXTRA_ID, data.id)
                         startActivity(intent)
                     }
 

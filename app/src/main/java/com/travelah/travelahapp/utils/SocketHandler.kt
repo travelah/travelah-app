@@ -1,7 +1,7 @@
 package com.travelah.travelahapp.utils
 
 import io.socket.client.IO
-    import io.socket.client.Socket
+import io.socket.client.Socket
 import okhttp3.OkHttpClient
 import java.net.URISyntaxException
 
@@ -27,7 +27,7 @@ object SocketHandler {
                 }
                 .build()
 
-            mSocket = IO.socket("http://192.168.8.7:3000", options)
+            mSocket = IO.socket("https://travelah-h7wjymk3wa-uc.a.run.app:3000/", options)
         } catch (_: URISyntaxException) {
 
         }
