@@ -98,7 +98,6 @@ fun BubbleChat(
                     .clip(CircleShape),
                 error = painterResource(id = R.drawable.ic_baseline_person_black_24)
             )
-
         }
     } else {
         Row(
