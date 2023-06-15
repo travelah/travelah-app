@@ -41,14 +41,14 @@ class ChatRemoteMediator(
             }
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
-                Log.d("Append", remoteKeys?.id.toString())
+//                Log.d("Append", remoteKeys?.id.toString())
                 val nextKey = remoteKeys?.nextKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 nextKey
             }
         }
 
-        Log.d("Check", page.toString())
+//        Log.d("Check", page.toString())
 
         try {
             Log.d("Api call", page.toString())

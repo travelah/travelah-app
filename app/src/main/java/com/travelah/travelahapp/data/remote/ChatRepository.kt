@@ -52,7 +52,7 @@ class ChatRepository private constructor(
     fun getHistoryGroupChat(token: String): LiveData<PagingData<ChatEntity>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 3
+                pageSize = 5
             ),
             remoteMediator = ChatRemoteMediator(travelahDatabase, apiService, token),
             pagingSourceFactory = {
