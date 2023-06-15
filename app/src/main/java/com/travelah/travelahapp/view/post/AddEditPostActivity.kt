@@ -10,7 +10,6 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -264,7 +263,7 @@ class AddEditPostActivity : AppCompatActivity() {
                                 is Result.Error -> {
                                     Toast.makeText(
                                         this,
-                                        "Error cok: ${result.error}",
+                                        "Error: ${result.error}",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }

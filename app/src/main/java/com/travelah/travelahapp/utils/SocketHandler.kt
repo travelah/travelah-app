@@ -28,7 +28,7 @@ object SocketHandler {
                 }
                 .build()
 
-            mSocket = IO.socket("${RetrofitConfig.BASE_URL}:3000", options)
+            mSocket = IO.socket("${RetrofitConfig.BASE_URL}/:8080", options)
         } catch (_: URISyntaxException) {
 
         }
