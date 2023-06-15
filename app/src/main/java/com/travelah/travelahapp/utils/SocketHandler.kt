@@ -1,7 +1,7 @@
 package com.travelah.travelahapp.utils
 
 import io.socket.client.IO
-    import io.socket.client.Socket
+import io.socket.client.Socket
 import okhttp3.OkHttpClient
 import java.net.URISyntaxException
 
