@@ -1,7 +1,6 @@
 package com.travelah.travelahapp.ui.components.elements
 
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,12 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
-import com.travelah.travelahapp.data.local.entity.PostEntity
-import com.travelah.travelahapp.data.mappers.toPost
 import com.travelah.travelahapp.data.remote.models.Places
 import com.travelah.travelahapp.data.remote.models.response.ChatItem
 import com.travelah.travelahapp.view.maps.MapsActivity
-import com.travelah.travelahapp.view.post.PostDetailActivity
 
 @Composable
 fun BubbleChat(
@@ -90,7 +86,7 @@ fun BubbleChat(
                 contentDescription = stringResource(R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
-                modifier = Modifier.size(40.dp),
+                modifier = Modifier.size(40.dp).clip(CircleShape),
                 error = painterResource(id = R.drawable.ic_baseline_person_black_24)
             )
 
@@ -107,9 +103,9 @@ fun BubbleChat(
                 .padding(12.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_app),
-                contentDescription = "Chatbot profile image",
-                modifier = Modifier.size(40.dp)
+                painter = painterResource(id = R.drawable.vela),
+                contentDescription = stringResource(R.string.chatbot_profile_desc),
+                modifier = Modifier.size(40.dp).clip(CircleShape)
             )
             Box(
                 modifier = Modifier
