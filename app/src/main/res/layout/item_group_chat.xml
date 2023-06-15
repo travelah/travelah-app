@@ -17,8 +17,8 @@
         android:textSize="14sp"
         android:textColor="@color/black"
         android:ellipsize="end"
-        android:paddingEnd="42dp"
         android:textAlignment="viewStart"
+        android:maxWidth="192dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

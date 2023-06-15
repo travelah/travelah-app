@@ -108,30 +108,6 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         }
     }
 
-    suspend fun updateProfile(p: UpdatedProfile) {
-        dataStore.edit {  preferences ->
-            preferences[NAME_KEY] = p.fullName.toString()
-            preferences[PHOTO_KEY] = "${p.profilePicPath}/${p.profilePicName}"
-            preferences[ABOUT_ME_KEY] = p.aboutMe.toString()
-            preferences[AGE_KEY] = p.age as Int
-            preferences[OCCUPATION_KEY] = p.occupation.toString()
-            preferences[LOCATION_KEY] = p.location.toString()
-        }
-    }
-
-    fun getUpdatedProfile(): Flow<ProfileData> {
-        return dataStore.data.map { preferences ->
-            ProfileData(
-                fullName = preferences[NAME_KEY] ?: "",
-                photo = preferences[PHOTO_KEY] ?: "",
-                aboutMe = preferences[ABOUT_ME_KEY] ?: "",
-                age = preferences[AGE_KEY] ?: 0,
-                occupation = preferences[OCCUPATION_KEY] ?: "",
-                location = preferences[LOCATION_KEY] ?: ""
-            )
-        }
-    }
-
     companion object {
         @Volatile
         private var INSTANCE: SettingPreferences? = null
