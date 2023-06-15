@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.elements
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -50,6 +51,8 @@ fun BubbleChat(
         context.startActivity(intent)
     }
 
+    Log.d("defg", chat.toString())
+
     if (isQuestion) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(
@@ -88,7 +91,7 @@ fun BubbleChat(
                 )
             }
             AsyncImage(
-                model = stringResource(id = R.string.profile_picture_link),
+                model = "${chat.user.profilePicPath}/${chat.user.profilePicName}",
                 contentDescription = stringResource(R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),
