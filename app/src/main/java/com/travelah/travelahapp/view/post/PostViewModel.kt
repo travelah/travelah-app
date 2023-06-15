@@ -63,4 +63,6 @@ class PostViewModel(
         id: Int,
         token: String,
     ) = postRepository.createPostComment(description, id, token)
+
+    fun deletePost(token: String, id: Int) = postRepository.deletePost(token, id)
 }

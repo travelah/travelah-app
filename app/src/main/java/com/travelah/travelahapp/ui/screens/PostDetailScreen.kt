@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,13 +21,17 @@ import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.contents.PostDetailContent
 import com.travelah.travelahapp.data.Result
+import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.ui.components.elements.AppBarChat
 import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.post.PostViewModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 @Composable
 fun PostDetailScreen(
     token: String,
+    profile: Profile,
     result: Result<Post>,
     postFromActivity: Post?,
     onBackClick: () -> Unit = {},
@@ -34,6 +40,40 @@ fun PostDetailScreen(
     ),
     modifier: Modifier = Modifier
 ) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    fun deletePost(id: Int) {
+        scope.launch {
+            viewModel.deletePost(token, id).catch {
+                Toast.makeText(
+                    context,
+                    "Error: " + it.message.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+            }.collect {
+                when (it) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        Toast.makeText(
+                            context,
+                            "You deleted a post",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        onBackClick()
+                    }
+                    is Result.Error -> {
+                        Toast.makeText(
+                            context,
+                            "Failed to delete a post: ${it.error}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         when (result) {
             is Result.Loading -> {
@@ -49,8 +89,14 @@ fun PostDetailScreen(
                     fullName = stringResource(R.string.post_detail),
                     onBackClick = onBackClick,
                     actions = {
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                        if (profile.id == result.data.userId) {
+                            IconButton(onClick = { deletePost(result.data.id) }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete"
+                                )
+                            }
                         }
                     }
                 )
@@ -65,7 +111,18 @@ fun PostDetailScreen(
             is Result.Error -> {
                 AppBarChat(
                     fullName = stringResource(R.string.post_detail),
-                    onBackClick = onBackClick
+                    onBackClick = onBackClick,
+                    actions = {
+                        if (profile.id == postFromActivity?.userId) {
+                            IconButton(onClick = { deletePost(postFromActivity?.id ?: 0) }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete"
+                                )
+                            }
+                        }
+                    }
                 )
                 PostDetailContent(
                     token = token,

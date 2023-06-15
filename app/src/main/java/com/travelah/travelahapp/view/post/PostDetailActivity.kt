@@ -36,12 +36,14 @@ class PostDetailActivity : AppCompatActivity() {
         }
 
         mainViewModel.getToken().observe(this) { token ->
-            if (token !== "") {
-                postViewModel.getPostDetail(token, id)
-                postViewModel.getLatestDetail().observe(this) { result ->
-                    setContent {
-                        MaterialTheme {
-                            PostDetailScreen(token, result, post, { onBackClick() }, postViewModel)
+            mainViewModel.getProfile().observe(this) {profile ->
+                if (token !== "" && profile != null) {
+                    postViewModel.getPostDetail(token, id)
+                    postViewModel.getLatestDetail().observe(this) { result ->
+                        setContent {
+                            MaterialTheme {
+                                PostDetailScreen(token, profile, result, post, { onBackClick() }, postViewModel)
+                            }
                         }
                     }
                 }

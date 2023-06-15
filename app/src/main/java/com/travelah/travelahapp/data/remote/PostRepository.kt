@@ -11,10 +11,7 @@ import com.travelah.travelahapp.data.remote.pager.PostRemoteMediator
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
-import com.travelah.travelahapp.data.remote.models.response.CreatePostCommentResponse
-import com.travelah.travelahapp.data.remote.models.response.CreatePostResponse
-import com.travelah.travelahapp.data.remote.models.response.ErrorResponse
-import com.travelah.travelahapp.data.remote.models.response.LikePostResponse
+import com.travelah.travelahapp.data.remote.models.response.*
 import com.travelah.travelahapp.data.remote.pager.MyPostPagingSource
 import com.travelah.travelahapp.data.remote.pager.PostCommentPagingSource
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
@@ -231,6 +228,36 @@ class PostRepository private constructor(
             }
         ).flow
     }
+
+    fun deletePost(token: String, id: Int): Flow<Result<PostDetailResponse>> = flow {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.deletePost(
+                    "Bearer $token",
+                    id,
+                )
+                if (response.status) {
+                    emit(Result.Success(response))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
 
     companion object {
         @Volatile

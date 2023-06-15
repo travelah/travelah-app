@@ -90,6 +90,12 @@ interface ApiService {
         @Path("id") id: Int,
     ): PostDetailResponse
 
+    @DELETE("posts/{id}")
+    suspend fun deletePost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+    ): PostDetailResponse
+
     @POST("posts/comment/{id}")
     suspend fun createCommentPost(
         @Header("Authorization") authorization: String,
