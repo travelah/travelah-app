@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class SettingPreferences private constructor(private val dataStore: DataStore<Preferences>) {
+    private val defaultImage = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
     fun getTokenSetting(): Flow<String> {
         return dataStore.data.map { preferences ->
             preferences[TOKEN_KEY] ?: ""
@@ -33,7 +34,7 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
             preferences[NAME_KEY] = profile.data.fullName
             preferences[IS_SIGNED_BY_GOOGLE_KEY] = profile.data.isSignedByGoogle
             if (profile.data.profilePicName.isNullOrEmpty() && profile.data.profilePicPath.isNullOrEmpty()) {
-                preferences[PHOTO_KEY] = "https://cdn-icons-png.flaticon.com/512/5556/5556468.png"
+                preferences[PHOTO_KEY] = defaultImage
             } else {
                 preferences[PHOTO_KEY] = "https://storage.googleapis.com/travelah-storage/${profile.data.profilePicPath}/${profile.data.profilePicName}"
             }
@@ -52,10 +53,10 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
             preferences[USER_ID_KEY] = 0
             preferences[NAME_KEY] = ""
             preferences[IS_SIGNED_BY_GOOGLE_KEY] = false
-            preferences[PHOTO_KEY] = "https://cdn-icons-png.flaticon.com/512/5556/5556468.png"
+            preferences[PHOTO_KEY] = defaultImage
             preferences[PHOTO_PATH_KEY] = ""
             preferences[PHOTO_NAME_KEY] = ""
-            preferences[ABOUT_ME_KEY] = "I am a traveler"
+            preferences[ABOUT_ME_KEY] = "-"
             preferences[AGE_KEY] = 0
             preferences[OCCUPATION_KEY] = "-"
             preferences[LOCATION_KEY] = "-"
@@ -83,7 +84,7 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         dataStore.edit {  preferences ->
             preferences[NAME_KEY] = p.fullName.toString()
             if (p.profilePicName.isNullOrEmpty() && p.profilePicPath.isNullOrEmpty()) {
-                preferences[PHOTO_KEY] = "https://cdn-icons-png.flaticon.com/512/5556/5556468.png"
+                preferences[PHOTO_KEY] = defaultImage
             } else {
                 preferences[PHOTO_KEY] = "https://storage.googleapis.com/travelah-storage/${p.profilePicPath}/${p.profilePicName}"
             }
@@ -98,8 +99,8 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         return dataStore.data.map { preferences ->
             ProfileData(
                 fullName = preferences[NAME_KEY] ?: "",
-                photo = preferences[PHOTO_KEY] ?: "https://cdn-icons-png.flaticon.com/512/5556/5556468.png",
-                aboutMe = preferences[ABOUT_ME_KEY] ?: "I am a traveler",
+                photo = preferences[PHOTO_KEY] ?: defaultImage,
+                aboutMe = preferences[ABOUT_ME_KEY] ?: "-",
                 age = preferences[AGE_KEY] ?: 0,
                 occupation = preferences[OCCUPATION_KEY] ?: "-",
                 location = preferences[LOCATION_KEY] ?: "-"
