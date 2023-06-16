@@ -81,8 +81,8 @@ interface ApiService {
         @Header("Authorization") authorization: String,
         @Part("title") title: RequestBody,
         @Part("description") description: RequestBody,
-        @Part("latitude") latitude: RequestBody,
-        @Part("longitude") longitude: RequestBody,
+        @Part("latitude") latitude: RequestBody ? = null,
+        @Part("longitude") longitude: RequestBody? = null,
         @Part photo: MultipartBody.Part,
     ): CreatePostResponse
 
@@ -93,9 +93,9 @@ interface ApiService {
         @Path("id") id: Int,
         @Part("title") title: RequestBody,
         @Part("description") description: RequestBody,
-        @Part("latitude") latitude: RequestBody,
-        @Part("longitude") longitude: RequestBody,
-        @Part photo: MultipartBody.Part,
+        @Part("latitude") latitude: RequestBody?,
+        @Part("longitude") longitude: RequestBody?,
+        @Part photo: MultipartBody.Part?,
     ): CreatePostResponse
 
     @GET("posts/detail/{id}")

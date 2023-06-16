@@ -70,7 +70,7 @@ class AddEditPostActivity : AppCompatActivity() {
             binding.apply {
                 titlePostInput.setText(it.title)
                 descriptionInput.setText(it.description)
-                locationText.text = it.location
+                locationText.text = it.location ?: "No Location"
             }
 //
             Glide.with(this)
@@ -213,6 +213,13 @@ class AddEditPostActivity : AppCompatActivity() {
     }
 
     private fun uploadPost() {
+        val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(PostDetailActivity.EXTRA_POST, Post::class.java)
+        } else {
+            @Suppress("deprecation")
+            intent.getParcelableExtra(PostDetailActivity.EXTRA_POST)
+        }
+
         if (getFile != null && binding.descriptionInput.error == null && binding.titlePostInput.error == null) {
             val file = reduceFileImage(getFile as File)
 
@@ -222,8 +229,8 @@ class AddEditPostActivity : AppCompatActivity() {
             val description =
                 binding.descriptionInput.text.toString().toRequestBody("text/plain".toMediaType())
 
-            val long = currLong.toString().toRequestBody("text/plain".toMediaType())
-            val lat = currLat.toString().toRequestBody("text/plain".toMediaType())
+            val long = if (currLong != null) currLong.toString().toRequestBody("text/plain".toMediaType()) else null
+            val lat = if (currLat != null) currLat.toString().toRequestBody("text/plain".toMediaType()) else null
 
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
@@ -234,14 +241,6 @@ class AddEditPostActivity : AppCompatActivity() {
 
             mainViewModel.getToken().observe(this) { token ->
                 if (token !== "") {
-
-                    val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        intent.getParcelableExtra(PostDetailActivity.EXTRA_POST, Post::class.java)
-                    } else {
-                        @Suppress("deprecation")
-                        intent.getParcelableExtra(PostDetailActivity.EXTRA_POST)
-                    }
-
                     if (post != null) {
                         postViewModel.updatePost(
                             post.id,
@@ -297,7 +296,7 @@ class AddEditPostActivity : AppCompatActivity() {
                                 is Result.Error -> {
                                     Toast.makeText(
                                         this,
-                                        "Error cok: ${result.error}",
+                                        "Error: ${result.error}",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -307,11 +306,59 @@ class AddEditPostActivity : AppCompatActivity() {
                 }
             }
         } else if (getFile == null) {
-            Toast.makeText(
-                this@AddEditPostActivity,
-                getString(R.string.not_put_the_picture),
-                Toast.LENGTH_SHORT
-            ).show()
+            mainViewModel.getToken().observe(this) { token ->
+                if (token !== "") {
+                    if (post != null) {
+                        val title =
+                            binding.titlePostInput.text.toString().toRequestBody("text/plain".toMediaType())
+
+                        val description =
+                            binding.descriptionInput.text.toString().toRequestBody("text/plain".toMediaType())
+
+                        val long = if (currLong != null) currLong.toString().toRequestBody("text/plain".toMediaType()) else null
+                        val lat = if (currLat != null) currLat.toString().toRequestBody("text/plain".toMediaType()) else null
+
+                        postViewModel.updatePost(
+                            post.id,
+                            null,
+                            title,
+                            description,
+                            token,
+                            long,
+                            lat
+                        ).observe(this) { result ->
+                            when (result) {
+                                is Result.Loading -> {
+
+                                }
+                                is Result.Success -> {
+                                    Toast.makeText(
+                                        this,
+                                        getString(R.string.upload_success),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
+                                }
+                                is Result.Error -> {
+                                    Toast.makeText(
+                                        this,
+                                        "Error: ${result.error}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    } else {
+                        Toast.makeText(
+                            this@AddEditPostActivity,
+                            getString(R.string.not_put_the_picture),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
+
         } else {
             Toast.makeText(
                 this@AddEditPostActivity,

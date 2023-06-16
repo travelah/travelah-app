@@ -123,8 +123,8 @@ class PostRepository private constructor(
         title: RequestBody,
         description: RequestBody,
         token: String,
-        long: RequestBody,
-        lat: RequestBody
+        long: RequestBody?,
+        lat: RequestBody?
     ): LiveData<Result<CreatePostResponse>> = liveData {
         emit(Result.Loading)
 
@@ -160,12 +160,12 @@ class PostRepository private constructor(
 
     fun updatePost(
         id: Int,
-        photo: MultipartBody.Part,
+        photo: MultipartBody.Part?,
         title: RequestBody,
         description: RequestBody,
         token: String,
-        long: RequestBody,
-        lat: RequestBody
+        long: RequestBody?,
+        lat: RequestBody?
     ): LiveData<Result<CreatePostResponse>> = liveData {
         emit(Result.Loading)
 
