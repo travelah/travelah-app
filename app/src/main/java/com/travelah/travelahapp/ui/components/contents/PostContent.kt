@@ -99,7 +99,6 @@ fun PostContent(
         // not used key because already handled by the paging3
         items(posts, key = { it.id }) { post ->
             if (post != null) {
-                Log.d("posts", post.profilePicOfUser.toString())
                 PostCard(
                     username = post.posterFullName,
                     profPic = "https://storage.googleapis.com/travelah-storage/${post.profilePicOfUser}",
