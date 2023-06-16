@@ -122,7 +122,7 @@ fun BubbleChat(
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(color = Color(0xFFE8F7FD))
-                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .padding(horizontal = if (chat.response.length > 160) 48.dp else 24.dp, vertical = 16.dp)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
