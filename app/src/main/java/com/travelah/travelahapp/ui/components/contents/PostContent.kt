@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.contents
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -98,9 +99,10 @@ fun PostContent(
         // not used key because already handled by the paging3
         items(posts, key = { it.id }) { post ->
             if (post != null) {
+                Log.d("posts", post.profilePicOfUser.toString())
                 PostCard(
                     username = post.posterFullName,
-                    profPic = post.profilePicOfUser,
+                    profPic = "https://storage.googleapis.com/travelah-storage/${post.profilePicOfUser}",
                     title = post.title,
                     date = post.createdAt.withDateFormatFromISO(),
                     likeCount = post.likeCount,

@@ -172,7 +172,7 @@ fun PostDetailContent(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 AsyncImage(
-                    model = result?.profilePicOfUser ?: postFromActivity?.profilePicOfUser,
+                    model = if (result != null) "https://storage.googleapis.com/travelah-storage/${result.profilePicOfUser}" else "https://storage.googleapis.com/travelah-storage/${postFromActivity?.profilePicOfUser}",
                     contentDescription = stringResource(id = R.string.profile_image_content_desc),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
