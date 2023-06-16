@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.contents
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -100,7 +101,7 @@ fun PostContent(
             if (post != null) {
                 PostCard(
                     username = post.posterFullName,
-                    profPic = post.profilePicOfUser,
+                    profPic = "https://storage.googleapis.com/travelah-storage/${post.profilePicOfUser}",
                     title = post.title,
                     date = post.createdAt.withDateFormatFromISO(),
                     likeCount = post.likeCount,

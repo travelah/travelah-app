@@ -18,6 +18,7 @@ class PostViewModel(
             postRepository.getMostLikedPost(token)
         }
     }
+
     fun mostLikedPostData() = postRepository.getMostLikedPostLiveData()
     fun getAllPost(token: String, isMyPost: Boolean) =
         postRepository.getAllPost(token, isMyPost).map {
@@ -58,19 +59,19 @@ class PostViewModel(
         title: RequestBody,
         description: RequestBody,
         token: String,
-        long: RequestBody,
-        lat: RequestBody
+        long: RequestBody?,
+        lat: RequestBody?
     ) =
         postRepository.createPost(photo, title, description, token, long, lat)
 
     fun updatePost(
         id: Int,
-        photo: MultipartBody.Part,
+        photo: MultipartBody.Part?,
         title: RequestBody,
         description: RequestBody,
         token: String,
-        long: RequestBody,
-        lat: RequestBody
+        long: RequestBody?,
+        lat: RequestBody?
     ) =
         postRepository.updatePost(id, photo, title, description, token, long, lat)
 

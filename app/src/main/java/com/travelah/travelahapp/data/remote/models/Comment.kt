@@ -33,8 +33,6 @@ data class Comment(
     @field:SerializedName("userProfilePicPath")
     val userProfilePicPath: String? = null,
 
-    @field:SerializedName("userProfilePicName")
-    val userProfilePicName: String? = null
 ) : Parcelable
 
 @Parcelize

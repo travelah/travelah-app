@@ -2,7 +2,6 @@ package com.travelah.travelahapp.view.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -17,7 +16,6 @@ import com.travelah.travelahapp.view.ViewModelFactory
 import com.travelah.travelahapp.view.login.LoginActivity
 import com.travelah.travelahapp.databinding.ActivityMainBinding
 import com.travelah.travelahapp.view.post.AddEditPostActivity
-import com.travelah.travelahapp.view.chat.ChatFragment
 import com.travelah.travelahapp.view.chat.DetailChatActivity
 
 class MainActivity : AppCompatActivity() {

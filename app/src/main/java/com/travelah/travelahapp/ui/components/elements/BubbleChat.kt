@@ -89,7 +89,7 @@ fun BubbleChat(
                 )
             }
             AsyncImage(
-                model = "${chat.user.profilePicPath}/${chat.user.profilePicName}",
+                model = "https://storage.googleapis.com/travelah-storage/${chat.user.profilePicPath}/${chat.user.profilePicName}",
                 contentDescription = stringResource(R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.ic_baseline_person_black_24),

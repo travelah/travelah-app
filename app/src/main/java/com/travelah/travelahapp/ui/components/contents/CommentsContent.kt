@@ -1,5 +1,6 @@
 package com.travelah.travelahapp.ui.components.contents
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -145,7 +146,7 @@ fun CommentsContent(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             AsyncImage(
-                                model = "https://storage.googleapis.com/travelah-storage/${comment.userProfilePicPath}/${comment.userProfilePicName}" ?: "",
+                                model = "https://storage.googleapis.com/travelah-storage/${comment.userProfilePicPath}",
                                 contentDescription = stringResource(id = R.string.profile_image_content_desc),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier

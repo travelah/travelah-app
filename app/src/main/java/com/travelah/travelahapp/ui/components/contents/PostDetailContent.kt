@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -172,7 +173,7 @@ fun PostDetailContent(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 AsyncImage(
-                    model = result?.profilePicOfUser ?: postFromActivity?.profilePicOfUser,
+                    model = if (result != null) "https://storage.googleapis.com/travelah-storage/${result.profilePicOfUser}" else "https://storage.googleapis.com/travelah-storage/${postFromActivity?.profilePicOfUser}",
                     contentDescription = stringResource(id = R.string.profile_image_content_desc),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -201,6 +202,21 @@ fun PostDetailContent(
                     fontWeight = FontWeight.Bold,
                 )
             )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_baseline_location_on_24),
+                    contentDescription = stringResource(id = R.string.location)
+                )
+                Text(
+                    text = result?.location ?: postFromActivity?.location ?: stringResource(R.string.no_location),
+                    style = MaterialTheme.typography.body2.copy(
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
             Text(
                 result?.description ?: "${postFromActivity?.description}",
                 style = MaterialTheme.typography.body2.copy(

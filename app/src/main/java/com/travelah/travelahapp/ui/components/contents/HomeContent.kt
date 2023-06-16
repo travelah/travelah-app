@@ -244,7 +244,7 @@ fun HomeContent(
                             items(listPost, key = { it.id }) { data ->
                                 PostCard(
                                     username = data.posterFullName,
-                                    profPic = data.profilePicOfUser,
+                                    profPic = "https://storage.googleapis.com/travelah-storage/${data.profilePicOfUser}",
                                     title = data.title,
                                     date = data.createdAt.withDateFormatFromISO(),
                                     likeCount = data.likeCount,
