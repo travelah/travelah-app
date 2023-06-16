@@ -5,6 +5,7 @@ import com.travelah.travelahapp.data.remote.retrofit.RetrofitConfig
 import io.socket.client.IO
 import io.socket.client.Socket
 
+// reference: https://medium.com/@thushenarriyam/socket-io-connection-on-android-kotlin-to-node-js-server-71b218c160c9
 object SocketHandler {
 
     lateinit var mSocket: Socket
