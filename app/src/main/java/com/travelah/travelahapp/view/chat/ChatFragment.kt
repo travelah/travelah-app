@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.travelah.travelahapp.adapter.GroupChatAdapter
@@ -53,14 +54,15 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvGroupChat.layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
+        layoutManager.stackFromEnd = true
+        binding.rvGroupChat.layoutManager = layoutManager
         adapter = GroupChatAdapter()
-        adapter.refresh()
         binding.rvGroupChat.adapter = adapter
 
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
-            chatViewModel.getGroupChatHistory(token).observe(viewLifecycleOwner) {
-                adapter.submitData(lifecycle, it)
+            chatViewModel.getGroupChatHistory("Bearer $token").observe(viewLifecycleOwner) {
+                adapter.submitData(viewLifecycleOwner.lifecycle, it)
                 adapter.setOnItemClickCallback(object : GroupChatAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: ChatEntity) {
                         val intent = Intent(requireActivity(), DetailChatActivity::class.java)

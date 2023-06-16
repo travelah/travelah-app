@@ -62,7 +62,7 @@ class GroupChatAdapter: PagingDataAdapter<ChatEntity, RecyclerView.ViewHolder>(D
             }
 
             override fun areContentsTheSame(oldItem: ChatEntity, newItem: ChatEntity): Boolean {
-                return oldItem.latestChat == newItem.latestChat && oldItem.latestChatDate == newItem.latestChatDate
+                return oldItem == newItem
             }
         }
     }
