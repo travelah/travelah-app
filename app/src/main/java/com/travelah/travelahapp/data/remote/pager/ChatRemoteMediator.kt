@@ -51,7 +51,7 @@ class ChatRemoteMediator(
 //        Log.d("Check", page.toString())
 
         try {
-            Log.d("Api call", page.toString())
+//            Log.d("Api call", page.toString())
             val responseData = apiService.getAllHistoryChat(token, page, state.config.pageSize)
             var endOfPaginationReached = responseData.data.isEmpty()
 
