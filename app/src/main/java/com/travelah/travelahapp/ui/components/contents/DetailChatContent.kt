@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.contents
 
 import android.app.Activity
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,10 +18,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.remote.models.response.ChatItem
 import com.travelah.travelahapp.ui.components.elements.BubbleChat
 import com.travelah.travelahapp.utils.SocketHandler
+import com.travelah.travelahapp.view.ViewModelFactory
+import com.travelah.travelahapp.view.chat.ChatViewModel
+import com.travelah.travelahapp.view.chat.DetailChatActivity
+import com.travelah.travelahapp.view.post.PostViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -29,6 +35,9 @@ fun DetailChatContent(
     token: String,
     id: Int,
     listChat: List<ChatItem>,
+    chatViewModel: ChatViewModel = viewModel(
+        factory = ViewModelFactory.getInstance(LocalContext.current)
+    ),
     modifier: Modifier = Modifier
 ) {
     var input by remember { mutableStateOf("") }
@@ -72,11 +81,20 @@ fun DetailChatContent(
         payload.put("token", token)
 
         SocketHandler.getSocket().emit("createChatByGroup", payload)
-        SocketHandler.getSocket().on(
+        SocketHandler.getSocket().once(
+            "chatCreated"
+        ) { args ->
+            val response = args[0] as JSONObject?
+            if (response != null) {
+//                Log.d("respons", response.toString())
+                chatViewModel.changeIdPost(response.getJSONObject("data").getInt("groupChatId"))
+            }
+        }
+
+        SocketHandler.getSocket().once(
             "chatRetrieved"
         ) { args ->
             val response = args[0] as JSONObject?
-
             if (response != null) {
                 input = ""
 

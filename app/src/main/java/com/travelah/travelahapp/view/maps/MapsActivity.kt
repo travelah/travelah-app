@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -189,6 +190,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     setResult(AddEditPostActivity.MAPS_RESULT, intent)
                     finish()
+                } else {
+                    Toast.makeText(
+                        this@MapsActivity,
+                        getString(R.string.choose_location_first),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 true
             }

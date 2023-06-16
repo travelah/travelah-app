@@ -30,10 +30,10 @@ class DetailChatActivity : AppCompatActivity() {
         factory = ViewModelFactory.getInstance(this)
 
         supportActionBar?.hide()
-
         chatViewModel.changeId(intent.getIntExtra(EXTRA_ID, 0))
 
         mainViewModel.getToken().observe(this) { token ->
+
             if (token != "") {
                 chatViewModel.idChat.observe(this) { id ->
                     SocketHandler.setSocket(token)
@@ -55,7 +55,7 @@ class DetailChatActivity : AppCompatActivity() {
                         mSocket.on(Socket.EVENT_CONNECT, onConnect);
                         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
                         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-                    } catch(e: Exception) {
+                    } catch (e: Exception) {
                         Log.d(TAG, "Error")
                     }
 
@@ -65,7 +65,8 @@ class DetailChatActivity : AppCompatActivity() {
                     payload.put("token", token)
 
 
-                    mSocket.io().on(Manager.EVENT_TRANSPORT
+                    mSocket.io().on(
+                        Manager.EVENT_TRANSPORT
                     ) { args ->
                         val transport: Transport = args[0] as Transport
                         transport.on(Transport.EVENT_ERROR) { args ->
@@ -76,7 +77,6 @@ class DetailChatActivity : AppCompatActivity() {
                     }
 
                     SocketHandler.getSocket().emit("getAllChatFromGroupChat", payload)
-
 
                     // Listen for the response from the server
                     SocketHandler.getSocket().on(
