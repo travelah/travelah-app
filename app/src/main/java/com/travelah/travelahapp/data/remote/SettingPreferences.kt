@@ -35,7 +35,7 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
             if (profile.data.profilePicName.isNullOrEmpty() && profile.data.profilePicPath.isNullOrEmpty()) {
                 preferences[PHOTO_KEY] = "https://cdn-icons-png.flaticon.com/512/5556/5556468.png"
             } else {
-                preferences[PHOTO_KEY] = "${profile.data.profilePicPath}/${profile.data.profilePicName}"
+                preferences[PHOTO_KEY] = "https://storage.googleapis.com/travelah-storage/${profile.data.profilePicPath}/${profile.data.profilePicName}"
             }
             preferences[PHOTO_PATH_KEY] = profile.data.profilePicPath
             preferences[PHOTO_NAME_KEY] = profile.data.profilePicName
@@ -85,7 +85,7 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
             if (p.profilePicName.isNullOrEmpty() && p.profilePicPath.isNullOrEmpty()) {
                 preferences[PHOTO_KEY] = "https://cdn-icons-png.flaticon.com/512/5556/5556468.png"
             } else {
-                preferences[PHOTO_KEY] = "${p.profilePicPath}/${p.profilePicName}"
+                preferences[PHOTO_KEY] = "https://storage.googleapis.com/travelah-storage/${p.profilePicPath}/${p.profilePicName}"
             }
             preferences[ABOUT_ME_KEY] = p.aboutMe.toString()
             preferences[AGE_KEY] = p.age as Int
