@@ -72,8 +72,9 @@ class AddEditPostActivity : AppCompatActivity() {
                 descriptionInput.setText(it.description)
                 locationText.text = it.location
             }
-
-            Glide.with(this).load("${post.postPhotoPath}/${post.postPhotoName}")
+//
+            Glide.with(this)
+                .load("https://storage.googleapis.com/travelah-storage/${post.postPhotoPath}/${post.postPhotoName}")
                 .into(binding.previewImageView)
             currLat = post.latitude
             currLong = post.longitude
@@ -122,7 +123,10 @@ class AddEditPostActivity : AppCompatActivity() {
             val myFile = File(currentPhotoPath)
 
             val exif = ExifInterface(myFile)
-            val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            val orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
             var angle: Float = 0F
 
             angle = when (orientation) {

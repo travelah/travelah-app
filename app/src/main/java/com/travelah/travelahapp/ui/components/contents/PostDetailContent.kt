@@ -155,7 +155,7 @@ fun PostDetailContent(
     ) {
         Box {
             AsyncImage(
-                model = if (result != null) "${result.postPhotoPath}/${result.postPhotoName}" else "${postFromActivity?.postPhotoPath}/${postFromActivity?.postPhotoName}",
+                model = if (result != null) "https://storage.googleapis.com/travelah-storage/${result.postPhotoPath}/${result.postPhotoName}" else "https://storage.googleapis.com/travelah-storage/${postFromActivity?.postPhotoPath}/${postFromActivity?.postPhotoName}",
                 contentDescription = stringResource(id = R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.height(
