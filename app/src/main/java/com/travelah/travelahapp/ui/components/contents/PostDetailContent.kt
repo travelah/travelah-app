@@ -3,16 +3,12 @@ package com.travelah.travelahapp.ui.components.contents
 import android.content.Intent
 import android.content.res.Configuration
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,12 +20,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.travelah.travelahapp.R
 import com.travelah.travelahapp.data.Result
-import com.travelah.travelahapp.data.local.entity.PostEntity
-import com.travelah.travelahapp.data.mappers.toPost
 import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.IconWithCount
 import com.travelah.travelahapp.utils.withDateFormatFromISO
@@ -44,7 +39,6 @@ fun PostDetailContent(
     token: String,
     result: Post?,
     postFromActivity: Post?,
-    onBackClick: () -> Unit = {},
     viewModel: PostViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -53,10 +47,26 @@ fun PostDetailContent(
     val scope = rememberCoroutineScope()
     val id = result?.id ?: postFromActivity?.id ?: 0
 
-    var likeCount by remember { mutableStateOf(result?.likeCount ?: postFromActivity?.likeCount ?: 0) }
-    var isUserLike by remember { mutableStateOf(result?.isUserLike ?: postFromActivity?.isUserLike ?: false) }
-    var dontlikeCount by remember { mutableStateOf(result?.dontLikeCount ?: postFromActivity?.likeCount ?: 0) }
-    var isUserDontLike by remember { mutableStateOf(result?.isUserDontLike ?: postFromActivity?.isUserDontLike ?: false) }
+    var likeCount by remember {
+        mutableStateOf(
+            result?.likeCount ?: postFromActivity?.likeCount ?: 0
+        )
+    }
+    var isUserLike by remember {
+        mutableStateOf(
+            result?.isUserLike ?: postFromActivity?.isUserLike ?: false
+        )
+    }
+    var dontlikeCount by remember {
+        mutableStateOf(
+            result?.dontLikeCount ?: postFromActivity?.likeCount ?: 0
+        )
+    }
+    var isUserDontLike by remember {
+        mutableStateOf(
+            result?.isUserDontLike ?: postFromActivity?.isUserDontLike ?: false
+        )
+    }
 
     fun handleOptimisticChanges(isLike: Boolean) {
         if (isLike) {
@@ -145,7 +155,7 @@ fun PostDetailContent(
     ) {
         Box {
             AsyncImage(
-                model = if (result != null) "${result.postPhotoPath}/${result.postPhotoName}" else "${postFromActivity?.postPhotoPath}/${postFromActivity?.postPhotoName}",
+                model = if (result != null) "https://storage.googleapis.com/travelah-storage/${result.postPhotoPath}/${result.postPhotoName}" else "https://storage.googleapis.com/travelah-storage/${postFromActivity?.postPhotoPath}/${postFromActivity?.postPhotoName}",
                 contentDescription = stringResource(id = R.string.profile_image_content_desc),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.height(
@@ -153,21 +163,13 @@ fun PostDetailContent(
                 ),
                 error = painterResource(id = R.drawable.ic_place_holder)
             )
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable { onBackClick() }
-            )
         }
         Column(
             modifier = Modifier.padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
                     model = result?.profilePicOfUser ?: postFromActivity?.profilePicOfUser,
@@ -194,8 +196,16 @@ fun PostDetailContent(
                 }
             }
             Text(
+                result?.title ?: "${postFromActivity?.title}",
+                style = MaterialTheme.typography.body1.copy(
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+            Text(
                 result?.description ?: "${postFromActivity?.description}",
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body2.copy(
+                    textAlign = TextAlign.Start
+                )
             )
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -219,7 +229,7 @@ fun PostDetailContent(
                     IconWithCount(
                         icon = if (isUserLike) R.drawable.ic_baseline_thumb_up_travelah_blue_24 else R.drawable.ic_baseline_thumb_up_24,
                         contentDescription = stringResource(R.string.like_count),
-                        count = "${likeCount ?: 0}",
+                        count = "$likeCount",
                         onClick = { likeDislikePost(id, true) },
                         iconSize = 24.dp,
                         textStyle = MaterialTheme.typography.caption.copy(
@@ -229,7 +239,7 @@ fun PostDetailContent(
                     IconWithCount(
                         icon = if (isUserDontLike) R.drawable.ic_baseline_thumb_down_travelah_blue_24 else R.drawable.ic_baseline_thumb_down_24,
                         contentDescription = stringResource(R.string.dislike_count),
-                        count = "${dontlikeCount ?: 0}",
+                        count = "$dontlikeCount",
                         onClick = { likeDislikePost(id, false) },
                         iconSize = 24.dp,
                         textStyle = MaterialTheme.typography.caption.copy(

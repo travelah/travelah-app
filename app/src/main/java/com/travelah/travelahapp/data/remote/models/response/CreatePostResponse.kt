@@ -1,15 +1,15 @@
-package com.travelah.travelahapp.data.remote.models
+package com.travelah.travelahapp.data.remote.models.response
 
 import com.google.gson.annotations.SerializedName
 
 data class CreatePostResponse(
-	@field:SerializedName("data")
+    @field:SerializedName("data")
 	val data: CreatePost,
 
-	@field:SerializedName("message")
+    @field:SerializedName("message")
 	val message: String,
 
-	@field:SerializedName("status")
+    @field:SerializedName("status")
 	val status: Boolean
 )
 

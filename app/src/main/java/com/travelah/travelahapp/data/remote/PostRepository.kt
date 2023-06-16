@@ -11,6 +11,7 @@ import com.travelah.travelahapp.data.remote.pager.PostRemoteMediator
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
 import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
+import com.travelah.travelahapp.data.remote.models.response.*
 import com.travelah.travelahapp.data.remote.pager.MyPostPagingSource
 import com.travelah.travelahapp.data.remote.pager.PostCommentPagingSource
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
@@ -26,35 +27,40 @@ class PostRepository private constructor(
     private val database: TravelahDatabase
 ) {
     private val postDetail: MediatorLiveData<Result<Post>> = MediatorLiveData()
+    private val mostLikedPost: MediatorLiveData<Result<List<Post>>> = MediatorLiveData()
 
     private fun convertErrorResponse(stringRes: String?): ErrorResponse {
         return Gson().fromJson(stringRes, ErrorResponse::class.java)
     }
 
-    fun getMostLikedPost(token: String): LiveData<Result<List<Post>>> = liveData {
-        emit(Result.Loading)
+    suspend fun getMostLikedPost(token: String): LiveData<Result<List<Post>>> {
+        mostLikedPost.value = Result.Loading
 
-        wrapEspressoIdlingResource {
-            try {
-                val response = apiService.getAllMostLikedPost("Bearer $token")
-                if (response.status) {
-                    emit(Result.Success(response.data))
-                } else {
-                    emit(Result.Error(response.message))
+        try {
+            val response = apiService.getAllMostLikedPost("Bearer $token")
+            if (response.status) {
+                mostLikedPost.value = Result.Success(response.data)
+            } else {
+                mostLikedPost.value = Result.Error(response.message)
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is HttpException -> {
+                    val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                    val msg = jsonRes.message
+                    mostLikedPost.value = Result.Error(msg)
                 }
-            } catch (e: Exception) {
-                when (e) {
-                    is HttpException -> {
-                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
-                        val msg = jsonRes.message
-                        emit(Result.Error(msg))
-                    }
-                    else -> {
-                        emit(Result.Error(e.message.toString()))
-                    }
+                else -> {
+                    mostLikedPost.value = Result.Error(e.message.toString())
                 }
             }
         }
+
+        return mostLikedPost
+    }
+
+    fun getMostLikedPostLiveData(): LiveData<Result<List<Post>>> {
+        return mostLikedPost
     }
 
     fun getAllPost(token: String, isMyPost: Boolean = false): Flow<PagingData<PostEntity>> {
@@ -126,6 +132,48 @@ class PostRepository private constructor(
             try {
                 val response = apiService.createPost(
                     "Bearer $token",
+                    title,
+                    description,
+                    lat,
+                    long,
+                    photo
+                )
+                if (response.status) {
+                    emit(Result.Success(response))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun updatePost(
+        id: Int,
+        photo: MultipartBody.Part,
+        title: RequestBody,
+        description: RequestBody,
+        token: String,
+        long: RequestBody,
+        lat: RequestBody
+    ): LiveData<Result<CreatePostResponse>> = liveData {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.updatePost(
+                    "Bearer $token",
+                    id,
                     title,
                     description,
                     lat,
@@ -227,6 +275,36 @@ class PostRepository private constructor(
             }
         ).flow
     }
+
+    fun deletePost(token: String, id: Int): Flow<Result<PostDetailResponse>> = flow {
+        emit(Result.Loading)
+
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.deletePost(
+                    "Bearer $token",
+                    id,
+                )
+                if (response.status) {
+                    emit(Result.Success(response))
+                } else {
+                    emit(Result.Error(response.message))
+                }
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                        val msg = jsonRes.message
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
 
     companion object {
         @Volatile

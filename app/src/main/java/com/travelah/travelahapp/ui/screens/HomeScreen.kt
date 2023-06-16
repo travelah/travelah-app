@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -21,9 +20,10 @@ import com.travelah.travelahapp.data.remote.models.Profile
 import com.travelah.travelahapp.ui.components.contents.HomeContent
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.R
-import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.data.remote.models.response.HistoryChat
 import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.ErrorText
+import com.travelah.travelahapp.view.post.PostViewModel
 
 @Composable
 fun HomeScreen(
@@ -34,6 +34,10 @@ fun HomeScreen(
     viewModel: MainViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
+    postViewModel: PostViewModel = viewModel(
+        factory = ViewModelFactory.getInstance(LocalContext.current)
+    ),
+    token: String,
     modifier: Modifier = Modifier,
 ) {
     val profileState: State<Profile?> = viewModel.getProfile().observeAsState()
@@ -56,6 +60,7 @@ fun HomeScreen(
                     }
                     is Result.Success -> {
                         HomeContent(
+                            postViewModel = postViewModel,
                             listChat = chatResult.data,
                             listPost = postResult.data,
                             profileName = profileState.value?.fullName ?: "",
@@ -63,7 +68,8 @@ fun HomeScreen(
                                 .padding(20.dp)
                                 .fillMaxWidth(),
                             onClickSeeChat = onClickSeeChat,
-                            onClickSeePost = onClickSeePost
+                            onClickSeePost = onClickSeePost,
+                            token = token
                         )
                     }
                     is Result.Error -> {

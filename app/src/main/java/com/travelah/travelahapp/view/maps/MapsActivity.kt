@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -91,7 +92,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 mMap.addMarker(MarkerOptions().position(latLng).title(location))
 
                                 // below line is to animate camera to that position.
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                             }
                         }
                     } catch (e: IOException) {
@@ -129,6 +130,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         if (place != null) {
+            currLat = place.lat
+            currLong = place.lng
             val placeLoc = LatLng(place.lat, place.lng)
             mMap.addMarker(
                 MarkerOptions()
@@ -187,6 +190,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     setResult(AddEditPostActivity.MAPS_RESULT, intent)
                     finish()
+                } else {
+                    Toast.makeText(
+                        this@MapsActivity,
+                        getString(R.string.choose_location_first),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 true
             }

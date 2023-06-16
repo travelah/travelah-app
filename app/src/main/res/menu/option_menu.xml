@@ -7,11 +7,18 @@
         android:visible="false"
         android:icon = "@drawable/ic_baseline_add_24_white"
         app:showAsAction="always" />
+    <item android:id="@+id/menu_add_post"
+        android:title="@string/add_post"
+        android:visible="false"
+        app:showAsAction="always"
+        android:icon = "@drawable/ic_baseline_add_24_white" />
+    <item android:id="@+id/menu_edit_post"
+        android:title="@string/edit_post"
+        android:visible="false"
+        app:showAsAction="always"
+        android:icon = "@drawable/ic_baseline_edit_24" />
     <item android:id="@+id/menu_logout"
         android:title="@string/logout"
         android:icon = "@drawable/ic_baseline_logout_24_white"
         app:showAsAction="always" />
-    <item android:id="@+id/menu_add_post"
-        android:title="@string/add_post"
-        android:icon = "@drawable/ic_baseline_add_24_white" />
 </menu>

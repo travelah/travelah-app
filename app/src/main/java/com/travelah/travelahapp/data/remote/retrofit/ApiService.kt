@@ -4,6 +4,7 @@ import com.travelah.travelahapp.data.remote.models.*
 import com.travelah.travelahapp.data.remote.models.body.CommentPostBody
 import com.travelah.travelahapp.data.remote.models.body.RegisterBody
 import com.travelah.travelahapp.data.remote.models.body.LoginBody
+import com.travelah.travelahapp.data.remote.models.response.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -73,7 +74,8 @@ interface ApiService {
         @Part("location") location: RequestBody?,
         @Part("aboutMe") aboutMe: RequestBody?
     ): UpdateProfileResponse
-  
+
+    @Multipart
     @POST("posts")
     suspend fun createPost(
         @Header("Authorization") authorization: String,
@@ -84,8 +86,26 @@ interface ApiService {
         @Part photo: MultipartBody.Part,
     ): CreatePostResponse
 
+    @Multipart
+    @PATCH("posts/{id}")
+    suspend fun updatePost(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("latitude") latitude: RequestBody,
+        @Part("longitude") longitude: RequestBody,
+        @Part photo: MultipartBody.Part,
+    ): CreatePostResponse
+
     @GET("posts/detail/{id}")
     suspend fun getPostDetail(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+    ): PostDetailResponse
+
+    @DELETE("posts/{id}")
+    suspend fun deletePost(
         @Header("Authorization") authorization: String,
         @Path("id") id: Int,
     ): PostDetailResponse

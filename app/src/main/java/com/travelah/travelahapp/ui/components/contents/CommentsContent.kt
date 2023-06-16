@@ -145,7 +145,7 @@ fun CommentsContent(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             AsyncImage(
-                                model = comment.userProfilePicPath ?: "",
+                                model = "https://storage.googleapis.com/travelah-storage/${comment.userProfilePicPath}/${comment.userProfilePicName}" ?: "",
                                 contentDescription = stringResource(id = R.string.profile_image_content_desc),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -155,7 +155,7 @@ fun CommentsContent(
                             )
                             Column {
                                 Text(
-                                    text = comment.userFullName,
+                                    text = comment.userFullName ?: "-",
                                     style = MaterialTheme.typography.body2.copy(
                                         fontWeight = FontWeight.Medium
                                     )

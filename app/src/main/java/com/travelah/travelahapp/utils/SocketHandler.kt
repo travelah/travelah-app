@@ -1,10 +1,11 @@
 package com.travelah.travelahapp.utils
 
+import android.util.Log
+import com.travelah.travelahapp.data.remote.retrofit.RetrofitConfig
 import io.socket.client.IO
 import io.socket.client.Socket
-import okhttp3.OkHttpClient
-import java.net.URISyntaxException
 
+// reference: https://medium.com/@thushenarriyam/socket-io-connection-on-android-kotlin-to-node-js-server-71b218c160c9
 object SocketHandler {
 
     lateinit var mSocket: Socket
@@ -16,20 +17,9 @@ object SocketHandler {
 // "http://localhost:3000/" will not work
 // If you want to use your physical phone you could use your ip address plus :3000
 // This will allow your Android Emulator and physical device at your home to connect to the server
-            val options = IO.Options()
-            options.callFactory = OkHttpClient.Builder()
-                .addInterceptor { chain ->
-                    val original = chain.request()
-                    val requestBuilder = original.newBuilder()
-                        .addHeader("authorization", "Bearer $token")
-                    val request = requestBuilder.build()
-                    chain.proceed(request)
-                }
-                .build()
-
-            mSocket = IO.socket("https://travelah-h7wjymk3wa-uc.a.run.app:3000/", options)
-        } catch (_: URISyntaxException) {
-
+            mSocket = IO.socket(RetrofitConfig.BASE_URL)
+        } catch (e: Exception) {
+            Log.d("Socket: ", e.message.toString())
         }
     }
 

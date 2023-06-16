@@ -28,10 +28,13 @@ data class Comment(
     val updatedAt: String? = null,
 
     @field:SerializedName("userFullName")
-    val userFullName: String,
+    val userFullName: String? = "",
 
     @field:SerializedName("userProfilePicPath")
-    val userProfilePicPath: String? = null
+    val userProfilePicPath: String? = null,
+
+    @field:SerializedName("userProfilePicName")
+    val userProfilePicName: String? = null
 ) : Parcelable
 
 @Parcelize

@@ -2,6 +2,7 @@ package com.travelah.travelahapp.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -51,7 +52,10 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_chat, R.id.navigation_post, R.id.navigation_profile
+                R.id.navigation_home,
+                R.id.navigation_chat,
+                R.id.navigation_post,
+                R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -62,11 +66,12 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val currentDestination = navController.currentDestination?.id
 
-        if (currentDestination == R.id.navigation_chat) {
-            menu?.findItem(R.id.new_chat)?.isVisible = true
-        }
+        menu?.findItem(R.id.new_chat)?.isVisible = currentDestination == R.id.navigation_chat
+        menu?.findItem(R.id.menu_add_post)?.isVisible = currentDestination == R.id.navigation_post
+
         return super.onPrepareOptionsMenu(menu)
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu, menu)

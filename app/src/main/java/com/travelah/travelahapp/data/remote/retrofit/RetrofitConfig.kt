@@ -8,8 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitConfig {
     companion object {
-        private var BASE_URL = "https://travelah-h7wjymk3wa-uc.a.run.app/api/v1/"
-//        private var BASE_URL = "https://demo-app-h7wjymk3wa-uc.a.run.app/api/v1/"
+        var BASE_URL = "https://travelah-h7wjymk3wa-uc.a.run.app"
+        private var API_URL = "$BASE_URL/api/v1/"
         fun getApiService(): ApiService {
             val loggingInterceptor = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -20,7 +20,7 @@ class RetrofitConfig {
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

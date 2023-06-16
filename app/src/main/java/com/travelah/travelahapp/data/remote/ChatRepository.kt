@@ -7,8 +7,8 @@ import com.google.gson.Gson
 import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.local.entity.ChatEntity
 import com.travelah.travelahapp.data.local.room.TravelahDatabase
-import com.travelah.travelahapp.data.remote.models.ErrorResponse
-import com.travelah.travelahapp.data.remote.models.HistoryChat
+import com.travelah.travelahapp.data.remote.models.response.ErrorResponse
+import com.travelah.travelahapp.data.remote.models.response.HistoryChat
 import com.travelah.travelahapp.data.remote.pager.ChatRemoteMediator
 import com.travelah.travelahapp.data.remote.retrofit.ApiService
 import com.travelah.travelahapp.utils.wrapEspressoIdlingResource

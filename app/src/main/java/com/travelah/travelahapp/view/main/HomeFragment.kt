@@ -49,7 +49,8 @@ class HomeFragment : Fragment() {
 
         mainViewModel.getToken().observe(viewLifecycleOwner) { token ->
             chatViewModel.getRecentHistoryChat(token).observe(viewLifecycleOwner) { chatResult ->
-                postViewModel.getMostLikedPost(token).observe(viewLifecycleOwner) { postResult ->
+                postViewModel.getMostLikedPost(token)
+                postViewModel.mostLikedPostData().observe(viewLifecycleOwner) { postResult ->
                     binding.composeView.apply {
                         // Dispose of the Composition when the view's LifecycleOwner
                         // is destroyed
@@ -61,7 +62,8 @@ class HomeFragment : Fragment() {
                                     postResult,
                                     chatResult,
                                     onClickSeeChat = { handleClickChat() },
-                                    onClickSeePost = { handleClickPost() }
+                                    onClickSeePost = { handleClickPost() },
+                                    token = token
                                 )
                             }
                         }

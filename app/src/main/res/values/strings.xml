@@ -75,4 +75,13 @@
     <string name="save_changes">Save Changes</string>
     <string name="failed_send_chat">Chat failed to send</string>
     <string name="message_copied">Message copied to clipboard</string>
+    <string name="chatbot_profile_desc">Chatbot profile image</string>
+    <string name="post_detail">Post Detail</string>
+    <string name="delete_post">Delete Post</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_post_confirmation">Are you sure want to delete this post?</string>
+    <string name="ok">OK</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="no_post_data_available">No post data available</string>
+    <string name="choose_location_first">You should choose location first</string>
 </resources>

@@ -45,11 +45,10 @@ class ChatFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        factory = requireActivity().let { ViewModelFactory.getInstance(it) }!!
+        factory = requireActivity().let { ViewModelFactory.getInstance(it) }
         _binding = FragmentChatBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

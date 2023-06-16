@@ -13,7 +13,12 @@ import okhttp3.RequestBody
 class PostViewModel(
     private val postRepository: PostRepository
 ) : ViewModel() {
-    fun getMostLikedPost(token: String) = postRepository.getMostLikedPost(token)
+    fun getMostLikedPost(token: String) {
+        viewModelScope.launch {
+            postRepository.getMostLikedPost(token)
+        }
+    }
+    fun mostLikedPostData() = postRepository.getMostLikedPostLiveData()
     fun getAllPost(token: String, isMyPost: Boolean) =
         postRepository.getAllPost(token, isMyPost).map {
             val postMap = mutableSetOf<Int>()
@@ -58,9 +63,22 @@ class PostViewModel(
     ) =
         postRepository.createPost(photo, title, description, token, long, lat)
 
+    fun updatePost(
+        id: Int,
+        photo: MultipartBody.Part,
+        title: RequestBody,
+        description: RequestBody,
+        token: String,
+        long: RequestBody,
+        lat: RequestBody
+    ) =
+        postRepository.updatePost(id, photo, title, description, token, long, lat)
+
     fun createPostComment(
         description: String,
         id: Int,
         token: String,
     ) = postRepository.createPostComment(description, id, token)
+
+    fun deletePost(token: String, id: Int) = postRepository.deletePost(token, id)
 }
