@@ -1,6 +1,7 @@
 package com.travelah.travelahapp.ui.components.contents
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,23 +21,31 @@ import com.travelah.travelahapp.data.remote.models.Post
 import com.travelah.travelahapp.ui.components.elements.*
 import com.travelah.travelahapp.utils.withDateFormatFromISO
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
+import com.travelah.travelahapp.data.Result
 import com.travelah.travelahapp.data.remote.models.response.HistoryChat
 import com.travelah.travelahapp.view.chat.DetailChatActivity
 import com.travelah.travelahapp.view.post.PostCommentActivity
 import com.travelah.travelahapp.view.post.PostDetailActivity
+import com.travelah.travelahapp.view.post.PostViewModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeContent(
+    postViewModel: PostViewModel,
     listChat: List<HistoryChat> = mutableListOf(),
     listPost: List<Post> = mutableListOf(),
     onClickSeeChat: () -> Unit,
     onClickSeePost: () -> Unit,
     profileName: String = "",
+    token: String,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     fun getHeightPost(): Dp {
         return when (listPost.size) {
@@ -80,6 +89,37 @@ fun HomeContent(
     fun onNewChatClick() {
         val intent = Intent(context, DetailChatActivity::class.java)
         context.startActivity(intent)
+    }
+
+    fun likePost(id: Int) {
+        scope.launch {
+            postViewModel.likeDislikePost(token, id, true).catch {
+                Toast.makeText(
+                    context,
+                    "Error: " + it.message.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+            }.collect {
+                when (it) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        postViewModel.getMostLikedPost(token)
+                        Toast.makeText(
+                            context,
+                            "You liked a post",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    is Result.Error -> {
+                        Toast.makeText(
+                            context,
+                            "Failed to liked a post: ${it.error}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
     LazyColumn(
@@ -215,7 +255,8 @@ fun HomeContent(
                                     onClickCard = {
                                         onPostCardClick(data)
                                     },
-                                    onClickComment = { onCommentButtonClick(data.id) }
+                                    onClickComment = { onCommentButtonClick(data.id) },
+                                    onClickLike = { likePost(data.id) }
                                 )
                             }
                         } else {

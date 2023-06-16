@@ -27,35 +27,40 @@ class PostRepository private constructor(
     private val database: TravelahDatabase
 ) {
     private val postDetail: MediatorLiveData<Result<Post>> = MediatorLiveData()
+    private val mostLikedPost: MediatorLiveData<Result<List<Post>>> = MediatorLiveData()
 
     private fun convertErrorResponse(stringRes: String?): ErrorResponse {
         return Gson().fromJson(stringRes, ErrorResponse::class.java)
     }
 
-    fun getMostLikedPost(token: String): LiveData<Result<List<Post>>> = liveData {
-        emit(Result.Loading)
+    suspend fun getMostLikedPost(token: String): LiveData<Result<List<Post>>> {
+        mostLikedPost.value = Result.Loading
 
-        wrapEspressoIdlingResource {
-            try {
-                val response = apiService.getAllMostLikedPost("Bearer $token")
-                if (response.status) {
-                    emit(Result.Success(response.data))
-                } else {
-                    emit(Result.Error(response.message))
+        try {
+            val response = apiService.getAllMostLikedPost("Bearer $token")
+            if (response.status) {
+                mostLikedPost.value = Result.Success(response.data)
+            } else {
+                mostLikedPost.value = Result.Error(response.message)
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is HttpException -> {
+                    val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
+                    val msg = jsonRes.message
+                    mostLikedPost.value = Result.Error(msg)
                 }
-            } catch (e: Exception) {
-                when (e) {
-                    is HttpException -> {
-                        val jsonRes = convertErrorResponse(e.response()?.errorBody()?.string())
-                        val msg = jsonRes.message
-                        emit(Result.Error(msg))
-                    }
-                    else -> {
-                        emit(Result.Error(e.message.toString()))
-                    }
+                else -> {
+                    mostLikedPost.value = Result.Error(e.message.toString())
                 }
             }
         }
+
+        return mostLikedPost
+    }
+
+    fun getMostLikedPostLiveData(): LiveData<Result<List<Post>>> {
+        return mostLikedPost
     }
 
     fun getAllPost(token: String, isMyPost: Boolean = false): Flow<PagingData<PostEntity>> {

@@ -13,7 +13,12 @@ import okhttp3.RequestBody
 class PostViewModel(
     private val postRepository: PostRepository
 ) : ViewModel() {
-    fun getMostLikedPost(token: String) = postRepository.getMostLikedPost(token)
+    fun getMostLikedPost(token: String) {
+        viewModelScope.launch {
+            postRepository.getMostLikedPost(token)
+        }
+    }
+    fun mostLikedPostData() = postRepository.getMostLikedPostLiveData()
     fun getAllPost(token: String, isMyPost: Boolean) =
         postRepository.getAllPost(token, isMyPost).map {
             val postMap = mutableSetOf<Int>()
